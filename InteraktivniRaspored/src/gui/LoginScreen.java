@@ -92,7 +92,31 @@ public class LoginScreen {
 						 * Ovdje umjesto ovog outputa treba da ide kod za ulazak na stranicu, u zavisnosti da li je korisnik 
 						 * prodekan, profesor ili asistent.
 						 */
-						System.out.println("Ispravan username i password");
+						if (nastavnik.getVrstaNastavnik() == 0) {
+							/**
+							 * Za prodekana
+							 */
+							System.out.println("Prodekan: Ispravan username i password za prodekana");
+						}
+						else if (nastavnik.getVrstaNastavnik() == 1) {
+							/**
+							 * Za profesora 
+							 */
+							System.out.println("Profesor:Ispravan username i password za prodekana");
+						}
+						else if (nastavnik.getVrstaNastavnik() == 2) {
+							/**
+							 * Za asistenta
+							 */
+							System.out.println("Asistent: Ispravan username i password za prodekana");
+						}
+						else {			
+							/**
+							 * Za studenta
+							 */
+							System.out.println("Student: Ispravan username i password");
+						}
+						
 						break;
 					}
 					
