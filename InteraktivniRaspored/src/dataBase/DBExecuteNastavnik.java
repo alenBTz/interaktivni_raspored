@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import tables.Nastavnik;
+
 /**
  * @author dino
  * Klasa koja uspostavlja konekciju sa Bazom podataka, i izvršava jednu SQl naredbu vezanu za tabelu nastavnik.
@@ -17,6 +19,7 @@ public class DBExecuteNastavnik {
 	/**
 	 * @author dino
 	 * Metod za uspostavljanje konekcije na bazu podataka.
+	 * @return 
 	 */
 	public static void connect() throws SQLException {
 
@@ -25,7 +28,7 @@ public class DBExecuteNastavnik {
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(SQL);
 				) {
-		
+			Nastavnik.getNastavnikList(rs);
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);

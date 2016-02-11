@@ -3,7 +3,6 @@ package tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import modeli.Nastavnik_;
 
@@ -13,18 +12,18 @@ import modeli.Nastavnik_;
  */
 public class Nastavnik {
 
-	public static List<Nastavnik_> nastavnikLista = new ArrayList<Nastavnik_>();
-	private static Nastavnik_ nastavnik;	
+	public static ArrayList<Nastavnik_> nastavnikLista = new ArrayList<Nastavnik_>();
+	//private static Nastavnik_ nastavnik = new Nastavnik_();	
 
 	/**
 	 * @author dino
 	 * Metod getNastavnikList koji iz baze podataka uzima sve n-torke iz tabele nastavnik,
 	 * i unosi ih u vektor Nastavnik_.
 	 */
-	public static List<Nastavnik_> getNastavnikList(ResultSet rs) throws SQLException{
-		nastavnik = null;
+	public static ArrayList<Nastavnik_> getNastavnikList(ResultSet rs) throws SQLException{
 		
 		while (rs.next()) {
+			Nastavnik_ nastavnik = new Nastavnik_();	
 			nastavnik.setSifNastavnik(rs.getInt("sifNastavnik"));
 			nastavnik.setImeNastavnik(rs.getString("imeNastavnik"));
 			nastavnik.setPrezNastavnik(rs.getString("prezNastavnik"));
@@ -32,6 +31,17 @@ public class Nastavnik {
 			nastavnik.setUsername(rs.getString("username"));
 			nastavnik.setPassword(rs.getString("password"));
 			nastavnikLista.add(nastavnik);
+			
+		}
+		/**
+		 * @test 
+		 * Da li pokupi u vektor korisnike iz tabele nastavnik
+		 */
+		for (int j = 0; j < nastavnikLista.size(); j++) {
+			Nastavnik_ nastavnik = new Nastavnik_();	
+			nastavnik = nastavnikLista.get(j);
+			System.out.println(nastavnik.getImeNastavnik() + ", username: " + nastavnik.getUsername() + ", password: " 
+					+ nastavnik.getPassword());
 		}
 		
 		return nastavnikLista;

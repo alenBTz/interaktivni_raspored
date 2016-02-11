@@ -13,6 +13,19 @@ public class Nastavnik_ {
 	String username;
 	String password;
 	
+	/**
+	 * @author dino
+	 * default konstruktor za Nastavnik_
+	 */
+	public Nastavnik_(){
+		sifNastavnik = -1;
+		imeNastavnik = "";
+		prezNastavnik = "";
+		vrstaNastavnik = -1;
+		username = "";
+		password = "";
+	}
+	
 	public int getSifNastavnik() {
 		return sifNastavnik;
 	}
