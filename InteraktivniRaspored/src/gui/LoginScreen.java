@@ -117,7 +117,7 @@ public class LoginScreen {
 							/**
 							 * Za studenta
 							 */
-							System.out.println("Student: Ispravan username i password");
+							System.out.println("Student: Ispravan username i password.");
 						}
 						
 						break;
