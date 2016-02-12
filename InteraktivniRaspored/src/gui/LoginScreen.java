@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -9,18 +10,20 @@ import javax.swing.JTextField;
 import modeli.Nastavnik_;
 import tables.Nastavnik;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class LoginScreen {
 
 	private JFrame frame;
 	private JTextField txtUsername;
-	private JTextField txtPassword;
 	
 	public ArrayList<Nastavnik_> listaNastavnika1;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -50,37 +53,37 @@ public class LoginScreen {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 500, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblUsername = new JLabel("username:");
-		lblUsername.setBounds(186, 73, 114, 15);
+		lblUsername.setBounds(200, 170, 100, 15);
 		frame.getContentPane().add(lblUsername);
 		
 		txtUsername = new JTextField();
-		txtUsername.setBounds(186, 100, 114, 19);
+		txtUsername.setBounds(200, 190, 100, 19);
 		frame.getContentPane().add(txtUsername);
 		txtUsername.setColumns(10);
 		
 		JLabel lblPassword = new JLabel("password:");
-		lblPassword.setBounds(186, 131, 114, 15);
+		lblPassword.setBounds(200, 220, 100, 15);
 		frame.getContentPane().add(lblPassword);
 		
-		txtPassword = new JTextField();
-		txtPassword.setBounds(186, 158, 114, 19);
-		frame.getContentPane().add(txtPassword);
-		txtPassword.setColumns(10);
+		passwordField = new JPasswordField();
+		passwordField.setBounds(200, 240, 100, 19);
+		frame.getContentPane().add(passwordField);
+		
 		
 		JButton btnLogin = new JButton("login");
 		btnLogin.addActionListener(new ActionListener() {
 			
-
 			public void actionPerformed(ActionEvent e) {
 				
 				String username = txtUsername.getText();
-				String password = txtPassword.getText();
-
+				char[] pom = passwordField.getPassword();
+				String password = new String(pom);
+				
 				listaNastavnika1 = Nastavnik.nastavnikLista;
 				
 				for (int i = 0; i < listaNastavnika1.size(); i++) {
@@ -123,7 +126,19 @@ public class LoginScreen {
 				}				
 			}
 		});
-		btnLogin.setBounds(183, 189, 117, 25);
+		btnLogin.setBounds(200, 270, 100, 25);
 		frame.getContentPane().add(btnLogin);
+		
+		/**
+		 * @dino
+		 * za ucitavanje loga od UNTZ
+		 */
+		JLabel label = new JLabel("");
+		Image img = new ImageIcon(this.getClass().getResource("/untz-logo.png")).getImage();
+		label.setIcon(new ImageIcon(img));
+		label.setBounds(175, 12, 150, 141);
+		frame.getContentPane().add(label);
+		
+		
 	}
 }
