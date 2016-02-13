@@ -7,8 +7,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dataBase.DBExecuteNastavnik;
+import dataBase.DBExecuteUsmjerenje;
 import modeli.Nastavnik_;
+import modeli.Usmjerenje_;
 import tables.Nastavnik;
+import tables.Usmjerenje;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
@@ -29,10 +32,12 @@ public class ProdekanGUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtIme;
+	private JTextField nazUsmjerenja;
 	private JTextField txtPrezime;
 	private JTextField txtUsername;
 	private JTextField txtPassword;
 	private JTable table;
+	private JTable tableUsmjerenja;
 	
 	/**
 	 * Launch the application.
@@ -160,38 +165,38 @@ public class ProdekanGUI extends JFrame {
 			}
 
 		});
-		btnPotvrdiUnos.setBounds(167, 274, 150, 25);
-		panelNastavnici.add(btnPotvrdiUnos);
+			btnPotvrdiUnos.setBounds(167, 274, 150, 25);
+			panelNastavnici.add(btnPotvrdiUnos);
+			
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(329, 12, 430, 289);
+			panelNastavnici.add(scrollPane);
+			
+			table = new JTable();
+			scrollPane.setViewportView(table);
+			table.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Sif", "Ime", "Prezime", "Vrsta", "Username", "Password"
+				}
+			));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(329, 12, 430, 289);
-		panelNastavnici.add(scrollPane);
+			
+			popuniTabeluNastavnicima();
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Sif", "Ime", "Prezime", "Vrsta", "Username", "Password"
-			}
-		));
-	
-		
-		popuniTabeluNastavnicima();
-	
-		
-		table.getColumnModel().getColumn(0).setPreferredWidth(30);
-		table.getColumnModel().getColumn(1).setPreferredWidth(120);
-		table.getColumnModel().getColumn(2).setPreferredWidth(150);
-		table.getColumnModel().getColumn(3).setPreferredWidth(65);
-		table.getColumnModel().getColumn(4).setPreferredWidth(150);
-		table.getColumnModel().getColumn(5).setPreferredWidth(150);
-		table.addContainerListener(new ContainerAdapter() {
-			@Override
-			public void componentAdded(ContainerEvent e) {
-			}
-		});		
+			
+			table.getColumnModel().getColumn(0).setPreferredWidth(30);
+			table.getColumnModel().getColumn(1).setPreferredWidth(120);
+			table.getColumnModel().getColumn(2).setPreferredWidth(150);
+			table.getColumnModel().getColumn(3).setPreferredWidth(65);
+			table.getColumnModel().getColumn(4).setPreferredWidth(150);
+			table.getColumnModel().getColumn(5).setPreferredWidth(150);
+			table.addContainerListener(new ContainerAdapter() {
+				@Override
+				public void componentAdded(ContainerEvent e) {
+				}
+			});		
 		
 		/**
 		 * Zgrade
@@ -208,9 +213,80 @@ public class ProdekanGUI extends JFrame {
 		/**
 		 * Usmjerenja
 		 */
+		
 		JPanel panelUsmjerenja = new JPanel();
 		tabbedPane.addTab("Usmjerenja", null, panelUsmjerenja, null);
+		panelUsmjerenja.setLayout(null);
 		
+		JLabel lblUnosNovogUsmjerenja = new JLabel("Unos novog usmjerenja:");
+		lblUnosNovogUsmjerenja.setBounds(12, 12, 200, 15);
+		panelUsmjerenja.add(lblUnosNovogUsmjerenja);
+		
+		JLabel lblNazUsmjerenja = new JLabel("Naziv:");
+		lblNazUsmjerenja.setBounds(12, 39, 70, 15);
+		panelUsmjerenja.add(lblNazUsmjerenja);
+		
+		nazUsmjerenja = new JTextField();
+		nazUsmjerenja.setText("");
+		nazUsmjerenja.setBounds(12, 66, 305, 19);
+		panelUsmjerenja.add(nazUsmjerenja);
+		nazUsmjerenja.setColumns(10);
+		
+		JButton btnPotvrdiUnosUsmjerenja = new JButton("Potvrdi unos");
+		btnPotvrdiUnosUsmjerenja.addActionListener(new ActionListener() {
+			/**
+			 * Kada se desi unos, treba da upise u bazu podataka odgovarajuce usmjerenje.
+			 */
+			public void actionPerformed(ActionEvent e) {
+			
+				Usmjerenje_ usmjerenje = new Usmjerenje_();
+				
+				usmjerenje.setNazUsmjerenje(nazUsmjerenja.getText());													
+				
+				try {
+					DBExecuteUsmjerenje.insertUsmjerenje(usmjerenje);
+					popuniTabeluUsmjerenjima();
+
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+
+		});
+		btnPotvrdiUnosUsmjerenja.setBounds(167, 274, 150, 25);
+		panelUsmjerenja.add(btnPotvrdiUnosUsmjerenja);
+		
+		///////////////////////////////////////
+		
+		
+		JScrollPane scrollPaneUsmjerenja = new JScrollPane();
+		scrollPaneUsmjerenja.setBounds(329, 12, 430, 289);
+		panelUsmjerenja.add(scrollPaneUsmjerenja);
+		
+		tableUsmjerenja = new JTable();
+		scrollPaneUsmjerenja.setViewportView(tableUsmjerenja);
+		tableUsmjerenja.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Sif", "Naziv"
+			}
+		));
+	
+		
+		popuniTabeluUsmjerenjima();
+	
+		
+		tableUsmjerenja.getColumnModel().getColumn(0).setPreferredWidth(30);
+		tableUsmjerenja.getColumnModel().getColumn(1).setPreferredWidth(120);
+		tableUsmjerenja.addContainerListener(new ContainerAdapter() {
+			@Override
+			public void componentAdded(ContainerEvent e) {
+			}
+		});		
+		///////////////////////////////////////
 		/**
 		 * Predmeti
 		 */
@@ -262,6 +338,31 @@ public class ProdekanGUI extends JFrame {
 		
 		model.setRowCount(0);
 		Nastavnik.nastavnikLista.clear();
+
+	}
+	
+	private void popuniTabeluUsmjerenjima() throws SQLException {
+		DefaultTableModel model = (DefaultTableModel) tableUsmjerenja.getModel();
+		
+		resetTableUsmjerenje(model);
+		
+		DBExecuteUsmjerenje.getUsmjerenja();
+		ArrayList<Usmjerenje_> usmjerenja = new ArrayList<Usmjerenje_>();
+		usmjerenja = Usmjerenje.usmjerenjeLista;
+		for (int i = 0; i < usmjerenja.size(); i++) {
+			Usmjerenje_ usmjerenje = new Usmjerenje_();	
+			usmjerenje = usmjerenja.get(i);
+			String sifUsmjString = String.valueOf(usmjerenje.getSifUsmjerenje());
+			//String nazUsmjString = String.valueOf(usmjerenje.getNazUsmjerenje());
+			
+			model.addRow(new Object[]{sifUsmjString, usmjerenje.getNazUsmjerenje()});
+		}
+	}
+
+	private void resetTableUsmjerenje(DefaultTableModel model) {
+		
+		model.setRowCount(0);
+		Usmjerenje.usmjerenjeLista.clear();
 
 	}
 	

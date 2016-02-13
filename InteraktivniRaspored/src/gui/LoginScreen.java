@@ -84,6 +84,8 @@ public class LoginScreen {
 				char[] pom = passwordField.getPassword();
 				String password = new String(pom);
 				
+				System.out.println(username);
+				System.out.println(password);
 				listaNastavnika1 = Nastavnik.nastavnikLista;
 				
 				for (int i = 0; i < listaNastavnika1.size(); i++) {
