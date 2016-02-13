@@ -10,9 +10,6 @@ import gui.ProdekanGUI;
 public class Main {
 
 	public static void main(String[] args) throws SQLException {
-		//DBExecuteNastavnik.getNastavnici();
-		
-		//LoginScreen.startLoginScreen();
 		
 		ProdekanGUI.startProdekanGUI();
 		
