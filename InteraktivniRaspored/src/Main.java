@@ -2,6 +2,7 @@ import java.sql.SQLException;
 
 import dataBase.DBExecuteNastavnik;
 import gui.LoginScreen;
+import gui.ProdekanGUI;
 
 
 
@@ -9,9 +10,12 @@ import gui.LoginScreen;
 public class Main {
 
 	public static void main(String[] args) throws SQLException {
-		DBExecuteNastavnik.connect();
+		//DBExecuteNastavnik.getNastavnici();
 		
-		LoginScreen.startLoginScreen();
+		//LoginScreen.startLoginScreen();
+		
+		ProdekanGUI.startProdekanGUI();
+		
 	}
 
 }
