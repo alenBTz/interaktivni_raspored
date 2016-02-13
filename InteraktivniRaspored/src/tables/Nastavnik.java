@@ -33,16 +33,6 @@ public class Nastavnik {
 			nastavnikLista.add(nastavnik);
 			
 		}
-		/**
-		 * @test 
-		 * Da li pokupi u vektor korisnike iz tabele nastavnik
-		 */
-		for (int j = 0; j < nastavnikLista.size(); j++) {
-			Nastavnik_ nastavnik = new Nastavnik_();	
-			nastavnik = nastavnikLista.get(j);
-			System.out.println(nastavnik.getImeNastavnik() + ", username: " + nastavnik.getUsername() + ", password: " 
-					+ nastavnik.getPassword());
-		}
 		
 		return nastavnikLista;
 		
