@@ -1,7 +1,5 @@
 import java.sql.SQLException;
 
-import dataBase.DBExecuteNastavnik;
-import gui.LoginScreen;
 import gui.ProdekanGUI;
 
 
