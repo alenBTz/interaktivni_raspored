@@ -18,12 +18,12 @@ public class Nastavnik_ {
 	 * default konstruktor za Nastavnik_
 	 */
 	public Nastavnik_(){
-		sifNastavnik = -1;
-		imeNastavnik = "";
-		prezNastavnik = "";
-		vrstaNastavnik = -1;
-		username = "";
-		password = "";
+		this.sifNastavnik = -1;
+		this.imeNastavnik = "";
+		this.prezNastavnik = "";
+		this.vrstaNastavnik = -1;
+		this.username = "";
+		this.password = "";
 	}
 	
 	public int getSifNastavnik() {

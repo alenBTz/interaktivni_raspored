@@ -8,14 +8,17 @@ import javax.swing.border.EmptyBorder;
 
 import dataBase.DBExecuteNastavnik;
 import dataBase.DBExecuteSala;
+import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteUsmjerenje;
 import dataBase.DBExecuteZgrada;
 import modeli.Nastavnik_;
 import modeli.Sala_;
+import modeli.Semestar_;
 import modeli.Usmjerenje_;
 import modeli.Zgrada_;
 import tables.Nastavnik;
 import tables.Sala;
+import tables.Semestar;
 import tables.Usmjerenje;
 import tables.Zgrada;
 
@@ -24,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -33,6 +37,7 @@ import javax.swing.JTable;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JRadioButton;
 
 public class ProdekanGUI extends JFrame {
 
@@ -52,8 +57,58 @@ public class ProdekanGUI extends JFrame {
 	private JTable table_5;
 	private JTextField txtNazivUsmjerenja;
 	private JTextField txtKratUsmjerenja;
+	private JTable tableSemestar;
 
+	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	
+	JPanel panelNastavnici = new JPanel();
+	JPanel panelZgrade = new JPanel();
+	JPanel panelSale = new JPanel();
+	JPanel panelUsmjerenja = new JPanel();
+	JPanel panelPredmeti = new JPanel();
+	JPanel panelSemestar = new JPanel();
+	JPanel panelGrupe = new JPanel();
+	JPanel panelRaspored = new JPanel();
+	
+    JComboBox<String> comboBox_2 = new JComboBox<String>();
+	
+	ActionListener buttonListener = new ActionListener(){
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			clearListe();
+			
+			Zgrada_ zgrada = new Zgrada_();
+			
+			zgrada.setNazZgrada(txtNazivzgrade.getText());
+			zgrada.setKratZgrada(txtKratzgrada.getText());
+			
+			try {
+				DBExecuteZgrada.insertZgrada(zgrada);
+				popuniTabeluZgradama();
+				
+				comboBox_2.setBounds(12, 240, 200, 24);
+				panelSale.add(comboBox_2);
+				
+				fillComboBoxSala();
+				
+				
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
+		
+	};
+	private JTextField txtNaziivPredmeta;
+	private JTextField txtKratpredmet;
+	private JTextField txtNazsemestar;
+	private JTable table_1;
+	private JTable table_3;
+
+
 	/**
 	 * Launch the application.
 	 */
@@ -79,64 +134,195 @@ public class ProdekanGUI extends JFrame {
 	 * @throws SQLException 
 	 */
 	public ProdekanGUI() throws SQLException {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 400);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+
+		initJTPane();
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(12, 12, 776, 346);
-		contentPane.add(tabbedPane);
+		initPanelNastavnici();		
 		
-		/**
-		 * Nastavnici
-		 */
-		guiNastavnici(tabbedPane);		
+		initPanelZgrade();		
 		
-		/**
-		 * Zgrade
-		 */
-		guiZgrade(tabbedPane);
+		initPanelSale();		
+			
+		initPanelUsmjerenja();		
+
+		initPanelSemestar();
+	
+		initPanelPredmeti();
 		
-		/**
-		 * Sale
-		 */
-		guiSale(tabbedPane);
-		
-		/**
-		 * Usmjerenja
-		 */		
-		guiUsmjerenja(tabbedPane);
-		
-		/**
-		 * Predmeti
-		 */
-		JPanel panelPredmeti = new JPanel();
-		tabbedPane.addTab("Predmeti", null, panelPredmeti, null);
-		
-		/**
-		 * Semestar
-		 */
-		JPanel panelSemestar = new JPanel();
-		tabbedPane.addTab("Semestar", null, panelSemestar, null);
 		
 		/**
 		 * Grupe
 		 */
-		JPanel panelGrupe = new JPanel();
-		tabbedPane.addTab("Grupe", null, panelGrupe, null);
+		//tabbedPane.addTab("Grupe", null, panelGrupe, null);
 		
 		/**
 		 * Raspored
 		 */
-		JPanel panelRaspored = new JPanel();
-		tabbedPane.addTab("Raspored", null, panelRaspored, null);
+		//tabbedPane.addTab("Raspored", null, panelRaspored, null);
+		
+		
+		
+
 	}
 
-	private void guiUsmjerenja(JTabbedPane tabbedPane) throws SQLException {
-		JPanel panelUsmjerenja = new JPanel();
+	private void initPanelPredmeti() {
+		tabbedPane.addTab("Predmeti", null, panelPredmeti, null);
+		panelPredmeti.setLayout(null);
+		
+		JLabel lblUnosPredmeta = new JLabel("Unos podataka o predmetima:");
+		lblUnosPredmeta.setBounds(12, 12, 250, 15);
+		panelPredmeti.add(lblUnosPredmeta);
+		
+		JLabel lblNazivPredmeta = new JLabel("Naziv predmeta:");
+		lblNazivPredmeta.setBounds(12, 39, 150, 15);
+		panelPredmeti.add(lblNazivPredmeta);
+		
+		txtNaziivPredmeta = new JTextField();
+		txtNaziivPredmeta.setText("");
+		txtNaziivPredmeta.setBounds(12, 66, 305, 19);
+		panelPredmeti.add(txtNaziivPredmeta);
+		txtNaziivPredmeta.setColumns(10);
+		
+		JLabel lblSkraenicaNazivaPredmeta = new JLabel("Skraćenica naziva predmeta:");
+		lblSkraenicaNazivaPredmeta.setBounds(12, 97, 250, 15);
+		panelPredmeti.add(lblSkraenicaNazivaPredmeta);
+		
+		txtKratpredmet = new JTextField();
+		txtKratpredmet.setText("");
+		txtKratpredmet.setBounds(12, 124, 305, 19);
+		panelPredmeti.add(txtKratpredmet);
+		txtKratpredmet.setColumns(10);
+		
+		JLabel lblKojemSemestruPripada = new JLabel("Predaje se u:");
+		lblKojemSemestruPripada.setBounds(12, 155, 150, 15);
+		panelPredmeti.add(lblKojemSemestruPripada);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(12, 182, 192, 24);
+		panelPredmeti.add(comboBox);
+		
+		JLabel lblIzborni = new JLabel("Izborni:");
+		lblIzborni.setBounds(212, 155, 70, 15);
+		panelPredmeti.add(lblIzborni);
+		
+		JRadioButton rdbtnDa = new JRadioButton("Da");
+		rdbtnDa.setBounds(212, 183, 50, 23);
+		panelPredmeti.add(rdbtnDa);
+		
+		JRadioButton rdbtnNe = new JRadioButton("Ne");
+		rdbtnNe.setBounds(267, 183, 50, 23);
+		panelPredmeti.add(rdbtnNe);
+		
+		ButtonGroup groupIzborni = new ButtonGroup();
+		groupIzborni.add(rdbtnDa);
+		groupIzborni.add(rdbtnNe);
+		
+		JLabel lblTipNastave = new JLabel("Tip nastave:");
+		lblTipNastave.setBounds(12, 218, 150, 15);
+		panelPredmeti.add(lblTipNastave);
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(12, 245, 145, 24);
+		panelPredmeti.add(comboBox_1);
+		
+		JLabel lblPredaje = new JLabel("Predaje:");
+		lblPredaje.setBounds(174, 218, 70, 15);
+		panelPredmeti.add(lblPredaje);
+		
+		JComboBox comboBox_3 = new JComboBox();
+		comboBox_3.setBounds(169, 245, 150, 24);
+		panelPredmeti.add(comboBox_3);
+		
+		JButton btnPotvrdiUnos_4 = new JButton("Potvrdi unos");
+		btnPotvrdiUnos_4.setBounds(12, 282, 150, 25);
+		panelPredmeti.add(btnPotvrdiUnos_4);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(329, 12, 430, 289);
+		panelPredmeti.add(scrollPane);
+		
+		table_3 = new JTable();
+		scrollPane.setViewportView(table_3);
+		table_3.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Sifra", "Predmet", "Skracenica", "Vrsta Nastave", "Predaje", "Izborni", "Semestar"
+			}
+		));
+		table_3.getColumnModel().getColumn(0).setPreferredWidth(42);
+		table_3.getColumnModel().getColumn(1).setPreferredWidth(147);
+		table_3.getColumnModel().getColumn(3).setPreferredWidth(98);
+		table_3.getColumnModel().getColumn(4).setPreferredWidth(144);
+		table_3.getColumnModel().getColumn(5).setPreferredWidth(50);
+		table_3.getColumnModel().getColumn(6).setPreferredWidth(65);
+	}
+
+	private void initPanelSemestar() throws SQLException {
+		tabbedPane.addTab("Semestar", null, panelSemestar, null);
+		panelSemestar.setLayout(null);
+		
+		JLabel lblPodaciOSemestrima = new JLabel("Unos podataka o semestrima:");
+		lblPodaciOSemestrima.setBounds(12, 12, 230, 15);
+		panelSemestar.add(lblPodaciOSemestrima);
+		
+		JLabel lblNazivSemestra = new JLabel("Naziv semestra:");
+		lblNazivSemestra.setBounds(12, 39, 150, 15);
+		panelSemestar.add(lblNazivSemestra);
+		
+		txtNazsemestar = new JTextField();
+		txtNazsemestar.setText("nazSemestar");
+		txtNazsemestar.setBounds(12, 66, 305, 19);
+		panelSemestar.add(txtNazsemestar);
+		txtNazsemestar.setColumns(10);
+		
+		JButton btnPotvrdiUnos_3 = new JButton("Potvrdi unos");
+		btnPotvrdiUnos_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Semestar_ semestar= new Semestar_();
+				semestar.setNazSemestar(txtNazsemestar.getText());
+				
+				try {
+					DBExecuteSemestar.insertSemestar(semestar);
+					popuniTabeluSemestrima();
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnPotvrdiUnos_3.setBounds(12, 97, 150, 25);
+		panelSemestar.add(btnPotvrdiUnos_3);
+		
+		JScrollPane scrollPaneSemestar = new JScrollPane();
+		scrollPaneSemestar.setBounds(329, 12, 430, 289);
+		panelSemestar.add(scrollPaneSemestar);
+		
+		tableSemestar = new JTable();
+		scrollPaneSemestar.setViewportView(tableSemestar);
+		tableSemestar.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Sifra", "Naziv semestra"
+			}
+		));
+		
+		popuniTabeluSemestrima();
+		
+		tableSemestar.getColumnModel().getColumn(0).setPreferredWidth(61);
+		tableSemestar.getColumnModel().getColumn(1).setPreferredWidth(356);
+		
+		table_2.addContainerListener(new ContainerAdapter() {
+			@Override
+			public void componentAdded(ContainerEvent e) {
+			}
+		});
+	}
+
+	private void initPanelUsmjerenja() throws SQLException {
 		tabbedPane.addTab("Usmjerenja", null, panelUsmjerenja, null);
 		panelUsmjerenja.setLayout(null);
 		
@@ -188,12 +374,12 @@ public class ProdekanGUI extends JFrame {
 		btnPotvrdiUnosUsmjerenja.setBounds(12, 155, 150, 25);
 		panelUsmjerenja.add(btnPotvrdiUnosUsmjerenja);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(329, 12, 430, 289);
-		panelUsmjerenja.add(scrollPane);
+		JScrollPane scrollPaneUsmjerenja = new JScrollPane();
+		scrollPaneUsmjerenja.setBounds(329, 12, 430, 289);
+		panelUsmjerenja.add(scrollPaneUsmjerenja);
 		
 		table_5 = new JTable();
-		scrollPane.setViewportView(table_5);
+		scrollPaneUsmjerenja.setViewportView(table_5);
 		table_5.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -215,8 +401,7 @@ public class ProdekanGUI extends JFrame {
 		});
 	}
 
-	private void guiSale(JTabbedPane tabbedPane) throws SQLException {
-		JPanel panelSale = new JPanel();
+	private void initPanelSale() throws SQLException {
 		tabbedPane.addTab("Sale", null, panelSale, null);
 		panelSale.setLayout(null);
 				
@@ -258,23 +443,10 @@ public class ProdekanGUI extends JFrame {
 		lblZgradiKojojPripada.setBounds(12, 213, 200, 15);
 		panelSale.add(lblZgradiKojojPripada);
 		
-		final JComboBox comboBox_2 = new JComboBox();
 		comboBox_2.setBounds(12, 240, 200, 24);
 		panelSale.add(comboBox_2);
 		
-		//popuniti combobox:
-		//combobox se puni redom.prvi element u bazi je prvi element u combo boxu. vazno za kasnije, gdje zelimo povezati salu sa zgradom
-		Zgrada.zgradaLista.clear();
-		DBExecuteZgrada.getZgrade();
-		ArrayList<Zgrada_> zgrade = new ArrayList<Zgrada_>();
-		zgrade = Zgrada.zgradaLista;
-		for (int i = 0; i < zgrade.size(); i++) {
-			Zgrada_ zgrada = new Zgrada_();	
-			zgrada = zgrade.get(i);
-			comboBox_2.addItem(zgrada.getNazZgrada());
-		}
-		
-		
+		fillComboBoxSala();	
 		
 		JButton btnPotvrdiUnos_2 = new JButton("Potvrdi unos");
 		btnPotvrdiUnos_2.addActionListener(new ActionListener() {
@@ -325,12 +497,12 @@ public class ProdekanGUI extends JFrame {
 		btnPotvrdiUnos_2.setBounds(12, 276, 150, 25);
 		panelSale.add(btnPotvrdiUnos_2);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(235, 12, 524, 289);
-		panelSale.add(scrollPane);
+		JScrollPane scrollPaneSale = new JScrollPane();
+		scrollPaneSale.setBounds(235, 12, 524, 289);
+		panelSale.add(scrollPaneSale);
 		
 		table_4 = new JTable();
-		scrollPane.setViewportView(table_4);
+		scrollPaneSale.setViewportView(table_4);
 		table_4.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -351,8 +523,7 @@ public class ProdekanGUI extends JFrame {
 		});
 	}
 
-	private void guiZgrade(JTabbedPane tabbedPane) throws SQLException {
-		JPanel panelZgrade = new JPanel();
+	private void initPanelZgrade() throws SQLException {
 		tabbedPane.addTab("Zgrade", null, panelZgrade, null);
 		panelZgrade.setLayout(null);
 		
@@ -381,35 +552,16 @@ public class ProdekanGUI extends JFrame {
 		txtKratzgrada.setColumns(10);
 		
 		JButton btnPotvrdiUnos_1 = new JButton("Potvrdi unos");
-		btnPotvrdiUnos_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	
-				
-				Zgrada_ zgrada = new Zgrada_();
-				
-				zgrada.setNazZgrada(txtNazivzgrade.getText());
-				zgrada.setKratZgrada(txtKratzgrada.getText());
-				
-				try {
-					DBExecuteZgrada.insertZgrada(zgrada);
-					popuniTabeluZgradama();
-
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				
-			}
-		});
 		btnPotvrdiUnos_1.setBounds(12, 155, 150, 25);
+		btnPotvrdiUnos_1.addActionListener(buttonListener);
 		panelZgrade.add(btnPotvrdiUnos_1);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(329, 12, 430, 289);
-		panelZgrade.add(scrollPane);
+		JScrollPane scrollPaneZgrade = new JScrollPane();
+		scrollPaneZgrade.setBounds(329, 12, 430, 289);
+		panelZgrade.add(scrollPaneZgrade);
 		
 		table_2 = new JTable();
-		scrollPane.setViewportView(table_2);
+		scrollPaneZgrade.setViewportView(table_2);
 		table_2.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -431,8 +583,7 @@ public class ProdekanGUI extends JFrame {
 		});
 	}
 
-	private void guiNastavnici(JTabbedPane tabbedPane) throws SQLException {
-		JPanel panelNastavnici = new JPanel();
+	private void initPanelNastavnici() throws SQLException {
 		tabbedPane.addTab("Nastavnici", null, panelNastavnici, null);
 		panelNastavnici.setLayout(null);
 		
@@ -480,7 +631,7 @@ public class ProdekanGUI extends JFrame {
 		panelNastavnici.add(txtPassword);
 		txtPassword.setColumns(10);
 		
-		final JComboBox comboBox = new JComboBox();
+		final JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(12, 271, 143, 30);
 		panelNastavnici.add(comboBox);
 		
@@ -552,11 +703,56 @@ public class ProdekanGUI extends JFrame {
 			}
 		});
 	}
+
 	
 	/**
+	 * @author dino
+	 * Inizijalizacija JTabbetPane-a
+	 */
+	private void initJTPane() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 400);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		tabbedPane.setBounds(12, 12, 776, 346);
+		contentPane.add(tabbedPane);
+		
+		
+		tabbedPane.add(panelNastavnici);
+		tabbedPane.add(panelZgrade);
+		tabbedPane.add(panelSale);
+		tabbedPane.add(panelUsmjerenja);
+		
+		getContentPane().add(tabbedPane);
+		
+	}
+
+
+	/**
+	 * @throws SQLException 
 	 * @dino 
 	 * poziva getNastavnici cime se puni globalni vektor nastavnika, iz tog vektora popunjavamo tabelu
 	 */
+	private void popuniTabeluSemestrima() throws SQLException{
+		DefaultTableModel model = (DefaultTableModel) tableSemestar.getModel();
+		
+		resetTable(model);
+		
+		DBExecuteSemestar.getSemestri();
+		ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
+		semestri = Semestar.semestarLista;
+		for (int i = 0; i < semestri.size(); i++) {
+			Semestar_ semestar = new Semestar_();	
+			semestar = semestri.get(i);
+			String sifSemtString = String.valueOf(semestar.getSifSemestar());
+			
+			model.addRow(new Object[]{sifSemtString, semestar.getNazSemestar()});
+		}
+	}
+	
 	private void popuniTabeluNastavnicima() throws SQLException {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
@@ -632,6 +828,20 @@ public class ProdekanGUI extends JFrame {
 		}
 	}
 
+	private void fillComboBoxSala() throws SQLException {
+		Zgrada.zgradaLista.clear();
+		comboBox_2.removeAllItems();
+		
+		DBExecuteZgrada.getZgrade();
+		ArrayList<Zgrada_> zgrade = new ArrayList<Zgrada_>();
+		zgrade = Zgrada.zgradaLista;
+		for (int i = 0; i < zgrade.size(); i++) {
+			Zgrada_ zgradaPom = new Zgrada_();	
+			zgradaPom = zgrade.get(i);
+			comboBox_2.addItem(zgradaPom.getNazZgrada());
+		}
+	}
+	
 	private void popuniTabeluUsmjerenjima() throws SQLException {
 		
 		DefaultTableModel model = (DefaultTableModel) table_5.getModel();
@@ -664,5 +874,6 @@ public class ProdekanGUI extends JFrame {
 		Zgrada.zgradaLista.clear();
 		Sala.salaLista.clear();
 		Usmjerenje.usmjerenjeLista.clear();
+		Semestar.semestarLista.clear();
 	}
 }

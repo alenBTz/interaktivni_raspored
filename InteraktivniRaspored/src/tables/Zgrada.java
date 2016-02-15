@@ -18,7 +18,7 @@ public class Zgrada {
 	 * i unosi ih u vektor Nastavnik_.
 	 */
 	public static ArrayList<Zgrada_> getZgradaList(ResultSet rs) throws SQLException{
-		
+
 		while (rs.next()) {
 			Zgrada_ zgrada = new Zgrada_();	
 			zgrada.setSifZgrada(rs.getInt("sifZgrada"));
