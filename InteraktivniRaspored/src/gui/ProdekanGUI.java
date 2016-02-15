@@ -650,18 +650,19 @@ public class ProdekanGUI extends JFrame {
 			model.addRow(new Object[]{sifUsmjerenjeString, usm.getNazUsmjerenje(), usm.getKratUsmjerenje()});
 		}
 		
-		
-		
 	}
 	
 	private void resetTable(DefaultTableModel model) {
 		
 		model.setRowCount(0);
+		clearListe();
+
+	}
+
+	private void clearListe() {
 		Nastavnik.nastavnikLista.clear();
 		Zgrada.zgradaLista.clear();
 		Sala.salaLista.clear();
 		Usmjerenje.usmjerenjeLista.clear();
-		
-
 	}
 }
