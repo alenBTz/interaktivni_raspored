@@ -7,16 +7,19 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dataBase.DBExecuteNastavnik;
+import dataBase.DBExecutePredmet;
 import dataBase.DBExecuteSala;
 import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteUsmjerenje;
 import dataBase.DBExecuteZgrada;
 import modeli.Nastavnik_;
+import modeli.Predmet_;
 import modeli.Sala_;
 import modeli.Semestar_;
 import modeli.Usmjerenje_;
 import modeli.Zgrada_;
 import tables.Nastavnik;
+import tables.Predmet;
 import tables.Sala;
 import tables.Semestar;
 import tables.Usmjerenje;
@@ -59,6 +62,12 @@ public class ProdekanGUI extends JFrame {
 	private JTextField txtKratUsmjerenja;
 	private JTable tableSemestar;
 
+	private JTextField txtNazivPredmeta;
+	private JTextField txtKratpredmet;
+	private JTextField txtNazsemestar;
+	private JTable tablePredmet;
+	
+	
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	
 	JPanel panelNastavnici = new JPanel();
@@ -71,6 +80,8 @@ public class ProdekanGUI extends JFrame {
 	JPanel panelRaspored = new JPanel();
 	
     JComboBox<String> comboBox_2 = new JComboBox<String>();
+	JComboBox<String> comboBoxPredajeNast = new JComboBox<String>();
+	JComboBox<String> comboBoxTipNastavnika = new JComboBox<String>();
 	
 	ActionListener buttonListener = new ActionListener(){
 
@@ -102,12 +113,47 @@ public class ProdekanGUI extends JFrame {
 
 		
 	};
-	private JTextField txtNaziivPredmeta;
-	private JTextField txtKratpredmet;
-	private JTextField txtNazsemestar;
-	private JTable table_1;
-	private JTable table_3;
+	
+	
+	ActionListener buttonListenerNastavnik = new ActionListener(){
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			clearListe();
+			
+			Nastavnik_ nastavnik = new Nastavnik_();
+			
+			nastavnik.setImeNastavnik(txtIme.getText());
+			nastavnik.setPrezNastavnik(txtPrezime.getText());
+			nastavnik.setUsername(txtUsername.getText());
+			nastavnik.setPassword(txtPassword.getText());
+			if (comboBoxTipNastavnika.getSelectedIndex() == -1) {
+				System.err.println("Pogresno unesen ili nije unesen tip nastavnika");
+			} else {
+				nastavnik.setVrstaNastavnik(comboBoxTipNastavnika.getSelectedIndex());
+			}
+			
+			try {
+				DBExecuteNastavnik.insertNastavnik(nastavnik);
+				popuniTabeluNastavnicima();
+
+				comboBoxPredajeNast.setBounds(113, 245, 206, 24);
+				panelPredmeti.add(comboBoxPredajeNast);
+				
+				fillComboBoxPredmet();
+				
+				
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
+
+	};
+	private JTable table_3;
+	
 
 	/**
 	 * Launch the application.
@@ -153,19 +199,20 @@ public class ProdekanGUI extends JFrame {
 		/**
 		 * Grupe
 		 */
-		//tabbedPane.addTab("Grupe", null, panelGrupe, null);
+		tabbedPane.addTab("Grupe", null, panelGrupe, null);
+		panelGrupe.setLayout(null);
 		
 		/**
 		 * Raspored
 		 */
-		//tabbedPane.addTab("Raspored", null, panelRaspored, null);
+		tabbedPane.addTab("Raspored", null, panelRaspored, null);
 		
 		
 		
 
 	}
 
-	private void initPanelPredmeti() {
+	private void initPanelPredmeti() throws SQLException {
 		tabbedPane.addTab("Predmeti", null, panelPredmeti, null);
 		panelPredmeti.setLayout(null);
 		
@@ -177,86 +224,217 @@ public class ProdekanGUI extends JFrame {
 		lblNazivPredmeta.setBounds(12, 39, 150, 15);
 		panelPredmeti.add(lblNazivPredmeta);
 		
-		txtNaziivPredmeta = new JTextField();
-		txtNaziivPredmeta.setText("");
-		txtNaziivPredmeta.setBounds(12, 66, 305, 19);
-		panelPredmeti.add(txtNaziivPredmeta);
-		txtNaziivPredmeta.setColumns(10);
+		txtNazivPredmeta = new JTextField();
+		txtNazivPredmeta.setText("");
+		txtNazivPredmeta.setBounds(12, 66, 305, 19);
+		panelPredmeti.add(txtNazivPredmeta);
+		txtNazivPredmeta.setColumns(10);
 		
 		JLabel lblSkraenicaNazivaPredmeta = new JLabel("Skraćenica naziva predmeta:");
-		lblSkraenicaNazivaPredmeta.setBounds(12, 97, 250, 15);
+		lblSkraenicaNazivaPredmeta.setBounds(340, 39, 250, 15);
 		panelPredmeti.add(lblSkraenicaNazivaPredmeta);
 		
 		txtKratpredmet = new JTextField();
 		txtKratpredmet.setText("");
-		txtKratpredmet.setBounds(12, 124, 305, 19);
+		txtKratpredmet.setBounds(340, 66, 250, 19);
 		panelPredmeti.add(txtKratpredmet);
 		txtKratpredmet.setColumns(10);
 		
 		JLabel lblKojemSemestruPripada = new JLabel("Predaje se u:");
-		lblKojemSemestruPripada.setBounds(12, 155, 150, 15);
+		lblKojemSemestruPripada.setBounds(609, 39, 150, 15);
 		panelPredmeti.add(lblKojemSemestruPripada);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(12, 182, 192, 24);
-		panelPredmeti.add(comboBox);
+		final JComboBox comboBoxUSemestru = new JComboBox();
+		comboBoxUSemestru.setBounds(609, 63, 150, 24);
+		panelPredmeti.add(comboBoxUSemestru);
+		
+		clearListe();
+		comboBoxUSemestru.removeAllItems();
+		DBExecuteSemestar.getSemestri();
+		ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
+		semestri = Semestar.semestarLista;
+		for (int i = 0; i < semestri.size(); i++) {
+			Semestar_ semestarPom = new Semestar_();
+			semestarPom = semestri.get(i);
+			comboBoxUSemestru.addItem(semestarPom.getNazSemestar());
+		}
+		
+
+		
 		
 		JLabel lblIzborni = new JLabel("Izborni:");
-		lblIzborni.setBounds(212, 155, 70, 15);
+		lblIzborni.setBounds(208, 97, 70, 15);
 		panelPredmeti.add(lblIzborni);
 		
-		JRadioButton rdbtnDa = new JRadioButton("Da");
-		rdbtnDa.setBounds(212, 183, 50, 23);
+		final JRadioButton rdbtnDa = new JRadioButton("Da");
+		rdbtnDa.setBounds(208, 125, 45, 23);
 		panelPredmeti.add(rdbtnDa);
 		
-		JRadioButton rdbtnNe = new JRadioButton("Ne");
-		rdbtnNe.setBounds(267, 183, 50, 23);
+		final JRadioButton rdbtnNe = new JRadioButton("Ne");
+		rdbtnNe.setBounds(272, 125, 45, 23);
 		panelPredmeti.add(rdbtnNe);
 		
 		ButtonGroup groupIzborni = new ButtonGroup();
 		groupIzborni.add(rdbtnDa);
 		groupIzborni.add(rdbtnNe);
+
+		
 		
 		JLabel lblTipNastave = new JLabel("Tip nastave:");
-		lblTipNastave.setBounds(12, 218, 150, 15);
+		lblTipNastave.setBounds(12, 97, 150, 15);
 		panelPredmeti.add(lblTipNastave);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(12, 245, 145, 24);
-		panelPredmeti.add(comboBox_1);
+		final JComboBox<String> comboBoxTipNastave = new JComboBox<String>();
+		comboBoxTipNastave.setBounds(12, 124, 178, 24);
+		panelPredmeti.add(comboBoxTipNastave);
+		
+		comboBoxTipNastave.addItem("Predavanja");
+		comboBoxTipNastave.addItem("Auditorne vježbe");
+		comboBoxTipNastave.addItem("Laboratorijske vježbe");
+
+
+		
 		
 		JLabel lblPredaje = new JLabel("Predaje:");
-		lblPredaje.setBounds(174, 218, 70, 15);
+		lblPredaje.setBounds(340, 97, 70, 15);
 		panelPredmeti.add(lblPredaje);
 		
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setBounds(169, 245, 150, 24);
-		panelPredmeti.add(comboBox_3);
+		comboBoxPredajeNast.setBounds(340, 124, 250, 24);
+		panelPredmeti.add(comboBoxPredajeNast);
+		
+		fillComboBoxPredmet();
+		
+
+		
 		
 		JButton btnPotvrdiUnos_4 = new JButton("Potvrdi unos");
-		btnPotvrdiUnos_4.setBounds(12, 282, 150, 25);
+		btnPotvrdiUnos_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					DBExecuteNastavnik.getNastavnici();
+					DBExecuteSemestar.getSemestri();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} //trebaju nam svi nastavnici
+				
+				Predmet_ predmet = new Predmet_();
+				
+				predmet.setNazPredmet(txtNazivPredmeta.getText());
+				predmet.setKratPredmet(txtKratpredmet.getText());
+				
+				
+				if (comboBoxTipNastave.getSelectedIndex() == -1) {
+					System.err.println("Pogresno unesen ili nije unesen tip nastavnika");
+				} else {
+					if(comboBoxTipNastave.getSelectedIndex() == 0)
+						predmet.setTipNastave("Predavanja");
+					else if (comboBoxTipNastave.getSelectedIndex() == 1) 
+						predmet.setTipNastave("Auditorne vježbe");
+					else if (comboBoxTipNastave.getSelectedIndex() == 2) 
+						predmet.setTipNastave("Laboratorijske vježbe");
+					
+				}
+								
+				if (rdbtnDa.isSelected()) 
+					predmet.setIzborni(1);
+				else if(rdbtnNe.isSelected())
+					predmet.setIzborni(0);
+
+				
+				/**
+				 * Za Semestar 
+				 */
+				if (comboBoxUSemestru.getSelectedIndex() == -1) {
+					System.err.println("Pogresno unesen ili nije unesen semestar");
+				} else {
+					int pom = comboBoxUSemestru.getSelectedIndex();
+					
+					Semestar_ semestar = new Semestar_();
+					ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
+					semestri = Semestar.semestarLista;
+					semestar = semestri.get(pom);
+					
+					int pom2 = semestar.getSifSemestar();
+					predmet.setSifSemestar(pom2);
+					System.out.println("---------SifSemestar");
+					System.out.println(pom2);
+					System.out.println("---------");
+				}		
+				
+				/*
+				 * Za Nastavnika 
+				 */
+				if (comboBoxPredajeNast.getSelectedIndex() == -1) {
+					System.err.println("Pogresno unesen ili nije unesen nastavnik");
+				} else {
+					int pom3 = comboBoxPredajeNast.getSelectedIndex();
+					
+					Nastavnik_ nastavnik = new Nastavnik_();
+					ArrayList<Nastavnik_> nastavnici = new ArrayList<Nastavnik_>();
+					nastavnici = Nastavnik.nastavnikLista;
+					nastavnik = nastavnici.get(pom3);
+					
+					int pom4 = nastavnik.getSifNastavnik();
+					predmet.setSifNastavnik(pom4);
+					System.out.println("---------SifNastavnik");
+					System.out.println(pom4);
+					System.out.println("---------");
+				}
+				
+				/**
+				 * Unos u bazu podataka u tabelu predmet
+				 */
+				try {
+					DBExecutePredmet.insertPredmet(predmet);
+					popuniTabeluPredmetima();				
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}		
+			}
+		});
+		btnPotvrdiUnos_4.setBounds(609, 124, 150, 25);
 		panelPredmeti.add(btnPotvrdiUnos_4);
 		
+				
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(329, 12, 430, 289);
+		scrollPane.setBounds(12, 165, 747, 142);
 		panelPredmeti.add(scrollPane);
 		
-		table_3 = new JTable();
-		scrollPane.setViewportView(table_3);
-		table_3.setModel(new DefaultTableModel(
+		tablePredmet = new JTable();
+		scrollPane.setViewportView(tablePredmet);
+		tablePredmet.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
 				"Sifra", "Predmet", "Skracenica", "Vrsta Nastave", "Predaje", "Izborni", "Semestar"
 			}
 		));
-		table_3.getColumnModel().getColumn(0).setPreferredWidth(42);
-		table_3.getColumnModel().getColumn(1).setPreferredWidth(147);
-		table_3.getColumnModel().getColumn(3).setPreferredWidth(98);
-		table_3.getColumnModel().getColumn(4).setPreferredWidth(144);
-		table_3.getColumnModel().getColumn(5).setPreferredWidth(50);
-		table_3.getColumnModel().getColumn(6).setPreferredWidth(65);
+		
+		popuniTabeluPredmetima();				
+
+		
+		tablePredmet.getColumnModel().getColumn(0).setPreferredWidth(35);
+		tablePredmet.getColumnModel().getColumn(1).setPreferredWidth(270);
+		tablePredmet.getColumnModel().getColumn(2).setPreferredWidth(70);
+		tablePredmet.getColumnModel().getColumn(3).setPreferredWidth(160);
+		tablePredmet.getColumnModel().getColumn(4).setPreferredWidth(200);
+		tablePredmet.getColumnModel().getColumn(5).setPreferredWidth(50);
+		tablePredmet.getColumnModel().getColumn(6).setPreferredWidth(70);
+		
+		
+		tablePredmet.addContainerListener(new ContainerAdapter() {
+			@Override
+			public void componentAdded(ContainerEvent e) {
+			}
+		});
+		
+		
 	}
+
+	
 
 	private void initPanelSemestar() throws SQLException {
 		tabbedPane.addTab("Semestar", null, panelSemestar, null);
@@ -631,19 +809,16 @@ public class ProdekanGUI extends JFrame {
 		panelNastavnici.add(txtPassword);
 		txtPassword.setColumns(10);
 		
-		final JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(12, 271, 143, 30);
-		panelNastavnici.add(comboBox);
 		
-		comboBox.addItem("Prodekan");
-		comboBox.addItem("Profesor");
-		comboBox.addItem("Asistent");
+		comboBoxTipNastavnika.setBounds(12, 271, 143, 30);
+		panelNastavnici.add(comboBoxTipNastavnika);
 		
-		JButton btnPotvrdiUnos = new JButton("Potvrdi unos");
-		btnPotvrdiUnos.addActionListener(new ActionListener() {
-			/**
-			 * Kada se desi unos, treba da upise u bazu podataka odgovarajuceg nastavnika.
-			 */
+		comboBoxTipNastavnika.addItem("Prodekan");
+		comboBoxTipNastavnika.addItem("Profesor");
+		comboBoxTipNastavnika.addItem("Asistent");
+		
+		JButton btnPotvrdiUnosNastavnik = new JButton("Potvrdi unos");
+		/*btnPotvrdiUnos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			
 				Nastavnik_ nastavnik = new Nastavnik_();
@@ -669,9 +844,10 @@ public class ProdekanGUI extends JFrame {
 
 			}
 
-		});
-		btnPotvrdiUnos.setBounds(167, 274, 150, 25);
-		panelNastavnici.add(btnPotvrdiUnos);
+		});*/
+		btnPotvrdiUnosNastavnik.setBounds(167, 274, 150, 25);
+		btnPotvrdiUnosNastavnik.addActionListener(buttonListenerNastavnik);
+		panelNastavnici.add(btnPotvrdiUnosNastavnik);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(329, 12, 430, 289);
@@ -862,6 +1038,92 @@ public class ProdekanGUI extends JFrame {
 		
 	}
 	
+	private void popuniTabeluPredmetima() throws SQLException{
+		
+		
+		DefaultTableModel model = (DefaultTableModel) tablePredmet.getModel();
+		
+		resetTable(model);
+		
+		DBExecutePredmet.getPredmeti();
+		DBExecuteSemestar.getSemestri();
+		DBExecuteNastavnik.getNastavnici();
+				
+		ArrayList<Predmet_> predmeti = new ArrayList<Predmet_>();
+		ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
+		ArrayList<Nastavnik_> nastavnici = new ArrayList<Nastavnik_>();
+
+		predmeti = Predmet.predmetLista;
+		semestri = Semestar.semestarLista;
+		nastavnici = Nastavnik.nastavnikLista;		
+		
+		for (int i = 0; i < predmeti.size(); i++) {
+			Predmet_ predmet = new Predmet_();	
+			Semestar_ semestar = new Semestar_();
+			Nastavnik_ nastavnik = new Nastavnik_();
+
+			predmet = predmeti.get(i);
+			String sifPredString = String.valueOf(predmet.getSifPredmet()); //treba za ispis u tabelu da ga u string pretvorimo, zato ovaj korak
+			
+			String izborniString = "";
+			if(predmet.getIzborni() == 0)
+				izborniString = "Ne";
+			else if(predmet.getIzborni() == 1)
+				izborniString = "Da";
+
+			/**
+			 * pretrazujemo vektor semestara da nadjemo sa odgovarajucim indeksom. Kada ga pronadjemo, taj semestar snimimo u varijablu semestar i izadjemo.
+			 */
+			for (int j = 0; j < semestri.size(); j++) {
+				Semestar_ semestar1 = new Semestar_();
+				semestar1 = semestri.get(j);
+				
+				if(semestar1.getSifSemestar() == predmet.getSifSemestar()){
+					semestar = semestar1;
+					break;
+				}
+			}
+			/**
+			 * pretrazujemo vektor profesora da nadjemo sa odgovarajucim indeksom. Kada ga pronadjemo, tog nastavnika snimimo u varijablu nastavnika i izadjemo.
+			 */
+			for (int k = 0; k < nastavnici.size(); k++) {
+				Nastavnik_ nastavnik1 = new Nastavnik_();
+				nastavnik1 = nastavnici.get(k);
+				
+				if(nastavnik1.getSifNastavnik() == predmet.getSifNastavnik()){
+					nastavnik = nastavnik1;
+					break;
+				}
+			}
+			// sifra naziv skracenica
+			//"Sifra", "Predmet", "Skracenica", "Vrsta Nastave", "Predaje", "Izborni", "Semestar"
+			model.addRow(new Object[]{
+					sifPredString, predmet.getNazPredmet(), predmet.getKratPredmet(), predmet.getTipNastave(), nastavnik.getImeNastavnik() + " " + nastavnik.getPrezNastavnik()
+					,izborniString, semestar.getNazSemestar()
+					});
+		}			
+			
+	}
+		
+		
+		
+	
+	
+	private void fillComboBoxPredmet() throws SQLException {
+		clearListe();
+		comboBoxPredajeNast.removeAllItems();
+		DBExecuteNastavnik.getNastavnici();
+		ArrayList<Nastavnik_> nastavnici = new ArrayList<Nastavnik_>();
+		nastavnici = Nastavnik.nastavnikLista;
+		for (int i = 0; i < nastavnici.size(); i++) {
+			Nastavnik_ nastavnikPom = new Nastavnik_();
+			nastavnikPom = nastavnici.get(i);
+			comboBoxPredajeNast.addItem(nastavnikPom.getImeNastavnik() + " " + nastavnikPom.getPrezNastavnik());
+		}
+	}
+	
+	
+	
 	private void resetTable(DefaultTableModel model) {
 		
 		model.setRowCount(0);
@@ -875,5 +1137,6 @@ public class ProdekanGUI extends JFrame {
 		Sala.salaLista.clear();
 		Usmjerenje.usmjerenjeLista.clear();
 		Semestar.semestarLista.clear();
+		Predmet.predmetLista.clear();
 	}
 }
