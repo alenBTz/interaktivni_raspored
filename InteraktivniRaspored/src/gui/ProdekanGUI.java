@@ -82,6 +82,7 @@ public class ProdekanGUI extends JFrame {
     JComboBox<String> comboBox_2 = new JComboBox<String>();
 	JComboBox<String> comboBoxPredajeNast = new JComboBox<String>();
 	JComboBox<String> comboBoxTipNastavnika = new JComboBox<String>();
+	JComboBox<String> comboBoxUSemestru = new JComboBox();
 	
 	ActionListener buttonListener = new ActionListener(){
 
@@ -110,18 +111,41 @@ public class ProdekanGUI extends JFrame {
 				e1.printStackTrace();
 			}
 		}
-
-		
 	};
 	
+	ActionListener buttonListenerSemestar = new ActionListener(){
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			clearListe();
+
+			Semestar_ semestar= new Semestar_();
+			semestar.setNazSemestar(txtNazsemestar.getText());
+			
+			try {
+				DBExecuteSemestar.insertSemestar(semestar);
+				popuniTabeluSemestrima();
+				
+				comboBoxUSemestru.setBounds(609, 63, 150, 24);
+				panelPredmeti.add(comboBoxUSemestru);		
+				fillComboBoxUSemestru();
+				
+				
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	};
 	
 	ActionListener buttonListenerNastavnik = new ActionListener(){
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			clearListe();
-			
+
 			Nastavnik_ nastavnik = new Nastavnik_();
 			
 			nastavnik.setImeNastavnik(txtIme.getText());
@@ -137,22 +161,18 @@ public class ProdekanGUI extends JFrame {
 			try {
 				DBExecuteNastavnik.insertNastavnik(nastavnik);
 				popuniTabeluNastavnicima();
-
-				comboBoxPredajeNast.setBounds(113, 245, 206, 24);
+				
+				comboBoxPredajeNast.setBounds(340, 124, 250, 24);
 				panelPredmeti.add(comboBoxPredajeNast);
-				
 				fillComboBoxPredmet();
-				
 				
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
+			
 		}
-
 	};
-	private JTable table_3;
 	
 
 	/**
@@ -244,24 +264,13 @@ public class ProdekanGUI extends JFrame {
 		lblKojemSemestruPripada.setBounds(609, 39, 150, 15);
 		panelPredmeti.add(lblKojemSemestruPripada);
 		
-		final JComboBox comboBoxUSemestru = new JComboBox();
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////
 		comboBoxUSemestru.setBounds(609, 63, 150, 24);
-		panelPredmeti.add(comboBoxUSemestru);
-		
-		clearListe();
-		comboBoxUSemestru.removeAllItems();
-		DBExecuteSemestar.getSemestri();
-		ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
-		semestri = Semestar.semestarLista;
-		for (int i = 0; i < semestri.size(); i++) {
-			Semestar_ semestarPom = new Semestar_();
-			semestarPom = semestri.get(i);
-			comboBoxUSemestru.addItem(semestarPom.getNazSemestar());
-		}
-		
+		panelPredmeti.add(comboBoxUSemestru);		
+		fillComboBoxUSemestru();
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		
-		
+
 		JLabel lblIzborni = new JLabel("Izborni:");
 		lblIzborni.setBounds(208, 97, 70, 15);
 		panelPredmeti.add(lblIzborni);
@@ -299,11 +308,12 @@ public class ProdekanGUI extends JFrame {
 		lblPredaje.setBounds(340, 97, 70, 15);
 		panelPredmeti.add(lblPredaje);
 		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////
 		comboBoxPredajeNast.setBounds(340, 124, 250, 24);
 		panelPredmeti.add(comboBoxPredajeNast);
-		
 		fillComboBoxPredmet();
-		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 		
 		
@@ -315,7 +325,6 @@ public class ProdekanGUI extends JFrame {
 					DBExecuteNastavnik.getNastavnici();
 					DBExecuteSemestar.getSemestri();
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} //trebaju nam svi nastavnici
 				
@@ -434,8 +443,6 @@ public class ProdekanGUI extends JFrame {
 		
 	}
 
-	
-
 	private void initPanelSemestar() throws SQLException {
 		tabbedPane.addTab("Semestar", null, panelSemestar, null);
 		panelSemestar.setLayout(null);
@@ -454,8 +461,8 @@ public class ProdekanGUI extends JFrame {
 		panelSemestar.add(txtNazsemestar);
 		txtNazsemestar.setColumns(10);
 		
-		JButton btnPotvrdiUnos_3 = new JButton("Potvrdi unos");
-		btnPotvrdiUnos_3.addActionListener(new ActionListener() {
+		JButton btnPotvrdiUnosSemestar = new JButton("Potvrdi unos");
+		/*btnPotvrdiUnos_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Semestar_ semestar= new Semestar_();
 				semestar.setNazSemestar(txtNazsemestar.getText());
@@ -470,9 +477,10 @@ public class ProdekanGUI extends JFrame {
 				}
 				
 			}
-		});
-		btnPotvrdiUnos_3.setBounds(12, 97, 150, 25);
-		panelSemestar.add(btnPotvrdiUnos_3);
+		});*/
+		btnPotvrdiUnosSemestar.setBounds(12, 97, 150, 25);
+		btnPotvrdiUnosSemestar.addActionListener(buttonListenerSemestar);
+		panelSemestar.add(btnPotvrdiUnosSemestar);
 		
 		JScrollPane scrollPaneSemestar = new JScrollPane();
 		scrollPaneSemestar.setBounds(329, 12, 430, 289);
@@ -818,7 +826,7 @@ public class ProdekanGUI extends JFrame {
 		comboBoxTipNastavnika.addItem("Asistent");
 		
 		JButton btnPotvrdiUnosNastavnik = new JButton("Potvrdi unos");
-		/*btnPotvrdiUnos.addActionListener(new ActionListener() {
+		/*btnPotvrdiUnosNastavnik.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			
 				Nastavnik_ nastavnik = new Nastavnik_();
@@ -827,23 +835,20 @@ public class ProdekanGUI extends JFrame {
 				nastavnik.setPrezNastavnik(txtPrezime.getText());
 				nastavnik.setUsername(txtUsername.getText());
 				nastavnik.setPassword(txtPassword.getText());
-				if (comboBox.getSelectedIndex() == -1) {
+				if (comboBoxTipNastavnika.getSelectedIndex() == -1) {
 					System.err.println("Pogresno unesen ili nije unesen tip nastavnika");
 				} else {
-					nastavnik.setVrstaNastavnik(comboBox.getSelectedIndex());
+					nastavnik.setVrstaNastavnik(comboBoxTipNastavnika.getSelectedIndex());
 				}
 				
 				try {
 					DBExecuteNastavnik.insertNastavnik(nastavnik);
 					popuniTabeluNastavnicima();
-
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 			}
-
 		});*/
 		btnPotvrdiUnosNastavnik.setBounds(167, 274, 150, 25);
 		btnPotvrdiUnosNastavnik.addActionListener(buttonListenerNastavnik);
@@ -1104,14 +1109,25 @@ public class ProdekanGUI extends JFrame {
 		}			
 			
 	}
-		
-		
-		
 	
+	private void fillComboBoxUSemestru() throws SQLException {
+		clearListe();
+		comboBoxUSemestru.removeAllItems();
+		
+		DBExecuteSemestar.getSemestri();
+		ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
+		semestri = Semestar.semestarLista;
+		for (int i = 0; i < semestri.size(); i++) {
+			Semestar_ semestarPom = new Semestar_();
+			semestarPom = semestri.get(i);
+			comboBoxUSemestru.addItem(semestarPom.getNazSemestar());
+		}
+	}
 	
 	private void fillComboBoxPredmet() throws SQLException {
 		clearListe();
 		comboBoxPredajeNast.removeAllItems();
+		
 		DBExecuteNastavnik.getNastavnici();
 		ArrayList<Nastavnik_> nastavnici = new ArrayList<Nastavnik_>();
 		nastavnici = Nastavnik.nastavnikLista;
@@ -1121,8 +1137,6 @@ public class ProdekanGUI extends JFrame {
 			comboBoxPredajeNast.addItem(nastavnikPom.getImeNastavnik() + " " + nastavnikPom.getPrezNastavnik());
 		}
 	}
-	
-	
 	
 	private void resetTable(DefaultTableModel model) {
 		
