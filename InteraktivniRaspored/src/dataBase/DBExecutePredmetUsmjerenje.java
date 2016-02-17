@@ -6,49 +6,40 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import modeli.Usmjerenje_;
-import tables.Usmjerenje;
+import modeli.PredmetUsmjerenje_;
+import tables.PredmetUsmjerenje;
 
-public class DBExecuteUsmjerenje {
+public class DBExecutePredmetUsmjerenje {
 	
-	private static final String SQL = "SELECT * FROM usmjerenje";
+	private static final String SQL = "SELECT * FROM PredmetUsmjerenje";
 
-	/**
-	 * @author dino
-	 * Metod za uspostavljanje konekcije na bazu podataka i dohvatanja svih predmetUsmjerenja.
-	 * @return 
-	 */
-	public static void getUsmjerenja() throws SQLException {
+	public static void getPredmetUsmjerenja() throws SQLException {
 
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(SQL);
 				) {
-			Usmjerenje.getUsmjerenjeList(rs);
+			PredmetUsmjerenje.getPredmetList(rs);
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);
 		}
 	}
-	
-	/**
-	 * @author dino
-	 * Metod za ubacivanje jedne zgrade u bazu.
-	 * @return 
-	 */
-	public static boolean insertUsmjerenje(Usmjerenje_ usmjerenje) throws SQLException {
-		
-		String sqlInsert = "INSERT INTO usmjerenje (nazUsmjerenje, kratUsmjerenje) " + "VALUES (?, ?)";
+
+
+	public static boolean insertPredmetUsmjerenje(PredmetUsmjerenje_ predmetUsmjerenje) throws SQLException {
+
+		String sqlInsert = "INSERT INTO PredmetUsmjerenje (sifPremet, sifUsmjerenje) " + "VALUES (?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				) {
-			stmt.setString(1, usmjerenje.getNazUsmjerenje());
-			stmt.setString(2, usmjerenje.getKratUsmjerenje());
+			stmt.setInt(1, predmetUsmjerenje.getSifPredmet());
+			stmt.setInt(2, predmetUsmjerenje.getSifUsmjerenje());
 			int affected = stmt.executeUpdate();
-			
+
 			/**
 			 * @dino
 			 * Posto se u bazi sifNastavnik automatski inkrementira unutar baze, treba ovaj dio.
@@ -58,7 +49,7 @@ public class DBExecuteUsmjerenje {
 				keys = stmt.getGeneratedKeys();
 				keys.next();
 				int newKey = keys.getInt(1);
-				usmjerenje.setSifUsmjerenje(newKey);
+				predmetUsmjerenje.setSifUsmjerenje(newKey);
 			} else {
 				System.err.println("Nijedan red nije izmjenjen");
 				return false;
@@ -72,10 +63,16 @@ public class DBExecuteUsmjerenje {
 			if(keys != null)
 				keys.close();
 		}
-		
+
 		return true;
 	}
-	
-	
+
+
+
+
 }
+
+
+
+
 
