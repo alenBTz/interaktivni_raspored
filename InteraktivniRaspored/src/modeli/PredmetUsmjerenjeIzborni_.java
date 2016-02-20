@@ -1,18 +1,18 @@
 package modeli;
 
-public class PredmetUsmjerenje_ {
-	int sifPredmetUsmjerenje;
+public class PredmetUsmjerenjeIzborni_ {
+	int sifIzborni;
 	int sifPredmet;
 	int sifUsmjerenje;
 	
-	public PredmetUsmjerenje_() {
-		this.sifPredmetUsmjerenje = -1;
+	public PredmetUsmjerenjeIzborni_() {
+		this.sifIzborni = -1;
 		this.sifPredmet = -1;
 		this.sifUsmjerenje = -1;
 	}
 
 	public int getSifPredmetUsmjerenje() {
-		return sifPredmetUsmjerenje;
+		return sifIzborni;
 	}
 
 	public int getSifPredmet() {
@@ -23,8 +23,8 @@ public class PredmetUsmjerenje_ {
 		return sifUsmjerenje;
 	}
 
-	public void setSifPredmetUsmjerenje(int sifPredmetUsmjerenje) {
-		this.sifPredmetUsmjerenje = sifPredmetUsmjerenje;
+	public void setSifPredmetUsmjerenje(int sifIzborni) {
+		this.sifIzborni = sifIzborni;
 	}
 
 	public void setSifPredmet(int sifPredmet) {

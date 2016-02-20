@@ -4,18 +4,12 @@ public class Predmet_ {
 	int sifPredmet;
 	String nazPredmet;
 	String kratPredmet;
-	int izborni;
-	String tipNastave;
-	int sifNastavnik;
 	int sifSemestar;
 	
 	public Predmet_(){
 		this.sifPredmet = -1;
 		this.nazPredmet = "";
 		this.kratPredmet = "";
-		this.izborni = -1;
-		this.tipNastave = "";
-		this.sifNastavnik = -1;
 		this.sifSemestar = -1;
 	}
 
@@ -29,18 +23,6 @@ public class Predmet_ {
 
 	public String getKratPredmet() {
 		return kratPredmet;
-	}
-
-	public int getIzborni() {
-		return izborni;
-	}
-
-	public String getTipNastave() {
-		return tipNastave;
-	}
-
-	public int getSifNastavnik() {
-		return sifNastavnik;
 	}
 
 	public int getSifSemestar() {
@@ -57,18 +39,6 @@ public class Predmet_ {
 
 	public void setKratPredmet(String kratPredmet) {
 		this.kratPredmet = kratPredmet;
-	}
-
-	public void setIzborni(int izborni) {
-		this.izborni = izborni;
-	}
-
-	public void setTipNastave(String tipNastave) {
-		this.tipNastave = tipNastave;
-	}
-
-	public void setSifNastavnik(int sifNastavnik) {
-		this.sifNastavnik = sifNastavnik;
 	}
 
 	public void setSifSemestar(int sifSemestar) {

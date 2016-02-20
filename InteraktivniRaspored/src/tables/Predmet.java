@@ -18,9 +18,6 @@ public class Predmet {
 			predmet.setSifPredmet(rs.getInt("sifPredmet"));
 			predmet.setNazPredmet(rs.getString("nazPredmet"));
 			predmet.setKratPredmet(rs.getString("kratPredmet"));
-			predmet.setIzborni(rs.getInt("izborni"));
-			predmet.setTipNastave(rs.getString("tipNastave"));
-			predmet.setSifNastavnik(rs.getInt("sifNastavnik"));
 			predmet.setSifSemestar(rs.getInt("sifSemestar"));
 			
 

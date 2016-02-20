@@ -6,21 +6,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import modeli.PredmetUsmjerenje_;
-import tables.PredmetUsmjerenje;
+import modeli.PredmetGrupaTipNastave_;
+import tables.PredmetGrupaTipNastave;
 
-public class DBExecutePredmetUsmjerenje {
-	
-	private static final String SQL = "SELECT * FROM PredmetUsmjerenje";
+public class DBExecutePredmetGrupaTipNastave {
 
-	public static void getPredmetUsmjerenja() throws SQLException {
+	private static final String SQL = "SELECT * FROM PredmetGrupaTipNastave";
+
+	public static void getPredmetGrupaTipNastave() throws SQLException {
 
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(SQL);
 				) {
-			PredmetUsmjerenje.getPredmetList(rs);
+			PredmetGrupaTipNastave.getPredmetGrupaTipNastaveList(rs);
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);
@@ -28,16 +28,17 @@ public class DBExecutePredmetUsmjerenje {
 	}
 
 
-	public static boolean insertPredmetUsmjerenje(PredmetUsmjerenje_ predmetUsmjerenje) throws SQLException {
+	public static boolean insertPredmetGrupaTipNastave(PredmetGrupaTipNastave_ predmetGrupaTipNastave) throws SQLException {
 
-		String sqlInsert = "INSERT INTO PredmetUsmjerenje (sifPremet, sifUsmjerenje) " + "VALUES (?, ?)";
+		String sqlInsert = "INSERT INTO PredmetGrupaTipNastave (sifPremet, sifGrupa, sifTipNastaven) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				) {
-			stmt.setInt(1, predmetUsmjerenje.getSifPredmet());
-			stmt.setInt(2, predmetUsmjerenje.getSifUsmjerenje());
+			stmt.setInt(1, predmetGrupaTipNastave.getSifPredmet());
+			stmt.setInt(2, predmetGrupaTipNastave.getSifGrupa());
+			stmt.setInt(3, predmetGrupaTipNastave.getSifTipNastave());
 			int affected = stmt.executeUpdate();
 
 			/**
@@ -49,7 +50,7 @@ public class DBExecutePredmetUsmjerenje {
 				keys = stmt.getGeneratedKeys();
 				keys.next();
 				int newKey = keys.getInt(1);
-				predmetUsmjerenje.setSifUsmjerenje(newKey);
+				predmetGrupaTipNastave.setSifPredmetGrupaTipNastave(newKey);
 			} else {
 				System.err.println("Nijedan red nije izmjenjen");
 				return false;
@@ -66,13 +67,4 @@ public class DBExecutePredmetUsmjerenje {
 
 		return true;
 	}
-
-
-
-
 }
-
-
-
-
-

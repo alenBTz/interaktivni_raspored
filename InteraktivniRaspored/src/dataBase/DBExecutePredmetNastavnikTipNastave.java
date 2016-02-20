@@ -6,67 +6,54 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import modeli.Predmet_;
-import modeli.Sala_;
-import tables.Predmet;
-import tables.Sala;
+import modeli.PredmetNastavnikTipNastave_;
+import tables.PredmetNastavnikTipNastave;
 
-public class DBExecutePredmet {
+
+public class DBExecutePredmetNastavnikTipNastave {
+
 	
-	private static final String SQL = "SELECT * FROM predmet";
+	private static final String SQL = "SELECT * FROM PredmetNastavnikTipNastave";
 
-	public static void getPredmeti() throws SQLException {
+	public static void getPredmetNastavnikTipNastave() throws SQLException {
 
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(SQL);
 				) {
-			Predmet.getPredmetList(rs);
+			PredmetNastavnikTipNastave.getPredmetNastavnikTipNastaveList(rs);
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);
 		}
 	}
-	
-	/**
-	 * @author dino
-	 * Metod za ubacivanje jednog predmeta u tabelu.
-	 * @return 
-	 */
-	public static boolean insertPredmet(Predmet_ predmet) throws SQLException {
-		
-		String sqlInsert = "INSERT INTO predmet (nazPredmet, kratPredmet, sifSemestar) " + "VALUES (?, ?, ?)";
 
+
+	public static boolean insertPredmetNastavnikTipNastave(PredmetNastavnikTipNastave_ predmetNastavnikTipNastave) throws SQLException {
+
+		String sqlInsert = "INSERT INTO PredmetNastavnikTipNastave (sifNastavnik, sifPredmet, sifTipNastave) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				) {
-			Statement stmtPom1 = conn.createStatement();
-			stmtPom1.execute("SET FOREIGN_KEY_CHECKS=0");
-			stmtPom1.close();
-			
-			stmt.setString(1, predmet.getNazPredmet());
-			stmt.setString(2, predmet.getKratPredmet());
-			stmt.setInt(3, predmet.getSifSemestar());
+			stmt.setInt(1, predmetNastavnikTipNastave.getSifNastavnik());
+			stmt.setInt(2, predmetNastavnikTipNastave.getSifPredmet());
+			stmt.setInt(3, predmetNastavnikTipNastave.getSifTipNastave());
 			
 			int affected = stmt.executeUpdate();
+
 			
 			if (affected == 1) {
 				keys = stmt.getGeneratedKeys();
 				keys.next();
 				int newKey = keys.getInt(1);
-				predmet.setSifPredmet(newKey);
+				predmetNastavnikTipNastave.setSifPredmetNastavnikTipNastave(newKey);
 			} else {
 				System.err.println("Nijedan red nije izmjenjen");
 				return false;
 			}
-			
-			Statement stmtPom2 = conn.createStatement();
-			stmtPom2.execute("SET FOREIGN_KEY_CHECKS=1");
-			stmtPom2.close();
-			
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);
@@ -75,9 +62,11 @@ public class DBExecutePredmet {
 		finally {
 			if(keys != null)
 				keys.close();
-
 		}
-		
+
 		return true;
 	}
+	
+	
+	
 }

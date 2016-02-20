@@ -6,23 +6,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import modeli.Predmet_;
-import modeli.Sala_;
-import tables.Predmet;
-import tables.Sala;
+import modeli.Student_;
+import tables.Student;
 
-public class DBExecutePredmet {
+public class DBExecuteStudent {
+
 	
-	private static final String SQL = "SELECT * FROM predmet";
+	private static final String SQL = "SELECT * FROM student";
 
-	public static void getPredmeti() throws SQLException {
+	public static void getStudent() throws SQLException {
 
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(SQL);
 				) {
-			Predmet.getPredmetList(rs);
+			Student.getStudentList(rs);
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);
@@ -31,12 +30,12 @@ public class DBExecutePredmet {
 	
 	/**
 	 * @author dino
-	 * Metod za ubacivanje jednog predmeta u tabelu.
+	 * Metod za ubacivanje jednog studenta u tabelu.
 	 * @return 
 	 */
-	public static boolean insertPredmet(Predmet_ predmet) throws SQLException {
+	public static boolean insertStudent(Student_ student) throws SQLException {
 		
-		String sqlInsert = "INSERT INTO predmet (nazPredmet, kratPredmet, sifSemestar) " + "VALUES (?, ?, ?)";
+		String sqlInsert = "INSERT INTO student (imeStudent, prezStudent, jmbgStudent, brIndexa, sifGrupa) " + "VALUES (?, ?, ?, ?, ?)";
 
 		ResultSet keys = null;
 		try(
@@ -47,17 +46,18 @@ public class DBExecutePredmet {
 			stmtPom1.execute("SET FOREIGN_KEY_CHECKS=0");
 			stmtPom1.close();
 			
-			stmt.setString(1, predmet.getNazPredmet());
-			stmt.setString(2, predmet.getKratPredmet());
-			stmt.setInt(3, predmet.getSifSemestar());
-			
+			stmt.setString(1, student.getImeStudent());
+			stmt.setString(2, student.getPrezStudent());
+			stmt.setString(3, student.getJmbgStudent());
+			stmt.setString(4, student.getBrIndexa());
+			stmt.setInt(5, student.getSifGrupa());
 			int affected = stmt.executeUpdate();
 			
 			if (affected == 1) {
 				keys = stmt.getGeneratedKeys();
 				keys.next();
 				int newKey = keys.getInt(1);
-				predmet.setSifPredmet(newKey);
+				student.setSifGrupa(newKey);
 			} else {
 				System.err.println("Nijedan red nije izmjenjen");
 				return false;
@@ -80,4 +80,6 @@ public class DBExecutePredmet {
 		
 		return true;
 	}
+	
+	
 }

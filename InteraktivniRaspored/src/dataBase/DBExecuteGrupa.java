@@ -6,23 +6,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import modeli.Predmet_;
-import modeli.Sala_;
-import tables.Predmet;
-import tables.Sala;
+import modeli.Grupa_;
+import tables.Grupa;
 
-public class DBExecutePredmet {
-	
-	private static final String SQL = "SELECT * FROM predmet";
 
-	public static void getPredmeti() throws SQLException {
+
+public class DBExecuteGrupa {
+
+	private static final String SQL = "SELECT * FROM grupa";
+
+	/**
+	 * @author dino
+	 * Metod za uspostavljanje konekcije na bazu podataka i dohvatanja svih ntorki iz grupa.
+	 * @return 
+	 */
+	public static void getGrupe() throws SQLException {
 
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(SQL);
 				) {
-			Predmet.getPredmetList(rs);
+			Grupa.getGrupaList(rs);
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);
@@ -31,42 +36,36 @@ public class DBExecutePredmet {
 	
 	/**
 	 * @author dino
-	 * Metod za ubacivanje jednog predmeta u tabelu.
+	 * Metod za ubacivanje jedne grupe u tabelu.
+
 	 * @return 
 	 */
-	public static boolean insertPredmet(Predmet_ predmet) throws SQLException {
+	public static boolean insertGrupa(Grupa_ grupa) throws SQLException {
 		
-		String sqlInsert = "INSERT INTO predmet (nazPredmet, kratPredmet, sifSemestar) " + "VALUES (?, ?, ?)";
-
+		String sqlInsert = "INSERT INTO grupa (nazivGrupa) " + "VALUES (?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				) {
-			Statement stmtPom1 = conn.createStatement();
-			stmtPom1.execute("SET FOREIGN_KEY_CHECKS=0");
-			stmtPom1.close();
 			
-			stmt.setString(1, predmet.getNazPredmet());
-			stmt.setString(2, predmet.getKratPredmet());
-			stmt.setInt(3, predmet.getSifSemestar());
-			
+			stmt.setString(1, grupa.getNazivGrupa());
 			int affected = stmt.executeUpdate();
 			
+			/**
+			 * @dino
+			 * Posto se u bazi sifIzborni automatski inkrementira unutar baze, treba ovaj dio.
+			 * Pogledati Lynda tutorial insertsql, pa ce biti jasnije
+			 */
 			if (affected == 1) {
 				keys = stmt.getGeneratedKeys();
 				keys.next();
 				int newKey = keys.getInt(1);
-				predmet.setSifPredmet(newKey);
+				grupa.setSifGrupa(newKey);
 			} else {
 				System.err.println("Nijedan red nije izmjenjen");
 				return false;
 			}
-			
-			Statement stmtPom2 = conn.createStatement();
-			stmtPom2.execute("SET FOREIGN_KEY_CHECKS=1");
-			stmtPom2.close();
-			
 		} 
 		catch (SQLException e) {
 			DBUtil.processException(e);
@@ -75,9 +74,10 @@ public class DBExecutePredmet {
 		finally {
 			if(keys != null)
 				keys.close();
-
 		}
 		
 		return true;
 	}
+	
+	
 }
