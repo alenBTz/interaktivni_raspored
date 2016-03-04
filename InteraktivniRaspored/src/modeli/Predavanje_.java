@@ -1,20 +1,21 @@
 package modeli;
 
+import java.sql.Time;
+
 public class Predavanje_ {
 	int sifPredavanje;
 	String danPredavanje;
-	int pocetakPredavanjeH;
-	int pocetakPredavanjeMin;
-	int krajPredavanjeH;
-	int krajPredavanjeMin;
+	Time pocetakPredavanje;
+	Time krajPredavanje;
+	int sifSala;
 	
 	public Predavanje_() {
+		
 		this.sifPredavanje = -1;
 		this.danPredavanje = "";
-		this.pocetakPredavanjeH = -1;
-		this.pocetakPredavanjeMin = -1;
-		this.krajPredavanjeH = -1;
-		this.krajPredavanjeMin = -1;
+		this.pocetakPredavanje = Time.valueOf("00:00:00");
+		this.krajPredavanje = Time.valueOf("00:00:00");
+		this.sifSala = -1;
 	}
 
 	public int getSifPredavanje() {
@@ -25,20 +26,16 @@ public class Predavanje_ {
 		return danPredavanje;
 	}
 
-	public int getPocetakPredavanjeH() {
-		return pocetakPredavanjeH;
+	public Time getPocetakPredavanje() {
+		return pocetakPredavanje;
 	}
 
-	public int getPocetakPredavanjeMin() {
-		return pocetakPredavanjeMin;
+	public Time getKrajPredavanje() {
+		return krajPredavanje;
 	}
 
-	public int getKrajPredavanjeH() {
-		return krajPredavanjeH;
-	}
-
-	public int getKrajPredavanjeMin() {
-		return krajPredavanjeMin;
+	public int getSifSala() {
+		return sifSala;
 	}
 
 	public void setSifPredavanje(int sifPredavanje) {
@@ -49,20 +46,18 @@ public class Predavanje_ {
 		this.danPredavanje = danPredavanje;
 	}
 
-	public void setPocetakPredavanjeH(int pocetakPredavanjeH) {
-		this.pocetakPredavanjeH = pocetakPredavanjeH;
+	public void setPocetakPredavanje(Time pocetakPredavanje) {
+		this.pocetakPredavanje = pocetakPredavanje;
 	}
 
-	public void setPocetakPredavanjeMin(int pocetakPredavanjeMin) {
-		this.pocetakPredavanjeMin = pocetakPredavanjeMin;
+	public void setKrajPredavanje(Time krajPredavanje) {
+		this.krajPredavanje = krajPredavanje;
 	}
 
-	public void setKrajPredavanjeH(int krajPredavanjeH) {
-		this.krajPredavanjeH = krajPredavanjeH;
+	public void setSifSala(int sifSala) {
+		this.sifSala = sifSala;
 	}
-
-	public void setKrajPredavanjeMin(int krajPredavanjeMin) {
-		this.krajPredavanjeMin = krajPredavanjeMin;
-	}
+	
+	
 	
 }

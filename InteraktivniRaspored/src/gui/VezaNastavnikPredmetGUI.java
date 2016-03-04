@@ -85,8 +85,8 @@ public class VezaNastavnikPredmetGUI {
 				 * nesto kao refresh tabele, nisam znao drugacije implementirati nego ovako
 				 */
 				if(active1 == 1)
-					TabelaVezaNastPred.frameTabelaVezaNastPred.dispose();
-				TabelaVezaNastPred.startTabelaVezaNastPred();
+					TabelaVezaNastPredGUI.frameTabelaVezaNastPred.dispose();
+				TabelaVezaNastPredGUI.startTabelaVezaNastPred();
 				active2 = 1;
 			
 			}
@@ -298,8 +298,8 @@ public class VezaNastavnikPredmetGUI {
 						 * nesto kao refresh tabele, nisam znao drugacije implementirati nego ovako
 						 */
 						if(active2 == 1)
-							TabelaVezaNastPred.frameTabelaVezaNastPred.dispose();
-						TabelaVezaNastPred.startTabelaVezaNastPred();
+							TabelaVezaNastPredGUI.frameTabelaVezaNastPred.dispose();
+						TabelaVezaNastPredGUI.startTabelaVezaNastPred();
 						active1 = 1;
 					} catch (SQLException e1) {
 						e1.printStackTrace();

@@ -7,10 +7,13 @@ import tables.Izborni;
 import tables.Nastavnik;
 import tables.NastavnikGrupa;
 import tables.Predavanje;
+import tables.PredavanjeUsmjerenje;
 import tables.Predmet;
 import tables.PredmetGrupaTipNastave;
 import tables.PredmetNastavnikTipNastave;
+import tables.PredmetPredavanjeTipNastave;
 import tables.PredmetUsmjerenjeIzborni;
+import tables.Rezervacija;
 import tables.Sala;
 import tables.Semestar;
 import tables.Student;
@@ -38,13 +41,15 @@ public class PomocneF {
 		Predmet.predmetLista.clear();
 		PredmetGrupaTipNastave.predmetGrupaTipNastaveLista.clear();
 		PredmetNastavnikTipNastave.predmetNastavnikTipNastaveLista.clear();
+		PredmetPredavanjeTipNastave.predmetPredavanjeTipNastaveLista.clear();
 		PredmetUsmjerenjeIzborni.predmetUsmjerenjeIzborniLista.clear();
-		//Rezervacija.
+		Rezervacija.rezervacijaLista.clear();
 		Sala.salaLista.clear();
 		Semestar.semestarLista.clear();
 		Student.studentLista.clear();
 		TipNastave.tipNastaveLista.clear();
 		Usmjerenje.usmjerenjeLista.clear();
 		Zgrada.zgradaLista.clear();
+		PredavanjeUsmjerenje.predavanjeUsmjerenjeLista.clear();
 	}
 }

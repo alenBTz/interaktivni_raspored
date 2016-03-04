@@ -1,31 +1,83 @@
 package modeli;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Rezervacija_ {
 	int sifRezervacija;
 	Date datumRezervacija;
 	String tipRezervacije;
-	int satRezervacijeH;
-	int satRezervacijeMin;
-	int satRezervacijeKrajH;
-	int satRezervacijeKrajMin;
+	Time satRezervacije;
+	Time satRezervacijeKraj;
 	int sifPredmet;
 	int sifSala;
 	int sifNastavnik;
 	
+	java.util.Date pomDatum = new java.util.Date();
+	
 	public Rezervacija_() {
+		String pomDatumString = pomDatum.toString();
+		String sat = pomDatum.toString();
+		sat = sat.substring(11, 19);
+		/*
+		 * yyyy-[m]m-[d]d
+		 * dow mon dd hh:mm:ss zzz yyyy		
+		 * Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+		 */
+		String pomDatumStringMjesec = pomDatumString.substring(4, 7);
+		switch (pomDatumStringMjesec) {
+		case "Jan":
+			pomDatumStringMjesec = "01";
+			break;
+		case "Feb":
+			pomDatumStringMjesec = "02";
+			break;
+		case "Mar":
+			pomDatumStringMjesec = "03";
+			break;
+		case "Apr":
+			pomDatumStringMjesec = "04";
+			break;
+		case "May":
+			pomDatumStringMjesec = "05";
+			break;
+		case "Jun":
+			pomDatumStringMjesec = "06";
+			break;
+		case "Jul":
+			pomDatumStringMjesec = "07";
+			break;
+		case "Aug":
+			pomDatumStringMjesec = "08";
+			break;
+		case "Sep":
+			pomDatumStringMjesec = "09";
+			break;
+		case "Oct":
+			pomDatumStringMjesec = "10";
+			break;
+		case "Nov":
+			pomDatumStringMjesec = "11";
+			break;
+		case "Dec":
+			pomDatumStringMjesec = "12";
+			break;
+		default:
+			break;
+		}
+		pomDatumString = pomDatumString.substring(24, 28) + "-" + pomDatumStringMjesec + "-" 
+		 +  pomDatumString.substring(8, 10);
+		
+		
 		this.sifRezervacija = -1;
-		this.datumRezervacija = new Date();
+		this.datumRezervacija = Date.valueOf(pomDatumString);
 		this.tipRezervacije = "";
-		this.satRezervacijeH =  -1;
-		this.satRezervacijeMin =  -1;
-		this.satRezervacijeKrajH =  -1;
-		this.satRezervacijeKrajMin =  -1;
-		this.sifPredmet =  -1;
-		this.sifSala =  -1;
-		this.sifNastavnik =  -1;
+		this.satRezervacije = Time.valueOf(sat);
+		this.satRezervacijeKraj = Time.valueOf("00:00:00");
+		this.sifPredmet = -1;
+		this.sifSala = -1;
+		this.sifNastavnik = -1;
 	}
 
 	public int getSifRezervacija() {
@@ -40,20 +92,12 @@ public class Rezervacija_ {
 		return tipRezervacije;
 	}
 
-	public int getSatRezervacijeH() {
-		return satRezervacijeH;
+	public Time getSatRezervacije() {
+		return satRezervacije;
 	}
 
-	public int getSatRezervacijeMin() {
-		return satRezervacijeMin;
-	}
-
-	public int getSatRezervacijeKrajH() {
-		return satRezervacijeKrajH;
-	}
-
-	public int getSatRezervacijeKrajMin() {
-		return satRezervacijeKrajMin;
+	public Time getSatRezervacijeKraj() {
+		return satRezervacijeKraj;
 	}
 
 	public int getSifPredmet() {
@@ -80,20 +124,12 @@ public class Rezervacija_ {
 		this.tipRezervacije = tipRezervacije;
 	}
 
-	public void setSatRezervacijeH(int satRezervacijeH) {
-		this.satRezervacijeH = satRezervacijeH;
+	public void setSatRezervacije(Time satRezervacije) {
+		this.satRezervacije = satRezervacije;
 	}
 
-	public void setSatRezervacijeMin(int satRezervacijeMin) {
-		this.satRezervacijeMin = satRezervacijeMin;
-	}
-
-	public void setSatRezervacijeKrajH(int satRezervacijeKrajH) {
-		this.satRezervacijeKrajH = satRezervacijeKrajH;
-	}
-
-	public void setSatRezervacijeKrajMin(int satRezervacijeKrajMin) {
-		this.satRezervacijeKrajMin = satRezervacijeKrajMin;
+	public void setSatRezervacijeKraj(Time satRezervacijeKraj) {
+		this.satRezervacijeKraj = satRezervacijeKraj;
 	}
 
 	public void setSifPredmet(int sifPredmet) {
@@ -107,6 +143,8 @@ public class Rezervacija_ {
 	public void setSifNastavnik(int sifNastavnik) {
 		this.sifNastavnik = sifNastavnik;
 	}
+	
+	
 	
 	
 }

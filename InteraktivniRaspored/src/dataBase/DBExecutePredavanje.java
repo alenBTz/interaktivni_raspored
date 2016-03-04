@@ -11,7 +11,7 @@ import tables.Predavanje;
 
 public class DBExecutePredavanje {
 
-	
+	public static int sifPredavanjePublic = -1;
 	private static final String SQL = "SELECT * FROM predavanje";
 
 	/**
@@ -40,8 +40,7 @@ public class DBExecutePredavanje {
 	 */
 	public static boolean insertPredavanje(Predavanje_ predavanje) throws SQLException {
 		
-		String sqlInsert = "INSERT INTO predavanje (danPredavanje, pocetakPredavanjeH, pocetakPredavanjeMin"
-				+ ", krajPredavanjeH, krajPredavanjeMin) " + "VALUES (?, ?, ?, ?, ?)";
+		String sqlInsert = "INSERT INTO predavanje (danPredavanje, pocetakPredavanje, krajPredavanje, sifSala) " + "VALUES (?, ?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
@@ -49,11 +48,9 @@ public class DBExecutePredavanje {
 				) {
 			
 			stmt.setString(1, predavanje.getDanPredavanje());
-			stmt.setInt(2, predavanje.getPocetakPredavanjeH());
-			stmt.setInt(3, predavanje.getPocetakPredavanjeMin());
-			stmt.setInt(4, predavanje.getKrajPredavanjeH());
-			stmt.setInt(5, predavanje.getKrajPredavanjeMin());
-					
+			stmt.setTime(2, predavanje.getPocetakPredavanje());
+			stmt.setTime(3, predavanje.getKrajPredavanje());
+			stmt.setInt(4, predavanje.getSifSala());
 			int affected = stmt.executeUpdate();
 			
 			/**
@@ -66,6 +63,7 @@ public class DBExecutePredavanje {
 				keys.next();
 				int newKey = keys.getInt(1);
 				predavanje.setSifPredavanje(newKey);
+				sifPredavanjePublic = newKey;
 			} else {
 				System.err.println("Nijedan red nije izmjenjen");
 				return false;

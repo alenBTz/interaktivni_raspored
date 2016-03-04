@@ -8,12 +8,17 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import dataBase.DBExecutePredmet;
+import dataBase.DBExecutePredmetUsmjerenjeIzborni;
 import dataBase.DBExecuteSemestar;
+import dataBase.DBExecuteUsmjerenje;
+import modeli.PredmetUsmjerenjeIzborni_;
 import modeli.Predmet_;
 import modeli.Semestar_;
+import modeli.Usmjerenje_;
 import pomocneF.PomocneF;
 import tables.Predmet;
 import tables.Semestar;
+import tables.Usmjerenje;
 
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
@@ -221,16 +226,61 @@ public class PredmetGUI {
 					e1.printStackTrace();
 				}
 
-				//osvjezavamo combobox jer smo unjeli novi predmet
-				/*
-				comboBoxPredPredmet.setBounds(400, 63, 271, 24);
-				panelPredmeti.add(comboBoxPredPredmet);
+				
+				/**
+				 * Po defaultu cemo staviti da je svaki predmet izborni na svakom usmjerenju, i kada unesemo neki predmet
+				 * postavimo ga kao "izborni" za svako usmjerenje i kao takvog ga unesemo u BP PredmetUsmjerenjeIzborni.
+				 * Kasnije cemo u PredmetUsmjerenjeGUI definisati koji su predmeti obavezni za koji smijer.
+				 * Ovdje sada predmet koji smo odabrali unosimo u tu tabelu, za svako usmjerenje, i postavljamo da nije izborni.
+				 */
+				/**
+				 * Trebamo se konektovati na BP PredmetUsmjerenjeIzborni i BP Usmjerenja
+				 */
 				try {
-					fillComboBoxPredPredmeti();
+					DBExecutePredmetUsmjerenjeIzborni.getPredmetUsmjerenja();
+					DBExecuteUsmjerenje.getUsmjerenja();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}*/
+				}
+				/**
+				 * Potrebna nam je varijabla 'pui' (PredmetUsmjerenjeIzborni), koju cemo popuniti odredjenim vrijednostima i unjeti u BP
+				 */
+				PredmetUsmjerenjeIzborni_ pui = new PredmetUsmjerenjeIzborni_();
+				/**
+				 * U 'pui' upisujemo da predmet jeste izborni, sifru predmeta, te sva usmjerenja koja postoje
+				 */
+				pui.setSifIzborni(2); //vrijednost 2 je u tabeli definisana kao "Izborni", tj da predmet jeste izborni.
+				pui.setSifPredmet(predmet.getSifPredmet());
+				/**
+				 * Treba da pokupimo sfire svih usmjerenja iz BP Usmjerenja. kreiramo vektor u koji upisujemo sve n-torke iz tabele Usmjerenja:
+				 */
+				ArrayList<Usmjerenje_> usmjerenja = new ArrayList<Usmjerenje_>();
+				usmjerenja = Usmjerenje.usmjerenjeLista;
+				/**
+				 * trebamo proci kroz sve elemente tog vektora, i za svako usmjerenje upisati predmet i da je izborni,
+				 */
+				for (int i = 0; i < usmjerenja.size(); i++) {
+					/**
+					 * Treba nam varijabla 'usmj' u koju cemo upisivati n-torke iz vektora usmjerenja
+					 */
+					Usmjerenje_ usmj = new Usmjerenje_();
+					usmj = usmjerenja.get(i);
+					/**
+					 * Sada kako imamo n-torku usmjerenja, mozemo sifru od tog usmjerenja uzet i upisati u 'pui'
+					 */
+					pui.setSifUsmjerenje(usmj.getSifUsmjerenje());
+					/**
+					 * 'pui' je sada kompletirano, pa ga upisujemo u BP
+					 */
+					try {
+						DBExecutePredmetUsmjerenjeIzborni.insertPredmetUsmjerenje(pui);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
 			}
 		});
 		btnPotvrdiUnosPredmet.setBounds(122, 135, 200, 25);

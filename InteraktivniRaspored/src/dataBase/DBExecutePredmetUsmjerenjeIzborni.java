@@ -30,7 +30,7 @@ public class DBExecutePredmetUsmjerenjeIzborni {
 
 	public static boolean insertPredmetUsmjerenje(PredmetUsmjerenjeIzborni_ predmetUsmjerenje) throws SQLException {
 
-		String sqlInsert = "INSERT INTO PredmetUsmjerenje (sifPremet, sifUsmjerenje) " + "VALUES (?, ?)";
+		String sqlInsert = "INSERT INTO PredmetUsmjerenjeIzborni (sifPredmet, sifUsmjerenje, sifIzborni) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
@@ -38,18 +38,19 @@ public class DBExecutePredmetUsmjerenjeIzborni {
 				) {
 			stmt.setInt(1, predmetUsmjerenje.getSifPredmet());
 			stmt.setInt(2, predmetUsmjerenje.getSifUsmjerenje());
+			stmt.setInt(3, predmetUsmjerenje.getSifIzborni());
 			int affected = stmt.executeUpdate();
 
 			/**
 			 * @dino
-			 * Posto se u bazi sifNastavnik automatski inkrementira unutar baze, treba ovaj dio.
+			 * Posto se u bazi prim kljuc automatski inkrementira unutar baze, treba ovaj dio.
 			 * Pogledati Lynda tutorial insertsql, pa ce biti jasnije
 			 */
 			if (affected == 1) {
 				keys = stmt.getGeneratedKeys();
 				keys.next();
 				int newKey = keys.getInt(1);
-				predmetUsmjerenje.setSifUsmjerenje(newKey);
+				predmetUsmjerenje.setSifPredmUsmjIzborni(newKey);
 			} else {
 				System.err.println("Nijedan red nije izmjenjen");
 				return false;
@@ -67,7 +68,34 @@ public class DBExecutePredmetUsmjerenjeIzborni {
 		return true;
 	}
 
+	public static boolean updatePredmetUsmjerenjeObavezan(PredmetUsmjerenjeIzborni_ predmetUsmjerenje) throws SQLException {
+		
+		/**
+		 * sifIzborni = 2 je po defaultu, tj da predmeti "izborni" predmeti na svim usmjerenjima.
+		 * za odgovarajuci predmet na odgovarajucem usmjerenju, postavljamo da je sifIzborni = 1, tj da je obavezan
+		 */
+		String sqlInsert = "UPDATE PredmetUsmjerenjeIzborni SET sifIzborni = 1 " + "WHERE sifPredmet = ? AND sifUsmjerenje = ?";
+		ResultSet keys = null;
+		try(
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+				) {
+			stmt.setInt(1, predmetUsmjerenje.getSifPredmet());
+			stmt.setInt(2, predmetUsmjerenje.getSifUsmjerenje());
+			stmt.executeUpdate();
 
+		} 
+		catch (SQLException e) {
+			DBUtil.processException(e);
+			return false;
+		} 
+		finally {
+			if(keys != null)
+				keys.close();
+		}
+
+		return true;
+	}
 
 
 }

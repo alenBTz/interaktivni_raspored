@@ -14,7 +14,8 @@ public class PredmetUsmjerenjeIzborni {
 		
 		while (rs.next()) {
 			PredmetUsmjerenjeIzborni_ predmetUsmjerenjeIzborni = new PredmetUsmjerenjeIzborni_();	
-			predmetUsmjerenjeIzborni.setSifPredmetUsmjerenje(rs.getInt("sifPredmetUsmjerenje"));
+			predmetUsmjerenjeIzborni.setSifPredmUsmjIzborni(rs.getInt("sifPredmUsmjIzborni"));
+			predmetUsmjerenjeIzborni.setSifIzborni(rs.getInt("sifIzborni"));
 			predmetUsmjerenjeIzborni.setSifPredmet(rs.getInt("sifPredmet"));
 			predmetUsmjerenjeIzborni.setSifUsmjerenje(rs.getInt("sifUsmjerenje"));
 

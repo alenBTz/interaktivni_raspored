@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 
 public class ProdekanGUI {
 
-	private JFrame frame;
+	public static JFrame frame;
 
 	/**
 	 * Launch the application.
@@ -40,12 +40,8 @@ public class ProdekanGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 725, 397);
-		/**
-		 * umjesto JFrame.EXIT_ON_CLOSE, koristit cemo JFrame.DISPOSE_ON_CLOSE. Exit on close zatvara cijelu aplikaciju
-		 * dok Dispose samo aktivni prozor
-		 */
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setBounds(10, 10, 725, 397);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblUnos = new JLabel("Unos:");
@@ -60,7 +56,6 @@ public class ProdekanGUI {
 		btnUnosNastavnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				NastavnikGUI.startNastavnikGUI();
-				TabelaNastavnikGUI.startTabelaNastavnikGUI();
 				}
 		});
 		btnUnosNastavnika.setBounds(12, 65, 200, 25);
@@ -112,6 +107,7 @@ public class ProdekanGUI {
 		btnUnosSemestri.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SemestarGUI.startSemestarGUI();
+			
 			}
 		});
 		btnUnosSemestri.setBounds(12, 213, 200, 25);
@@ -125,12 +121,23 @@ public class ProdekanGUI {
 		btnUnosPredmeti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PredmetGUI.startPredmetGUI();
+			
 			}
 		});
 		btnUnosPredmeti.setBounds(12, 250, 200, 25);
 		frame.getContentPane().add(btnUnosPredmeti);
 		
-		
+		/**
+		 * Ako se pritisne dugme 'Raspored', pokrene RasporedGUI.startRasporedGUI();
+		 */	
+		JButton btnUnosRaspored = new JButton("Raspored");
+		btnUnosRaspored.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RasporedGUI.startRasporedGUI();
+			}
+		});
+		btnUnosRaspored.setBounds(12, 287, 200, 25);
+		frame.getContentPane().add(btnUnosRaspored);
 		
 		JLabel lblPovezivanje = new JLabel("Povezivanje:");
 		lblPovezivanje.setBounds(264, 38, 100, 15);
@@ -159,6 +166,32 @@ public class ProdekanGUI {
 		});
 		btnGrupaPredmet.setBounds(264, 102, 200, 25);
 		frame.getContentPane().add(btnGrupaPredmet);
+		
+		/**
+		 * Ako se pritisne dugme 'Grupa - Predmet', pokrene se VezaGrupaPredmet.startVeza GrupaPredmet
+		 */
+		JButton btnGrupaPredmet_1 = new JButton("Grupa - Predmet");
+		btnGrupaPredmet_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VezaGrupaPredmetGUI.startGrupaPredmetGUI();
+			}
+		});
+		btnGrupaPredmet_1.setBounds(264, 139, 200, 25);
+		frame.getContentPane().add(btnGrupaPredmet_1);
+		
+		/**
+		 * Ako se pritisne dugme 'Predmet - Usmjerenje', pokrene se VezaPredmetUsmjerenjeGUI.startPredmet()
+		 */
+		JButton btnPredmetUsmjerenje = new JButton("Predmet - Usmjerenje");
+		btnPredmetUsmjerenje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VezaPredmetUsmjerenjeGUI.startVezaPredmUsmjGUI();
+			}
+		});
+		btnPredmetUsmjerenje.setBounds(264, 176, 200, 25);
+		frame.getContentPane().add(btnPredmetUsmjerenje);
+		
+		
 		
 		
 		

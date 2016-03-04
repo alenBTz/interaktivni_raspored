@@ -30,7 +30,7 @@ public class DBExecutePredmetGrupaTipNastave {
 
 	public static boolean insertPredmetGrupaTipNastave(PredmetGrupaTipNastave_ predmetGrupaTipNastave) throws SQLException {
 
-		String sqlInsert = "INSERT INTO PredmetGrupaTipNastave (sifPremet, sifGrupa, sifTipNastaven) " + "VALUES (?, ?, ?)";
+		String sqlInsert = "INSERT INTO PredmetGrupaTipNastave (sifPredmet, sifGrupa, sifTipNastave) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);

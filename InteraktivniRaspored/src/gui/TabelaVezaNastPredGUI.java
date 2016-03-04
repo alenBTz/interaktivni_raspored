@@ -25,7 +25,7 @@ import tables.TipNastave;
 
 import javax.swing.JScrollPane;
 
-public class TabelaVezaNastPred {
+public class TabelaVezaNastPredGUI {
 
 	public static JFrame frameTabelaVezaNastPred;
 	private JTable tableVezaNastPred;
@@ -37,7 +37,7 @@ public class TabelaVezaNastPred {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TabelaVezaNastPred window = new TabelaVezaNastPred();
+					TabelaVezaNastPredGUI window = new TabelaVezaNastPredGUI();
 					window.frameTabelaVezaNastPred.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,7 +50,7 @@ public class TabelaVezaNastPred {
 	 * Create the application.
 	 * @throws SQLException 
 	 */
-	public TabelaVezaNastPred() throws SQLException {
+	public TabelaVezaNastPredGUI() throws SQLException {
 		initialize();
 	}
 

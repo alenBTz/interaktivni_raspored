@@ -16,10 +16,9 @@ public static ArrayList<Predavanje_> predavanjeLista = new ArrayList<Predavanje_
 			Predavanje_ predavanje = new Predavanje_();
 			predavanje.setSifPredavanje(rs.getInt("sifPredavanje"));
 			predavanje.setDanPredavanje(rs.getString("danPredavanje"));
-			predavanje.setPocetakPredavanjeH(rs.getInt("pocetakPredavanjeH"));
-			predavanje.setPocetakPredavanjeMin(rs.getInt("pocetakPredavanjeMin"));
-			predavanje.setKrajPredavanjeH(rs.getInt("krajPredavanjeH"));
-			predavanje.setKrajPredavanjeMin(rs.getInt("krajPredavanjeMin"));			
+			predavanje.setPocetakPredavanje(rs.getTime("pocetakPredavanje"));
+			predavanje.setKrajPredavanje(rs.getTime("krajPredavanje"));
+			predavanje.setSifSala(rs.getInt("sifSala"));
 			predavanjeLista.add(predavanje);
 		}
 		return predavanjeLista;

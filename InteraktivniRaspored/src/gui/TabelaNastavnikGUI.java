@@ -56,7 +56,6 @@ public class TabelaNastavnikGUI {
 		 * umjesto JFrame.EXIT_ON_CLOSE, koristit cemo JFrame.DISPOSE_ON_CLOSE. Exit on close zatvara cijelu aplikaciju
 		 * dok Dispose samo aktivni prozor
 		 */
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameTabelaNastavnik.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
