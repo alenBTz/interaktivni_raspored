@@ -31,6 +31,7 @@ public class DBExecuteUsmjerenje {
 			DBUtil.processException(e);
 		}
 	}
+
 	
 	/**
 	 * @author dino

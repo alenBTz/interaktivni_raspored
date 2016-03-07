@@ -12,9 +12,12 @@ import javax.swing.table.DefaultTableModel;
 import dataBase.DBExecuteUsmjerenje;
 import modeli.Usmjerenje_;
 import pomocneF.PomocneF;
+import pomocneF.IzbrisiRed;
 import tables.Usmjerenje;
 
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaUsmjerenjeGUI {
 
@@ -79,6 +82,25 @@ public class TabelaUsmjerenjeGUI {
 		popuniTabeluUsmjerenjima();
 
 		JButton btnIzbriiUsmjerenja = new JButton("Izbriši usmjerenja");
+		btnIzbriiUsmjerenja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+				int red = tableUsmjerenja.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tableUsmjerenja.getValueAt(red, 0);
+						IzbrisiRed.izbrisiRed(id, "usmjerenje");
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbriiUsmjerenja.setBounds(12, 231, 180, 25);
 		frameTabelaUsmjerenja.getContentPane().add(btnIzbriiUsmjerenja);
 	}

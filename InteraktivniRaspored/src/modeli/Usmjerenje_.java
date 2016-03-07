@@ -4,11 +4,13 @@ public class Usmjerenje_ {
 	int sifUsmjerenje;
 	String nazUsmjerenje;
 	String kratUsmjerenje;
+	String nazPrveKolone;
 	
 	public Usmjerenje_() {
 		this.sifUsmjerenje = -1;
 		this.nazUsmjerenje = "";
 		this.kratUsmjerenje = "";
+		this.nazPrveKolone = "sifra";
 	}
 
 	public int getSifUsmjerenje() {
@@ -22,11 +24,13 @@ public class Usmjerenje_ {
 	public String getKratUsmjerenje() {
 		return kratUsmjerenje;
 	}
-
+	
+	
 	public void setSifUsmjerenje(int sifUsmjerenje) {
 		this.sifUsmjerenje = sifUsmjerenje;
 	}
-
+	
+	
 	public void setNazUsmjerenje(String nazUsmjerenje) {
 		this.nazUsmjerenje = nazUsmjerenje;
 	}

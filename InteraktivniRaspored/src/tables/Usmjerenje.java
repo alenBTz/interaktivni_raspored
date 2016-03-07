@@ -1,6 +1,7 @@
 package tables;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ import modeli.Usmjerenje_;
 public class Usmjerenje {
 	
 	public static ArrayList<Usmjerenje_> usmjerenjeLista = new ArrayList<Usmjerenje_>();
-
+	public static String nazPrveKolone = "";
 	/**
 	 * @author dino
 	 * Metod getNastavnikList koji iz baze podataka uzima sve n-torke iz tabele nastavnik,
