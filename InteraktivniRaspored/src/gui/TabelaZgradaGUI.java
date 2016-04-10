@@ -12,8 +12,11 @@ import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteZgrada;
 import modeli.Zgrada_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Zgrada;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaZgradaGUI {
 
@@ -85,6 +88,25 @@ public class TabelaZgradaGUI {
 		}
 		
 		btnIzbrisiZgrade = new JButton("Izbriši zgrade");
+		btnIzbrisiZgrade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableZgrade.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tableZgrade.getValueAt(red, 0);
+						IzbrisiRed.izbrisiRed(id,"sifZgrada","zgrada");
+						modelZgrade.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbrisiZgrade.setBounds(12, 286, 150, 25);
 		frameTabelaZgrade.getContentPane().add(btnIzbrisiZgrade);
 	}

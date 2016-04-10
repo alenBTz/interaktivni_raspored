@@ -11,15 +11,19 @@ import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteSemestar;
 import modeli.Semestar_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Semestar;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaSemestarGUI {
 
 	public static JFrame frameTabelaSemestar;
 	private JTable tableSemestar;
 	private JScrollPane scrollPane;
+	private DefaultTableModel modelSemestar;
 
 	/**
 	 * Launch the application.
@@ -85,14 +89,33 @@ public class TabelaSemestarGUI {
 		
 		
 		JButton btnIzbrisiSemestar = new JButton("Izbriši semestar");
+		btnIzbrisiSemestar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableSemestar.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tableSemestar.getValueAt(red, 0);
+						IzbrisiRed.izbrisiRed(id,"sifSemestar","semestar");
+						modelSemestar.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbrisiSemestar.setBounds(12, 336, 174, 25);
 		frameTabelaSemestar.getContentPane().add(btnIzbrisiSemestar);
 	}
 	
 	private void popuniTabeluSemestrima() throws SQLException{
-		DefaultTableModel model = (DefaultTableModel) tableSemestar.getModel();
+		modelSemestar = (DefaultTableModel) tableSemestar.getModel();
 
-		PomocneF.resetTable(model);
+		PomocneF.resetTable(modelSemestar);
 
 		DBExecuteSemestar.getSemestri();
 		ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
@@ -102,7 +125,7 @@ public class TabelaSemestarGUI {
 			semestar = semestri.get(i);
 			String sifSemtString = String.valueOf(semestar.getSifSemestar());
 
-			model.addRow(new Object[]{sifSemtString, semestar.getNazSemestar()});
+			modelSemestar.addRow(new Object[]{sifSemtString, semestar.getNazSemestar()});
 		}
 	}
 

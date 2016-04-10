@@ -13,15 +13,15 @@ import tables.Usmjerenje;
 
 public class IzbrisiRed {
 
-	public static boolean izbrisiRed(Object red,String imeTabele) throws SQLException {
+	public static boolean izbrisiRed(Object red,String imeKolone,String imeTabele) throws SQLException {
 		
-		 String sql = "DELETE FROM usmjerenje WHERE sifUsmjerenje = ?";
+
+		 String sql = "DELETE FROM "+imeTabele+" WHERE "+imeKolone+" = ?";
 
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
 				) {
-			//stmt.setString(1,imeTabele);
 			stmt.setObject(1,red);
 			int affected = stmt.executeUpdate();
 			if (affected == 1){

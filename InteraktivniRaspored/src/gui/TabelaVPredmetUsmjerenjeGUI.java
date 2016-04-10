@@ -17,6 +17,7 @@ import modeli.Izborni_;
 import modeli.PredmetUsmjerenjeIzborni_;
 import modeli.Predmet_;
 import modeli.Usmjerenje_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Izborni;
 import tables.Predmet;
@@ -24,12 +25,14 @@ import tables.PredmetUsmjerenjeIzborni;
 import tables.Usmjerenje;
 
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaVPredmetUsmjerenjeGUI {
 
 	public static JFrame frameTabelaPredmUsmj;
 	private JTable tablePredmUsmj;
-
+	private DefaultTableModel modelVezaPredUsmjerenja;
 	/**
 	 * Launch the application.
 	 */
@@ -78,11 +81,11 @@ public class TabelaVPredmetUsmjerenjeGUI {
 			new Object[][] {
 			},
 			new String[] {
-				"Usmjerenje", "Predmet"
+				"Sifra","Usmjerenje", "Predmet"
 			}
 		));
-		tablePredmUsmj.getColumnModel().getColumn(0).setPreferredWidth(255);
-		tablePredmUsmj.getColumnModel().getColumn(1).setPreferredWidth(274);
+		tablePredmUsmj.getColumnModel().getColumn(1).setPreferredWidth(255);
+		tablePredmUsmj.getColumnModel().getColumn(2).setPreferredWidth(274);
 		
 		try {
 			popuniTabeluUsmjerPredmetima();
@@ -94,6 +97,27 @@ public class TabelaVPredmetUsmjerenjeGUI {
 		
 		
 		JButton btnIzbriiOdabraniRed = new JButton("Izbriši odabrani red");
+		btnIzbriiOdabraniRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tablePredmUsmj.getSelectedRow();
+
+				if(red != -1)
+				{
+					try {
+						Object id = tablePredmUsmj.getValueAt(red, 0);
+						System.out.println(id);
+						IzbrisiRed.izbrisiRed(id,"sifPredmUsmjIzborni","predmetusmjerenjeizborni");
+						modelVezaPredUsmjerenja.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbriiOdabraniRed.setBounds(12, 435, 200, 25);
 		frameTabelaPredmUsmj.getContentPane().add(btnIzbriiOdabraniRed);
 		
@@ -107,12 +131,12 @@ public class TabelaVPredmetUsmjerenjeGUI {
 		 */
 		
 		
-		DefaultTableModel model = (DefaultTableModel) tablePredmUsmj.getModel();
+		modelVezaPredUsmjerenja = (DefaultTableModel) tablePredmUsmj.getModel();
 		
 		/**
 		 * Pozovemo ovaj metod kako ne bi bilo u tabeli ispis duplih elemenata. Resetuje tabelu, tj isprazni joj sadrzaj
 		 */
-		PomocneF.resetTable(model);
+		PomocneF.resetTable(modelVezaPredUsmjerenja);
 		
 		/**
 		 * Povezivanje sa bazama podataka
@@ -155,7 +179,8 @@ public class TabelaVPredmetUsmjerenjeGUI {
 			 * Uzimamo vrijednost n-torke iz tabele PredmetUsmjerenjeIzborni i snimamo u 'pui'
 			 */
 			pui = puiX.get(i);
-			
+			String sifPredmUsmjIzborni = String.valueOf(pui.getSifPredmUsmjIzborni());
+
 			/**
 			 * u pui imamo polja sifPredmet, sifUsmjerenje, sifIzborni.
 			 * Na osnovu tih polja mozemo dohvatiti odgovarajuce n-torke iz preostale 
@@ -213,8 +238,8 @@ public class TabelaVPredmetUsmjerenjeGUI {
 				 * U tabeli necemo ispisavit polja "izborni", jer tabela sadrzi samo predmete koji su obavezni na odredjenom smjeru.
 				 * Vec su ranije u bazu unjeti samo obavezni predmeti za odgovarajuci smijer.
 				 */
-				model.addRow(new Object[]{
-						usmjerenje.getNazUsmjerenje(), predmet.getNazPredmet()
+				modelVezaPredUsmjerenja.addRow(new Object[]{
+						sifPredmUsmjIzborni,usmjerenje.getNazUsmjerenje(), predmet.getNazPredmet()
 				});
 				
 			}

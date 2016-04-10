@@ -15,18 +15,21 @@ import dataBase.DBExecuteNastavnikGrupa;
 import modeli.Grupa_;
 import modeli.NastavnikGrupa_;
 import modeli.Nastavnik_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Grupa;
 import tables.Nastavnik;
 import tables.NastavnikGrupa;
 
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaNastavnikGrupaGUI {
 
 	public static JFrame frameTabelaNastGrupa;
 	private JTable tableNastGrupa;
-
+	private DefaultTableModel modelNastGrupa;
 	/**
 	 * Launch the application.
 	 */
@@ -91,14 +94,32 @@ public class TabelaNastavnikGrupaGUI {
 		 * brisanje jedne n-torke iz tabele, tj iz baze.
 		 */
 		JButton btnIzbrisiVezuNastGrupa = new JButton("Izbriši vezu");
+		btnIzbrisiVezuNastGrupa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableNastGrupa.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tableNastGrupa.getValueAt(red, 0);
+						IzbrisiRed.izbrisiRed(id,"sifNastGrupa","nastavnikgrupa");
+						modelNastGrupa.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbrisiVezuNastGrupa.setBounds(12, 436, 117, 25);
 		frameTabelaNastGrupa.getContentPane().add(btnIzbrisiVezuNastGrupa);
 	}
 	
 	private void popuniTabeluGrupaNastavnicima() throws SQLException{
-		DefaultTableModel model = (DefaultTableModel) tableNastGrupa.getModel();
-
-		PomocneF.resetTable(model);
+		modelNastGrupa = (DefaultTableModel) tableNastGrupa.getModel();
+		PomocneF.resetTable(modelNastGrupa);
 
 		/**
 		 * konektujemo se na BP ,tj na tabele NastavnikGrupa, nastavnik i grupa.
@@ -167,7 +188,7 @@ public class TabelaNastavnikGrupaGUI {
 			/**
 			 * sad kad smo dohvatili sve elemente, mozemo ispisati tabelu
 			 */
-			model.addRow(new Object[]{ nastavnik.getImeNastavnik() + " " + nastavnik.getPrezNastavnik(), grupa.getNazivGrupa()});
+			modelNastGrupa.addRow(new Object[]{ nastavnik.getImeNastavnik() + " " + nastavnik.getPrezNastavnik(), grupa.getNazivGrupa()});
 		}
 	}
 }

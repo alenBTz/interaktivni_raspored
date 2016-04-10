@@ -12,8 +12,11 @@ import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteNastavnik;
 import modeli.Nastavnik_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Nastavnik;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaNastavnikGUI {
 
@@ -85,6 +88,25 @@ public class TabelaNastavnikGUI {
 
 		
 		JButton btnIzbriiNastavnike = new JButton("Izbriši nastavnike");
+		btnIzbriiNastavnike.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableNastavnici.getSelectedRow();
+			if(red != -1)
+			{
+				try {
+					Object id = tableNastavnici.getValueAt(red, 0);
+					IzbrisiRed.izbrisiRed(id,"sifNastavnik","nastavnik");
+					modelNastavnik.removeRow(red);
+				} catch (SQLException e) {
+					System.out.println("Operacija brisanja nije uspjela ");
+					e.printStackTrace();
+				}
+			}
+			else{
+				System.out.println("Niti jedan red nije selektovan");
+			}
+			}
+		});
 		btnIzbriiNastavnike.setBounds(12, 436, 200, 25);
 		frameTabelaNastavnik.getContentPane().add(btnIzbriiNastavnike);
 	}

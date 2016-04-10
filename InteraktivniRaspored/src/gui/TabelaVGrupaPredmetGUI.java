@@ -17,6 +17,7 @@ import modeli.Grupa_;
 import modeli.PredmetGrupaTipNastave_;
 import modeli.Predmet_;
 import modeli.TipNastave_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Grupa;
 import tables.Predmet;
@@ -24,11 +25,14 @@ import tables.PredmetGrupaTipNastave;
 import tables.TipNastave;
 
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaVGrupaPredmetGUI {
 
 	public static JFrame frameTabelaGrupaPredmet;
 	private JTable tableGrupaPredmetTipN;
+	private DefaultTableModel modelVezaGrupaPredmet;
 
 	/**
 	 * Launch the application.
@@ -78,7 +82,7 @@ public class TabelaVGrupaPredmetGUI {
 			new Object[][] {
 			},
 			new String[] {
-				"Grupa", "Predmet", "Tip nastave"
+				"Sifra","Grupa", "Predmet", "Tip nastave"
 			}
 		));
 		tableGrupaPredmetTipN.getColumnModel().getColumn(0).setPreferredWidth(106);
@@ -93,18 +97,39 @@ public class TabelaVGrupaPredmetGUI {
 		}
 		
 		JButton btnIzbriiStavku = new JButton("Izbriši stavku");
+		btnIzbriiStavku.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableGrupaPredmetTipN.getSelectedRow();
+
+				if(red != -1)
+				{
+					try {
+						Object id = tableGrupaPredmetTipN.getValueAt(red, 0);
+						System.out.println(id);
+						IzbrisiRed.izbrisiRed(id,"sifPredmetGrupaTipNastave","predmetgrupatipnastave");
+						modelVezaGrupaPredmet.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbriiStavku.setBounds(12, 436, 150, 25);
 		frameTabelaGrupaPredmet.getContentPane().add(btnIzbriiStavku);
 	}
 	
 	private void popuniTabeluGrupaPredmetima() throws SQLException{
 
-		DefaultTableModel model = (DefaultTableModel) tableGrupaPredmetTipN.getModel();
+		modelVezaGrupaPredmet = (DefaultTableModel) tableGrupaPredmetTipN.getModel();
 		
 		/**
 		 * Pozovemo ovaj metod kako ne bi bilo u tabeli ispis duplih elemenata. Resetuje tabelu, tj isprazni joj sadrzaj
 		 */
-		PomocneF.resetTable(model);
+		PomocneF.resetTable(modelVezaGrupaPredmet);
 		
 		/**
 		 * Povezivanje sa bazama podataka
@@ -145,7 +170,8 @@ public class TabelaVGrupaPredmetGUI {
 			 * Uzimamo vrijednost n-torke iz tabele PredmetGrupaTipNastave i snimamo u 'pgtn'
 			 */
 			pgtn = pgtnX.get(i);
-			
+			String sifPredmetGrupaTipNastave = String.valueOf(pgtn.getSifPredmetGrupaTipNastave());
+
 			/**
 			 * u pgtn imamo polja sifGrupa, sifTipNastave, sifPredmet.
 			 * Na osnovu tih polja mozemo dohvatiti odgovarajuce n-torke iz preostale 
@@ -197,8 +223,8 @@ public class TabelaVGrupaPredmetGUI {
 			/**
 			 * Kako smo sad pokupili predmet, grupu, i tip nastave, mozemo ispisati u tabelu
 			 */
-			model.addRow(new Object[]{
-					grupa.getNazivGrupa(), predmet.getNazPredmet(), tipNastave.getNazTipNastave()
+			modelVezaGrupaPredmet.addRow(new Object[]{
+					sifPredmetGrupaTipNastave,grupa.getNazivGrupa(), predmet.getNazPredmet(), tipNastave.getNazTipNastave()
 			});
 
 		}

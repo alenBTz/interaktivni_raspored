@@ -12,12 +12,15 @@ import dataBase.DBExecutePredmet;
 import dataBase.DBExecuteSemestar;
 import modeli.Predmet_;
 import modeli.Semestar_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Predmet;
 import tables.Semestar;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaPredmetGUI {
 
@@ -86,6 +89,25 @@ public class TabelaPredmetGUI {
 
 		
 		JButton btnIzbriiRed = new JButton("Izbriši red");
+		btnIzbriiRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tablePredmet.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tablePredmet.getValueAt(red, 0);
+						IzbrisiRed.izbrisiRed(id,"sifPredmet","predmet");
+						modelPredmet.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbriiRed.setBounds(12, 356, 117, 25);
 		frameTabelaPredmet.getContentPane().add(btnIzbriiRed);
 		

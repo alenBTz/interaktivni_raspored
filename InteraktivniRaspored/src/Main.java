@@ -13,9 +13,6 @@ public class Main {
 		ProdekanGUI.startProdekanGUI();
 		
 		Rezervacija_ rez = new Rezervacija_();
-		System.out.println(rez.getDatumRezervacija());
-
-		System.out.println(rez.getSatRezervacije());
 	}
 
 }

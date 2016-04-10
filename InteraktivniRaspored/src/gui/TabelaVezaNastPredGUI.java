@@ -17,6 +17,7 @@ import modeli.Nastavnik_;
 import modeli.PredmetNastavnikTipNastave_;
 import modeli.Predmet_;
 import modeli.TipNastave_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Nastavnik;
 import tables.Predmet;
@@ -24,12 +25,14 @@ import tables.PredmetNastavnikTipNastave;
 import tables.TipNastave;
 
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaVezaNastPredGUI {
 
 	public static JFrame frameTabelaVezaNastPred;
 	private JTable tableVezaNastPred;
-
+	private DefaultTableModel modelVezaNastPred;
 	/**
 	 * Launch the application.
 	 */
@@ -78,29 +81,50 @@ public class TabelaVezaNastPredGUI {
 			new Object[][] {
 			},
 			new String[] {
-				"Nastavnik", "Predmet", "Tip nastave"
+				"Sifra","Predmet", "Nastavnik", "Tip nastave"
 			}
 		));
-		tableVezaNastPred.getColumnModel().getColumn(0).setPreferredWidth(273);
-		tableVezaNastPred.getColumnModel().getColumn(1).setPreferredWidth(298);
-		tableVezaNastPred.getColumnModel().getColumn(2).setPreferredWidth(224);
+		tableVezaNastPred.getColumnModel().getColumn(1).setPreferredWidth(273);
+		tableVezaNastPred.getColumnModel().getColumn(2).setPreferredWidth(298);
+		tableVezaNastPred.getColumnModel().getColumn(3).setPreferredWidth(224);
 		
 		popuniTabeluNastavnicimaPredmetima();
 		
 		
 		JButton btnIzbriiVezu = new JButton("Izbriši vezu");
+		btnIzbriiVezu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableVezaNastPred.getSelectedRow();
+
+				if(red != -1)
+				{
+					try {
+						Object id = tableVezaNastPred.getValueAt(red, 0);
+						System.out.println(id);
+						IzbrisiRed.izbrisiRed(id,"sifPredmetNastavnikTipNastave","predmetnastavniktipnastave");
+						modelVezaNastPred.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbriiVezu.setBounds(12, 436, 117, 25);
 		frameTabelaVezaNastPred.getContentPane().add(btnIzbriiVezu);
 	}
 	
 	private void popuniTabeluNastavnicimaPredmetima() throws SQLException{
 
-		DefaultTableModel model = (DefaultTableModel) tableVezaNastPred.getModel();
+		modelVezaNastPred = (DefaultTableModel) tableVezaNastPred.getModel();
 		
 		/**
 		 * Pozovemo ovaj metod kako ne bi bilo u tabeli ispis duplih elemenata. Resetuje tabelu, tj isprazni joj sadrzaj
 		 */
-		PomocneF.resetTable(model);
+		PomocneF.resetTable(modelVezaNastPred);
 		
 		/**
 		 * Povezivanje sa bazama podataka
@@ -142,7 +166,7 @@ public class TabelaVezaNastPredGUI {
 			 * Uzimamo vrijednost n-torke iz tabele PredmetNastavnikTipNastave i snimamo u 'pntn'
 			 */
 			pntn = pntnX.get(i);
-			
+			String sifPredmetNastavnikTipNastave = String.valueOf(pntn.getSifPredmetNastavnikTipNastave());
 			/**
 			 * u pntn imamo polja sifNastavnik, sifTipNastave, sifPredmet.
 			 * Na osnovu tih polja mozemo dohvatiti odgovarajuce n-torke iz preostale 
@@ -194,8 +218,8 @@ public class TabelaVezaNastPredGUI {
 			/**
 			 * Kako smo sad pokupili predmet, nastavnik, i tip nastave, mozemo ispisati u tabelu
 			 */
-			model.addRow(new Object[]{
-					predmet.getNazPredmet(), nastavnik.getImeNastavnik() + " " + nastavnik.getPrezNastavnik(), tipNastave.getNazTipNastave()
+			modelVezaNastPred.addRow(new Object[]{
+					sifPredmetNastavnikTipNastave,predmet.getNazPredmet(), nastavnik.getImeNastavnik() + " " + nastavnik.getPrezNastavnik(), tipNastave.getNazTipNastave()
 			});
 
 		}

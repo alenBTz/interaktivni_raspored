@@ -13,17 +13,20 @@ import dataBase.DBExecuteGrupa;
 import dataBase.DBExecuteStudent;
 import modeli.Grupa_;
 import modeli.Student_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Grupa;
 import tables.Student;
 
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaStudentGUI {
 
 	public static JFrame frameTabelaStudent;
 	private JTable tableStudent;
-
+	private DefaultTableModel modelStudent;
 	/**
 	 * Launch the application.
 	 */
@@ -88,6 +91,25 @@ public class TabelaStudentGUI {
 		
 		
 		JButton btnIzbrisiStudenta = new JButton("Izbriši studenta");
+		btnIzbrisiStudenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableStudent.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tableStudent.getValueAt(red, 0);
+						IzbrisiRed.izbrisiRed(id,"sifStudent","student");
+						modelStudent.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbrisiStudenta.setBounds(12, 536, 150, 25);
 		frameTabelaStudent.getContentPane().add(btnIzbrisiStudenta);
 		
@@ -95,9 +117,9 @@ public class TabelaStudentGUI {
 	}
 	
 	private void popuniTabeluStudentima() throws SQLException{
-		DefaultTableModel model = (DefaultTableModel) tableStudent.getModel();
+		modelStudent = (DefaultTableModel) tableStudent.getModel();
 
-		PomocneF.resetTable(model);
+		PomocneF.resetTable(modelStudent);
 
 		DBExecuteStudent.getStudent();
 		DBExecuteGrupa.getGrupe();
@@ -128,7 +150,7 @@ public class TabelaStudentGUI {
 			}
 
 
-			model.addRow(new Object[]{sifStudString, student.getImeStudent(), student.getPrezStudent(), JMBGString
+			modelStudent.addRow(new Object[]{sifStudString, student.getImeStudent(), student.getPrezStudent(), JMBGString
 					, student.getBrIndexa(), grupa.getNazivGrupa()});
 		}
 	}

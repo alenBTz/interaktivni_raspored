@@ -84,13 +84,13 @@ public class TabelaUsmjerenjeGUI {
 		JButton btnIzbriiUsmjerenja = new JButton("Izbriši usmjerenja");
 		btnIzbriiUsmjerenja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
 				int red = tableUsmjerenja.getSelectedRow();
 				if(red != -1)
 				{
 					try {
 						Object id = tableUsmjerenja.getValueAt(red, 0);
-						IzbrisiRed.izbrisiRed(id, "usmjerenje");
+						IzbrisiRed.izbrisiRed(id,"sifUsmjerenje","usmjerenje");
+						modelUsmjerenja.removeRow(red);
 					} catch (SQLException e) {
 						System.out.println("Operacija brisanja nije uspjela ");
 						e.printStackTrace();

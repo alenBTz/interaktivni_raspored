@@ -216,6 +216,9 @@ public class VezaPredmetUsmjerenjeGUI {
 				pui.setSifIzborni(izborni.getSifIzborni());
 				pui.setSifPredmet(predmet.getSifPredmet());
 				pui.setSifUsmjerenje(usmjerenje.getSifUsmjerenje());
+				System.out.println(pui.getSifIzborni());
+				System.out.println(pui.getSifPredmet());
+				System.out.println(pui.getSifUsmjerenje());
 
 				/**
 				 * Sada radimo update tabele, tj mijenjamo predmete za odgovarajuce smijerove da su obavezni,i ispisujemo samo obavezne predmete po smijeru

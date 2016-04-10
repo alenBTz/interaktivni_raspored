@@ -4,13 +4,11 @@ public class Usmjerenje_ {
 	int sifUsmjerenje;
 	String nazUsmjerenje;
 	String kratUsmjerenje;
-	String nazPrveKolone;
 	
 	public Usmjerenje_() {
 		this.sifUsmjerenje = -1;
 		this.nazUsmjerenje = "";
 		this.kratUsmjerenje = "";
-		this.nazPrveKolone = "sifra";
 	}
 
 	public int getSifUsmjerenje() {

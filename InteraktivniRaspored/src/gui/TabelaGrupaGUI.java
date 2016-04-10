@@ -11,15 +11,19 @@ import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteGrupa;
 import modeli.Grupa_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Grupa;
 
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaGrupaGUI {
 
 	public static JFrame frameTabelaGrupa;
 	private JTable tableGrupa;
+	private DefaultTableModel modelGrupa;
 
 	/**
 	 * Launch the application.
@@ -40,14 +44,14 @@ public class TabelaGrupaGUI {
 	/**
 	 * Create the application.
 	 */
-	public TabelaGrupaGUI() {
+	public TabelaGrupaGUI() throws SQLException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() throws SQLException{
 		frameTabelaGrupa = new JFrame();
 		frameTabelaGrupa.setBounds(100, 100, 260, 408);
 		frameTabelaGrupa.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -68,36 +72,52 @@ public class TabelaGrupaGUI {
 		));
 		tableGrupa.getColumnModel().getColumn(1).setPreferredWidth(199);
 		
-		try {
+	
 			popuniTabeluGrupama();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		
 		
 		JButton btnIzbriiGrupu = new JButton("Izbriši grupu");
+		btnIzbriiGrupu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				int red = tableGrupa.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tableGrupa.getValueAt(red, 0);
+						IzbrisiRed.izbrisiRed(id,"sifGrupa","grupa");
+						modelGrupa.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbriiGrupu.setBounds(12, 344, 150, 25);
 		frameTabelaGrupa.getContentPane().add(btnIzbriiGrupu);
 	}
 	
 	
 	private void popuniTabeluGrupama() throws SQLException{
-		DefaultTableModel model = (DefaultTableModel) tableGrupa.getModel();
+		modelGrupa = (DefaultTableModel) tableGrupa.getModel();
 
-		PomocneF.resetTable(model);
+		PomocneF.resetTable(modelGrupa);
 
 		DBExecuteGrupa.getGrupe();
-		ArrayList<Grupa_> grupe = new ArrayList<>();
+		ArrayList<Grupa_> grupe = new ArrayList<Grupa_>();
 		grupe = Grupa.grupaLista;
 
 		for (int i = 0; i < grupe.size(); i++) {
 			Grupa_ grupa = new Grupa_();	
 			grupa = grupe.get(i);
-			String sifGupaString = String.valueOf(grupa.getSifGrupa());
+			String sifGrupaString = String.valueOf(grupa.getSifGrupa());
 
-			model.addRow(new Object[]{sifGupaString, grupa.getNazivGrupa()});
+			modelGrupa.addRow(new Object[]{sifGrupaString, grupa.getNazivGrupa()});
 		}
 	}
 	

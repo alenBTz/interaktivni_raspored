@@ -289,7 +289,13 @@ public class ZgradaSalaGUI {
 				 */
 				sala.setNazivSala(txtNazivsale.getText());
 				sala.setKratSala(txtKratsale.getText());
-				sala.setBrMjesta(Integer.parseInt(txtKapacitetsale.getText())); //uneseni string moramo u int pretvoriti pa upisati
+				    try {
+				    	sala.setBrMjesta(Integer.parseInt(txtKapacitetsale.getText()));
+				    }
+				    catch (NumberFormatException a) {
+				        // It's OK to ignore "e" here because returning a default value is the documented behaviour on invalid input.
+				    	sala.setBrMjesta(0);
+				    }; //uneseni string moramo u int pretvoriti pa upisati
 
 				/**
 				 * Provjeravamo koja opcija je unjeta u ComboBox

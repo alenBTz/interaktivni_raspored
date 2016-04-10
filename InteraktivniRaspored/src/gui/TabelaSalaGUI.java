@@ -14,15 +14,18 @@ import dataBase.DBExecuteSala;
 import dataBase.DBExecuteZgrada;
 import modeli.Sala_;
 import modeli.Zgrada_;
+import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
 import tables.Sala;
 import tables.Zgrada;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TabelaSalaGUI {
 
 	public static JFrame frameTabelaSala;
 	private JTable tableSale;
-
+	private DefaultTableModel modelSala;
 	/**
 	 * Launch the application.
 	 */
@@ -42,14 +45,14 @@ public class TabelaSalaGUI {
 	/**
 	 * Create the application.
 	 */
-	public TabelaSalaGUI() {
+	public TabelaSalaGUI() throws SQLException{
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() throws SQLException{
 		frameTabelaSala = new JFrame();
 		frameTabelaSala.setBounds(100, 100, 800, 450);
 		/**
@@ -79,23 +82,37 @@ public class TabelaSalaGUI {
 		/**
 		 * Funkcija implementira popunjavanje date tabele zgradama
 		 */
-		try {
 			popuniTabeluSalama();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		
 		JButton btnIzbrisiSalu = new JButton("Izbriši salu");
+		btnIzbrisiSalu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int red = tableSale.getSelectedRow();
+				if(red != -1)
+				{
+					try {
+						Object id = tableSale.getValueAt(red, 1);
+						IzbrisiRed.izbrisiRed(id,"sifSala","sala");
+						modelSala.removeRow(red);
+					} catch (SQLException e) {
+						System.out.println("Operacija brisanja nije uspjela ");
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("Niti jedan red nije selektovan");
+				}
+			}
+		});
 		btnIzbrisiSalu.setBounds(12, 386, 117, 25);
 		frameTabelaSala.getContentPane().add(btnIzbrisiSalu);
 	}
 	
 	private void popuniTabeluSalama() throws SQLException{
-		DefaultTableModel modelSale = (DefaultTableModel) tableSale.getModel();
+		modelSala = (DefaultTableModel) tableSale.getModel();
 
-		PomocneF.resetTable(modelSale);
+		PomocneF.resetTable(modelSala);
 
 		DBExecuteSala.getSala();
 		DBExecuteZgrada.getZgrade();
@@ -127,7 +144,7 @@ public class TabelaSalaGUI {
 			}
 
 
-			modelSale.addRow(new Object[]{zgrada.getNazZgrada(), sifSalaString, sala.getNazivSala(), sala.getKratSala(), sala.getBrMjesta()});
+			modelSala.addRow(new Object[]{zgrada.getNazZgrada(), sifSalaString, sala.getNazivSala(), sala.getKratSala(), sala.getBrMjesta()});
 		}
 	}
 
