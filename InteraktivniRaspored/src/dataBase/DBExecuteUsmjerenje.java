@@ -12,7 +12,7 @@ import tables.Usmjerenje;
 public class DBExecuteUsmjerenje {
 	
 	private static final String SQL = "SELECT * FROM usmjerenje";
-
+	
 	/**
 	 * @author dino
 	 * Metod za uspostavljanje konekcije na bazu podataka i dohvatanja svih predmetUsmjerenja.
@@ -30,6 +30,23 @@ public class DBExecuteUsmjerenje {
 		catch (SQLException e) {
 			DBUtil.processException(e);
 		}
+	}
+	public static int getSifUsmjerenja(String imeUsmjerenja) throws SQLException {
+		String upitZaSifru = "SELECT sifUsmjerenje FROM usmjerenje WHERE nazUsmjerenje = '"+imeUsmjerenja+"'";
+		try(
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(upitZaSifru);
+				) {
+			rs.next();
+			
+			return rs.getInt("sifUsmjerenje");
+			
+		} 
+		catch (SQLException e) {
+			DBUtil.processException(e);
+		}
+		return -1;
 	}
 
 	

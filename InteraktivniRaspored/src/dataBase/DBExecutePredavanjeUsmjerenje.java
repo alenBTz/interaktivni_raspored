@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import modeli.Izborni_;
 import modeli.PredavanjeUsmjerenje_;
+import modeli.Predmet_;
 import tables.Izborni;
 import tables.PredavanjeUsmjerenje;
 
@@ -32,6 +34,30 @@ public class DBExecutePredavanjeUsmjerenje {
 		catch (SQLException e) {
 			DBUtil.processException(e);
 		}
+	}
+	
+	//Sledeci metod dohvaca predmete po usmjerenjima i vraca sifre pronadjenih predmeta
+	//(koristeno pri implementaciji rasporeda tacnije radi dohvacanja predmeta na odredjenom smijeru)
+	
+	
+	public static ArrayList<Integer> getPredmetByUsmjerenje(int sifUsmjerenja) throws SQLException {
+		String sqlGetByName = "SELECT * FROM PredavanjeUsmjerenje WHERE sifUsmjerenje = '" + sifUsmjerenja + "'";
+		ArrayList<PredavanjeUsmjerenje_> lista = null;
+		ArrayList<Integer> array = new ArrayList<Integer>();;
+		try{
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				lista = PredavanjeUsmjerenje.getPredavanjeUsmjerenjeList(rs);
+		} 
+		catch (SQLException e) {
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji predmet sa sifrom usmjerenja :"+ sifUsmjerenja);
+		}
+		for(int i=0;i<lista.size();i++){
+			array.add(lista.get(i).getSifPredavanje());
+		}
+		return array;
 	}
 	
 	/**

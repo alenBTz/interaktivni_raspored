@@ -9,7 +9,10 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecutePredmet;
+import dataBase.DBExecutePredmetUsmjerenjeIzborni;
 import dataBase.DBExecuteSemestar;
+import dataBase.DBExecuteUsmjerenje;
+import modeli.PredmetUsmjerenjeIzborni_;
 import modeli.Predmet_;
 import modeli.Semestar_;
 import pomocneF.IzbrisiRed;
@@ -27,15 +30,16 @@ public class TabelaPredmetGUI {
 	public static JFrame frameTabelaPredmet;
 	private JTable tablePredmet;
 	public static DefaultTableModel modelPredmet;
+	private JButton btnIzaberi;
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void startTabelaPredmetGUI() {
+	public static void startTabelaPredmetGUI(int verzija, int sifraUsmjerenja) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TabelaPredmetGUI window = new TabelaPredmetGUI();
+					TabelaPredmetGUI window = new TabelaPredmetGUI(verzija,sifraUsmjerenja);
 					window.frameTabelaPredmet.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,14 +51,14 @@ public class TabelaPredmetGUI {
 	/**
 	 * Create the application.
 	 */
-	public TabelaPredmetGUI() {
-		initialize();
+	public TabelaPredmetGUI(int verzija, int sifraUsmjerenja) {
+		initialize(verzija,sifraUsmjerenja);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(int verzija,int sifraUsmjerenja) {
 		frameTabelaPredmet = new JFrame();
 		frameTabelaPredmet.setBounds(100, 100, 600, 420);
 		/**
@@ -77,6 +81,8 @@ public class TabelaPredmetGUI {
 				"\u0160ifra", "Predmet", "Skra\u0107enica", "Semestar"
 			}
 		));
+		
+		
 		tablePredmet.getColumnModel().getColumn(1).setPreferredWidth(280);
 		tablePredmet.getColumnModel().getColumn(2).setPreferredWidth(136);
 		
@@ -87,30 +93,56 @@ public class TabelaPredmetGUI {
 			e.printStackTrace();
 		}
 
-		
-		JButton btnIzbriiRed = new JButton("Izbriši red");
-		btnIzbriiRed.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int red = tablePredmet.getSelectedRow();
-				if(red != -1)
-				{
-					try {
-						Object id = tablePredmet.getValueAt(red, 0);
-						IzbrisiRed.izbrisiRed(id,"sifPredmet","predmet");
-						modelPredmet.removeRow(red);
-					} catch (SQLException e) {
-						System.out.println("Operacija brisanja nije uspjela ");
-						e.printStackTrace();
+		if (verzija == 1){
+			JButton btnIzbriiRed = new JButton("Izbriši red");
+			btnIzbriiRed.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int red = tablePredmet.getSelectedRow();
+					if(red != -1)
+					{
+						try {
+							Object id = tablePredmet.getValueAt(red, 0);
+							IzbrisiRed.izbrisiRed(id,"sifPredmet","predmet");
+							modelPredmet.removeRow(red);
+						} catch (SQLException e) {
+							System.out.println("Operacija brisanja nije uspjela ");
+							e.printStackTrace();
+						}
+					}
+					else{
+						System.out.println("Niti jedan red nije selektovan");
 					}
 				}
-				else{
-					System.out.println("Niti jedan red nije selektovan");
-				}
-			}
-		});
+			});
+		
 		btnIzbriiRed.setBounds(12, 356, 117, 25);
 		frameTabelaPredmet.getContentPane().add(btnIzbriiRed);
-		
+		}
+		if(verzija == 2){
+			btnIzaberi = new JButton("Izaberi");
+			btnIzaberi.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					tablePredmet.setRowSelectionAllowed(true);
+					int[] selection = tablePredmet.getSelectedRows();
+					for (int i=0;i<selection.length;i++){
+						String sifraPredmeta = tablePredmet.getValueAt(selection[i], 0).toString();
+						PredmetUsmjerenjeIzborni_ pui = new PredmetUsmjerenjeIzborni_();
+						try {
+							DBExecutePredmetUsmjerenjeIzborni.getPredmetUsmjerenja();
+							pui.setSifIzborni(1);
+							pui.setSifPredmet(Integer.parseInt(sifraPredmeta));
+							pui.setSifUsmjerenje(sifraUsmjerenja);
+							DBExecutePredmetUsmjerenjeIzborni.updatePredmetUsmjerenje(pui);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					TabelaPredmetGUI.frameTabelaPredmet.dispose();
+				}
+			});
+			btnIzaberi.setBounds(410, 348, 89, 23);
+			frameTabelaPredmet.getContentPane().add(btnIzaberi);
+		}
 	}
 	
 	/**

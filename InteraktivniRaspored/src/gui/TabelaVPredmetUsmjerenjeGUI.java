@@ -104,9 +104,15 @@ public class TabelaVPredmetUsmjerenjeGUI {
 				if(red != -1)
 				{
 					try {
-						Object id = tablePredmUsmj.getValueAt(red, 0);
-						System.out.println(id);
-						IzbrisiRed.izbrisiRed(id,"sifPredmUsmjIzborni","predmetusmjerenjeizborni");
+						String imePredmeta = tablePredmUsmj.getValueAt(red, 2).toString();
+						//Object id = tablePredmUsmj.getValueAt(red, 0);
+						PredmetUsmjerenjeIzborni_ pui = new PredmetUsmjerenjeIzborni_();
+						pui.setSifIzborni(2);
+						pui.setSifPredmet(DBExecutePredmet.getPredmetByName(imePredmeta).getSifPredmet());
+						pui.setSifUsmjerenje(14);
+						DBExecutePredmetUsmjerenjeIzborni.updatePredmetUsmjerenje(pui);
+						//IzbrisiRed.izbrisiRed(id,"sifPredmUsmjIzborni","predmetusmjerenjeizborni");
+						
 						modelVezaPredUsmjerenja.removeRow(red);
 					} catch (SQLException e) {
 						System.out.println("Operacija brisanja nije uspjela ");

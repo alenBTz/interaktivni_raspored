@@ -68,20 +68,21 @@ public class DBExecutePredmetUsmjerenjeIzborni {
 		return true;
 	}
 
-	public static boolean updatePredmetUsmjerenjeObavezan(PredmetUsmjerenjeIzborni_ predmetUsmjerenje) throws SQLException {
+	public static boolean updatePredmetUsmjerenje(PredmetUsmjerenjeIzborni_ predmetUsmjerenje) throws SQLException {
 		
 		/**
 		 * sifIzborni = 2 je po defaultu, tj da predmeti "izborni" predmeti na svim usmjerenjima.
 		 * za odgovarajuci predmet na odgovarajucem usmjerenju, postavljamo da je sifIzborni = 1, tj da je obavezan
 		 */
-		String sqlInsert = "UPDATE PredmetUsmjerenjeIzborni SET sifIzborni = 1 " + "WHERE sifPredmet = ? AND sifUsmjerenje = ?";
+		String sqlInsert = "UPDATE PredmetUsmjerenjeIzborni SET sifIzborni = ? " + "WHERE sifPredmet = ? AND sifUsmjerenje = ?";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 				) {
-			stmt.setInt(1, predmetUsmjerenje.getSifPredmet());
-			stmt.setInt(2, predmetUsmjerenje.getSifUsmjerenje());
+			stmt.setInt(1, predmetUsmjerenje.getSifIzborni());
+			stmt.setInt(2, predmetUsmjerenje.getSifPredmet());
+			stmt.setInt(3, predmetUsmjerenje.getSifUsmjerenje());
 			stmt.executeUpdate();
 
 		} 

@@ -88,7 +88,7 @@ public class PredmetGUI {
 				 */
 				if(active1 == 1)
 					TabelaPredmetGUI.frameTabelaPredmet.dispose();
-				TabelaPredmetGUI.startTabelaPredmetGUI();
+				TabelaPredmetGUI.startTabelaPredmetGUI(1,-1);
 				active2 = 1;
 			
 			}
@@ -218,7 +218,7 @@ public class PredmetGUI {
 					 */
 					if(active2 == 1)
 						TabelaPredmetGUI.frameTabelaPredmet.dispose();
-					TabelaPredmetGUI.startTabelaPredmetGUI();
+					TabelaPredmetGUI.startTabelaPredmetGUI(1,-1);
 					active1 = 1;			
 
 				} catch (SQLException e1) {
