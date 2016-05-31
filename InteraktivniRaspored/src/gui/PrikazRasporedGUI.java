@@ -14,13 +14,13 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
 import dataBase.DBExecutePredavanje;
-import dataBase.DBExecutePredavanjeUsmjerenje;
+import dataBase.DBExecutePredavanjeUsmjerenjeSemestar;
 import dataBase.DBExecutePredmet;
 import dataBase.DBExecutePredmetPredavanjeTipNastave;
 import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteTipNastave;
 import dataBase.DBExecuteUsmjerenje;
-import modeli.PredavanjeUsmjerenje_;
+import modeli.PredavanjeUsmjerenjeSemestar_;
 import modeli.Predavanje_;
 import modeli.PredmetPredavanjeTipNastave_;
 import modeli.Predmet_;
@@ -30,7 +30,7 @@ import modeli.Usmjerenje_;
 import pomocneF.RaspKoord_;
 import pomocneF.RasporedKoordinate;
 import tables.Predavanje;
-import tables.PredavanjeUsmjerenje;
+import tables.PredavanjeUsmjerenjeSemestar;
 import tables.Predmet;
 import tables.PredmetPredavanjeTipNastave;
 import tables.Semestar;
@@ -48,11 +48,11 @@ public class PrikazRasporedGUI {
 	/**
 	 * Launch the application.
 	 */
-	public static void startPrikazRasporedGUI() {
+	public static void startPrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PrikazRasporedGUI window = new PrikazRasporedGUI();
+					PrikazRasporedGUI window = new PrikazRasporedGUI(predavanjaZaPrikazati);
 					window.framePrikazRaspored.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,17 +64,19 @@ public class PrikazRasporedGUI {
 	/**
 	 * Create the application.
 	 */
-	public PrikazRasporedGUI() {
-		initialize();
+	public PrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati) {
+		initialize(predavanjaZaPrikazati);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati) {
 		//komentar
 		
-		
+		for(int i=0;i<predavanjaZaPrikazati.size();i++){
+			System.out.println(predavanjaZaPrikazati.get(i));
+		}
 		framePrikazRaspored = new JFrame();
 		framePrikazRaspored.setBounds(100, 100, 1290, 735);
 		framePrikazRaspored.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -275,7 +277,7 @@ public class PrikazRasporedGUI {
 			DBExecuteUsmjerenje.getUsmjerenja();
 			DBExecutePredmet.getPredmeti();
 			DBExecuteSemestar.getSemestri();
-			DBExecutePredavanjeUsmjerenje.getPredavanjeUsmjerenje();
+			DBExecutePredavanjeUsmjerenjeSemestar.getPredavanjeUsmjerenjeSemestar();
 			DBExecuteTipNastave.getTipNastave();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -287,7 +289,7 @@ public class PrikazRasporedGUI {
 		ArrayList<Usmjerenje_> usmjerenja = new ArrayList<>();
 		ArrayList<Predmet_> predmeti = new ArrayList<>();
 		ArrayList<Semestar_> semestri = new ArrayList<>();
-		ArrayList<PredavanjeUsmjerenje_> puX = new ArrayList<>();
+		ArrayList<PredavanjeUsmjerenjeSemestar_> puX = new ArrayList<>();
 		ArrayList<TipNastave_> tnX = new ArrayList<>();
 		
 		pptnX = PredmetPredavanjeTipNastave.predmetPredavanjeTipNastaveLista;
@@ -295,7 +297,7 @@ public class PrikazRasporedGUI {
 		usmjerenja = Usmjerenje.usmjerenjeLista;
 		predmeti = Predmet.predmetLista;
 		semestri = Semestar.semestarLista;
-		puX = PredavanjeUsmjerenje.predavanjeUsmjerenjeLista;
+		puX = PredavanjeUsmjerenjeSemestar.predavanjeUsmjerenjeSemestarLista;
 		tnX = TipNastave.tipNastaveLista;
 		/**
 		 * Sada na osnovu prosljedjenih elemenata vadimo iz ovih vektora ono sto nam treba
@@ -306,7 +308,7 @@ public class PrikazRasporedGUI {
 		Usmjerenje_ usmjerenje = new Usmjerenje_();
 		Predmet_ predmet = new Predmet_();
 		Semestar_ semestar = new Semestar_();
-		PredavanjeUsmjerenje_ pu = new PredavanjeUsmjerenje_();
+		PredavanjeUsmjerenjeSemestar_ pu = new PredavanjeUsmjerenjeSemestar_();
 		TipNastave_ tn = new TipNastave_();
 		/**
 		 * pošto simuliramo da su dohvaceni samo usmjerenje i semestar, radimo sa tim podacima.
@@ -326,7 +328,7 @@ public class PrikazRasporedGUI {
 		/**
 		 * U vektor puXPom upisujemo samo ona predavanja koja se nalaze u odgovarajucem usmjerenju
 		 */
-		ArrayList<PredavanjeUsmjerenje_> puXPom = new ArrayList<>();
+		ArrayList<PredavanjeUsmjerenjeSemestar_> puXPom = new ArrayList<>();
 		for (int i = 0; i < puX.size(); i++) {
 			if(puX.get(i).getSifUsmjerenje() == sifUsmjerenje){
 				puXPom.add(puX.get(i));

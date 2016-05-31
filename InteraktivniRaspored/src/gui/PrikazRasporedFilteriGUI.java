@@ -8,10 +8,10 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 
-import dataBase.DBExecutePredavanjeUsmjerenje;
+import dataBase.DBExecutePredavanjeUsmjerenjeSemestar;
 import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteUsmjerenje;
-import modeli.PredavanjeUsmjerenje_;
+import modeli.PredavanjeUsmjerenjeSemestar_;
 import modeli.Predmet_;
 import modeli.Semestar_;
 import modeli.Usmjerenje_;
@@ -99,14 +99,15 @@ public class PrikazRasporedFilteriGUI {
 		JButton btnPrikaziRaspored = new JButton("Prikaži raspored");
 		btnPrikaziRaspored.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<PredavanjeUsmjerenjeSemestar_> listaPredavanja = new ArrayList<PredavanjeUsmjerenjeSemestar_>();
 				try {
-					ArrayList<Integer> lista = DBExecutePredavanjeUsmjerenje.getPredmetByUsmjerenje(14);
-					System.out.println("broj vracenih predmeta je :"+ lista.get(1));
+					listaPredavanja = DBExecutePredavanjeUsmjerenjeSemestar.getPredavanjeByUsmjerenjeAndSemestar(14,0);
+					System.out.println("broj vracenih predmeta je :"+ listaPredavanja.size());
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				PrikazRasporedGUI.startPrikazRasporedGUI();
+				PrikazRasporedGUI.startPrikazRasporedGUI(listaPredavanja);
 			}
 		});
 		btnPrikaziRaspored.setBounds(115, 106, 250, 25);

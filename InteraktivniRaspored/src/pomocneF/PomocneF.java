@@ -7,7 +7,7 @@ import tables.Izborni;
 import tables.Nastavnik;
 import tables.NastavnikGrupa;
 import tables.Predavanje;
-import tables.PredavanjeUsmjerenje;
+import tables.PredavanjeUsmjerenjeSemestar;
 import tables.Predmet;
 import tables.PredmetGrupaTipNastave;
 import tables.PredmetNastavnikTipNastave;
@@ -50,6 +50,6 @@ public class PomocneF {
 		TipNastave.tipNastaveLista.clear();
 		Usmjerenje.usmjerenjeLista.clear();
 		Zgrada.zgradaLista.clear();
-		PredavanjeUsmjerenje.predavanjeUsmjerenjeLista.clear();
+		PredavanjeUsmjerenjeSemestar.predavanjeUsmjerenjeSemestarLista.clear();
 	}
 }

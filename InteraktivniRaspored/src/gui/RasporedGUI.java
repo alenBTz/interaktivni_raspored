@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import modeli.PredavanjeUsmjerenje_;
+import modeli.PredavanjeUsmjerenjeSemestar_;
 import modeli.Predavanje_;
 import modeli.PredmetPredavanjeTipNastave_;
 import modeli.Predmet_;
@@ -17,7 +17,7 @@ import modeli.TipNastave_;
 import modeli.Usmjerenje_;
 import pomocneF.PomocneF;
 import tables.Predavanje;
-import tables.PredavanjeUsmjerenje;
+import tables.PredavanjeUsmjerenjeSemestar;
 import tables.Predmet;
 import tables.Sala;
 import tables.Semestar;
@@ -27,7 +27,7 @@ import tables.Usmjerenje;
 import javax.swing.JLabel;
 
 import dataBase.DBExecuteIzborni;
-import dataBase.DBExecutePredavanjeUsmjerenje;
+import dataBase.DBExecutePredavanjeUsmjerenjeSemestar;
 import dataBase.DBExecutePredavanje;
 import dataBase.DBExecutePredmet;
 import dataBase.DBExecutePredmetPredavanjeTipNastave;
@@ -288,7 +288,7 @@ public class RasporedGUI {
 					DBExecuteIzborni.getIzborni();
 					DBExecutePredmetUsmjerenjeIzborni.getPredmetUsmjerenja();
 					DBExecutePredmetPredavanjeTipNastave.getPredmetPredavanjeTipNastave();
-					DBExecutePredavanjeUsmjerenje.getPredavanjeUsmjerenje();
+					DBExecutePredavanjeUsmjerenjeSemestar.getPredavanjeUsmjerenjeSemestar();
 				} catch (SQLException e2) {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
@@ -584,11 +584,11 @@ public class RasporedGUI {
 						 * unosimo sifre svih odabranih usmjerenja za odgovarajuce predavanje.
 						 * te sifre smo smjestili u vektor intova 'sifUsmjerenjaVektor'
 						 */
-						PredavanjeUsmjerenje_ pu = new PredavanjeUsmjerenje_();
+						PredavanjeUsmjerenjeSemestar_ pu = new PredavanjeUsmjerenjeSemestar_();
 						for (int i = 0; i < sifUsmjerenjaVektor.size(); i++) {
 							pu.setSifPredavanje(DBExecutePredavanje.sifPredavanjePublic);
 							pu.setSifUsmjerenje(sifUsmjerenjaVektor.get(i));
-							DBExecutePredavanjeUsmjerenje.insertPredavanjeUsmjerenje(pu);
+							DBExecutePredavanjeUsmjerenjeSemestar.insertPredavanjeUsmjerenjeSemestar(pu);
 						}
 						
 					} catch (SQLException e1) {
