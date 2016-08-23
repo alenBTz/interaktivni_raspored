@@ -744,7 +744,7 @@ public class RasporedGUI {
 
 	private void fillcomboBoxPocetakSat() throws SQLException {
 		
-		for (int i = 0; i < 24; i++) {
+		for (int i = 8; i < 18; i++) {
 			String pom = String.valueOf(i);
 			comboBoxPocetakSat.addItem(pom);
 		}

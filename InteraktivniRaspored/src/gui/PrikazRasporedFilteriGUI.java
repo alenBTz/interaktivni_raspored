@@ -8,14 +8,17 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 
+import dataBase.DBExecutePredavanje;
 import dataBase.DBExecutePredavanjeUsmjerenjeSemestar;
 import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteUsmjerenje;
 import modeli.PredavanjeUsmjerenjeSemestar_;
+import modeli.Predavanje_;
 import modeli.Predmet_;
 import modeli.Semestar_;
 import modeli.Usmjerenje_;
 import pomocneF.PomocneF;
+import tables.Predavanje;
 import tables.Semestar;
 import tables.Usmjerenje;
 
@@ -99,15 +102,18 @@ public class PrikazRasporedFilteriGUI {
 		JButton btnPrikaziRaspored = new JButton("Prikaži raspored");
 		btnPrikaziRaspored.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<PredavanjeUsmjerenjeSemestar_> listaPredavanja = new ArrayList<PredavanjeUsmjerenjeSemestar_>();
+				ArrayList<PredavanjeUsmjerenjeSemestar_> filtriranaPredavanja = new ArrayList<PredavanjeUsmjerenjeSemestar_>();
+				ArrayList<Predavanje_> svaPredavanja = new ArrayList<Predavanje_>();
+				comboBoxUsmjerenje.getSelectedItem();
 				try {
-					listaPredavanja = DBExecutePredavanjeUsmjerenjeSemestar.getPredavanjeByUsmjerenjeAndSemestar(14,0);
-					System.out.println("broj vracenih predmeta je :"+ listaPredavanja.size());
+					DBExecutePredavanje.getPredavanja();
+					svaPredavanja = Predavanje.predavanjeLista;
+					filtriranaPredavanja = DBExecutePredavanjeUsmjerenjeSemestar.getPredavanjeByUsmjerenjeAndSemestar(14,0);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				PrikazRasporedGUI.startPrikazRasporedGUI(listaPredavanja);
+				PrikazRasporedGUI.startPrikazRasporedGUI(filtriranaPredavanja,svaPredavanja);
 			}
 		});
 		btnPrikaziRaspored.setBounds(115, 106, 250, 25);
@@ -182,12 +188,9 @@ public class PrikazRasporedFilteriGUI {
 		DBExecuteUsmjerenje.getUsmjerenja();
 		ArrayList<Usmjerenje_> usmjerenja = new ArrayList<Usmjerenje_>();
 		usmjerenja = Usmjerenje.usmjerenjeLista;
-		System.out.println("Broj Usmjerenja" + usmjerenja.size() );
 		for (int i = 0; i < usmjerenja.size(); i++) {
-			System.out.println("usao sam");
 			Usmjerenje_ usmjerenjePom = new Usmjerenje_();
 			usmjerenjePom = usmjerenja.get(i);
-			System.out.println(usmjerenjePom.getNazUsmjerenje());
 			comboBoxUsmjerenje.addItem(usmjerenjePom.getNazUsmjerenje());
 		}
 	}

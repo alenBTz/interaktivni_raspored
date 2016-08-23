@@ -44,15 +44,16 @@ import javax.swing.JSeparator;
 public class PrikazRasporedGUI {
 
 	private JFrame framePrikazRaspored;
+	private JFrame framePrikazRaspore;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void startPrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati) {
+	public static void startPrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati,ArrayList<Predavanje_> svaPredavanja) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PrikazRasporedGUI window = new PrikazRasporedGUI(predavanjaZaPrikazati);
+					PrikazRasporedGUI window = new PrikazRasporedGUI(predavanjaZaPrikazati,svaPredavanja);
 					window.framePrikazRaspored.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,25 +65,61 @@ public class PrikazRasporedGUI {
 	/**
 	 * Create the application.
 	 */
-	public PrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati) {
-		initialize(predavanjaZaPrikazati);
+	public PrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati,ArrayList<Predavanje_> svaPredavanja) {
+		initialize(predavanjaZaPrikazati,svaPredavanja);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati) {
+	private void initialize(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati,ArrayList<Predavanje_> svaPredavanja) {
 		//komentar
-		
-		for(int i=0;i<predavanjaZaPrikazati.size();i++){
-			System.out.println(predavanjaZaPrikazati.get(i));
-		}
 		framePrikazRaspored = new JFrame();
 		framePrikazRaspored.setBounds(100, 100, 1290, 735);
 		framePrikazRaspored.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		framePrikazRaspored.getContentPane().setLayout(null);
 		
 		Border borderBlack = BorderFactory.createLineBorder(Color.BLACK, 2);
+		int[] array = {84,136,188,240,292,344,396,448,500,552};
+		
+		for(int i=0;i<predavanjaZaPrikazati.size();i++){
+			for(int j=0;j<svaPredavanja.size();j++){
+				if(predavanjaZaPrikazati.get(i).getSifPredavanje() == svaPredavanja.get(j).getSifPredavanje()){
+					switch (svaPredavanja.get(j).getDanPredavanje()){
+					case "Ponedeljak":
+						System.out.println("ponedeljak");
+						int pocetak = Integer.parseInt(svaPredavanja.get(j).getPocetakPredavanje().toString().substring(0,2)) - 8;
+						int kraj = Integer.parseInt(svaPredavanja.get(j).getKrajPredavanje().toString().substring(0,2)) - 8;
+						//System.out.println(svaPredavanja.get(j).getPocetakPredavanje());
+						//System.out.println("pocetak"+pocetak);
+						//System.out.println("kraj"+kraj);
+						
+						JLabel lblPonedeljakk = new JLabel("Ime predmeta");
+						lblPonedeljakk.setBackground(Color.RED);
+						lblPonedeljakk.setOpaque(true);
+						lblPonedeljakk.setHorizontalAlignment(SwingConstants.CENTER);
+						lblPonedeljakk.setBounds(144, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
+						lblPonedeljakk.setBorder(borderBlack);
+						framePrikazRaspored.getContentPane().add(lblPonedeljakk);
+						
+						break;
+					case "Utorak":
+						System.out.println("utorak");
+						break;
+					case "Srijeda":
+						System.out.println("srijeda");
+						break;
+					case "Cetvrtak":
+						System.out.println("cevtrtak");
+						break;
+					case "Petak":
+						System.out.println("petak");
+						break;
+					}
+				}
+			}
+		}
+
 		
 		JLabel lblVrijeme = new JLabel("Vrijeme");
 		lblVrijeme.setBackground(Color.LIGHT_GRAY);
@@ -91,7 +128,7 @@ public class PrikazRasporedGUI {
 		lblVrijeme.setBounds(12, 12, 120, 60);
 		lblVrijeme.setBorder(borderBlack);
 		framePrikazRaspored.getContentPane().add(lblVrijeme);
-		
+			
 		JLabel lblPonedeljak = new JLabel("Ponedeljak");
 		lblPonedeljak.setBackground(Color.LIGHT_GRAY);
 		lblPonedeljak.setOpaque(true);

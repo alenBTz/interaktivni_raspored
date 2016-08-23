@@ -4,6 +4,7 @@ import javax.swing.table.DefaultTableModel;
 
 import tables.Grupa;
 import tables.Izborni;
+import tables.Korisnik;
 import tables.Nastavnik;
 import tables.NastavnikGrupa;
 import tables.Predavanje;
@@ -24,7 +25,7 @@ import tables.Zgrada;
 public class PomocneF {
 	
 	public static void resetTable(DefaultTableModel model) {
-
+		System.out.println("resetuj tabelu");
 		model.setRowCount(0);
 		clearListe();
 
@@ -33,6 +34,7 @@ public class PomocneF {
 
 
 	public static void clearListe() {
+		Korisnik.korisnikLista.clear();
 		Grupa.grupaLista.clear();
 		Izborni.izborniLista.clear();
 		Nastavnik.nastavnikLista.clear();

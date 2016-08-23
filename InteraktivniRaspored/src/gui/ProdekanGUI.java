@@ -191,6 +191,15 @@ public class ProdekanGUI {
 		btnPredmetUsmjerenje.setBounds(264, 176, 200, 25);
 		frame.getContentPane().add(btnPredmetUsmjerenje);
 		
+		JButton btnKorisnik = new JButton("Korisnik");
+		btnKorisnik.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				KorisnikGUI.startKorisnikGUI();
+			}
+		});
+		btnKorisnik.setBounds(264, 213, 200, 25);
+		frame.getContentPane().add(btnKorisnik);
+		
 		
 		
 		
