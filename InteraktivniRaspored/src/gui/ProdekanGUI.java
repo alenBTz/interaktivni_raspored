@@ -201,7 +201,14 @@ public class ProdekanGUI {
 		frame.getContentPane().add(btnKorisnik);
 		
 		
-		
+		JButton btnUnosPredavanja = new JButton("Predavanja");
+		btnUnosPredavanja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabelaPredavanjeGUI.startTabelaPredavanjeGUI();
+				}
+		});
+		btnUnosPredavanja.setBounds(264, 250, 200, 25);
+		frame.getContentPane().add(btnUnosPredavanja);
 		
 		
 		

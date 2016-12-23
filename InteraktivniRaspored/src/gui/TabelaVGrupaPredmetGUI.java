@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteGrupa;
 import dataBase.DBExecutePredmet;
 import dataBase.DBExecutePredmetGrupaTipNastave;
 import dataBase.DBExecuteTipNastave;
+import modeli.CustomDefaultTableModel;
 import modeli.Grupa_;
 import modeli.PredmetGrupaTipNastave_;
 import modeli.Predmet_;
@@ -32,7 +32,7 @@ public class TabelaVGrupaPredmetGUI {
 
 	public static JFrame frameTabelaGrupaPredmet;
 	private JTable tableGrupaPredmetTipN;
-	private DefaultTableModel modelVezaGrupaPredmet;
+	private CustomDefaultTableModel modelVezaGrupaPredmet;
 
 	/**
 	 * Launch the application.
@@ -78,7 +78,7 @@ public class TabelaVGrupaPredmetGUI {
 		
 		tableGrupaPredmetTipN = new JTable();
 		scrollPane.setViewportView(tableGrupaPredmetTipN);
-		tableGrupaPredmetTipN.setModel(new DefaultTableModel(
+		tableGrupaPredmetTipN.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -124,7 +124,7 @@ public class TabelaVGrupaPredmetGUI {
 	
 	private void popuniTabeluGrupaPredmetima() throws SQLException{
 
-		modelVezaGrupaPredmet = (DefaultTableModel) tableGrupaPredmetTipN.getModel();
+		modelVezaGrupaPredmet = (CustomDefaultTableModel) tableGrupaPredmetTipN.getModel();
 		
 		/**
 		 * Pozovemo ovaj metod kako ne bi bilo u tabeli ispis duplih elemenata. Resetuje tabelu, tj isprazni joj sadrzaj

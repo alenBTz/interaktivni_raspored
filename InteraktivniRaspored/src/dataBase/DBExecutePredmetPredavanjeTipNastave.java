@@ -5,13 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+import modeli.Predavanje_;
 import modeli.PredmetPredavanjeTipNastave_;
+import tables.Predavanje;
 import tables.PredmetPredavanjeTipNastave;
 
 public class DBExecutePredmetPredavanjeTipNastave {
 
-	private static final String SQL = "SELECT * FROM PredmetPredavanjeTipNastave";
+	private static final String SQL = "SELECT * FROM predmetpredavanjetipnastave";
 
 	public static void getPredmetPredavanjeTipNastave() throws SQLException {
 
@@ -30,7 +33,7 @@ public class DBExecutePredmetPredavanjeTipNastave {
 
 	public static boolean insertPredmetNastavnikTipNastave(PredmetPredavanjeTipNastave_ pptn) throws SQLException {
 
-		String sqlInsert = "INSERT INTO PredmetPredavanjeTipNastave (sifPredmet, sifPredavanje, sifTipNastave) " + "VALUES (?, ?, ?)";
+		String sqlInsert = "INSERT INTO predmetpredavanjetipnastave (sifPredmet, sifPredavanje, sifTipNastave) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
@@ -71,6 +74,40 @@ public class DBExecutePredmetPredavanjeTipNastave {
 		}
 
 		return true;
+	}
+	public static ArrayList<Integer> getPredavanjeByPredmet(int sifPredmet) throws SQLException 
+	{
+		String sqlGetByName = "SELECT * FROM predmetpredavanjetipnastave WHERE sifPredmet = '" + sifPredmet + "'";
+		System.out.println(sqlGetByName);
+		ArrayList<PredmetPredavanjeTipNastave_> lista = null;
+		Connection conn = null;
+		int j=0;
+		try
+		{
+				conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				lista = PredmetPredavanjeTipNastave.getPredmetPredavanjeTipNastaveList(rs);
+				rs.close();
+		} 
+		catch (SQLException e)
+		{
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji predavanje sa sifrom predmeta  :"+ sifPredmet);
+		} finally{
+			conn.close();
+			
+		}
+		ArrayList<Integer> listaSifPredavanja = new ArrayList<Integer>();
+		
+		System.out.println("lista:" + lista.size());
+		
+		for(int i=0; i<lista.size();i++)
+		{
+			listaSifPredavanja.add(lista.get(i).getSifPredavanje());
+		}
+
+		return listaSifPredavanja;
 	}
 	
 }

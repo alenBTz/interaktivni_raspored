@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecutePredmet;
 import dataBase.DBExecutePredmetUsmjerenjeIzborni;
 import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteUsmjerenje;
+import modeli.CustomDefaultTableModel;
 import modeli.PredmetUsmjerenjeIzborni_;
 import modeli.Predmet_;
 import modeli.Semestar_;
@@ -29,7 +29,7 @@ public class TabelaPredmetGUI {
 
 	public static JFrame frameTabelaPredmet;
 	private JTable tablePredmet;
-	public static DefaultTableModel modelPredmet;
+	public static CustomDefaultTableModel modelPredmet;
 	private JButton btnIzaberi;
 	
 	/**
@@ -74,7 +74,7 @@ public class TabelaPredmetGUI {
 		
 		tablePredmet = new JTable();
 		scrollPane.setViewportView(tablePredmet);
-		tablePredmet.setModel(new DefaultTableModel(
+		tablePredmet.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -149,7 +149,7 @@ public class TabelaPredmetGUI {
 	 * metod koji vrsi popunjavanje tabele
 	 */
 	private void popuniTabeluPredmetima() throws SQLException {
-		modelPredmet = (DefaultTableModel) tablePredmet.getModel();
+		modelPredmet = (CustomDefaultTableModel) tablePredmet.getModel();
 
 		PomocneF.resetTable(modelPredmet);
 

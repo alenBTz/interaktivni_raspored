@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import dataBase.DBExecuteKorisnik;
 import dataBase.DBExecuteNastavnik;
 import modeli.Nastavnik_;
 import tables.Nastavnik;
@@ -20,8 +21,6 @@ public class NastavnikGUI {
 	private JFrame frameNastavnik;
 	private JTextField txtImenastavnik;
 	private JTextField txtPreznastavnik;
-	private JTextField txtUsernamenast;
-	private JTextField txtPasswordnast;
 	
 	int active1 = 0;
 	int active2 = 0;
@@ -107,26 +106,6 @@ public class NastavnikGUI {
 		frameNastavnik.getContentPane().add(txtPreznastavnik);
 		txtPreznastavnik.setColumns(10);
 		
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(62, 103, 77, 15);
-		frameNastavnik.getContentPane().add(lblUsername);
-		
-		txtUsernamenast = new JTextField();
-		txtUsernamenast.setText("");
-		txtUsernamenast.setBounds(150, 99, 166, 19);
-		frameNastavnik.getContentPane().add(txtUsernamenast);
-		txtUsernamenast.setColumns(10);
-		
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(64, 130, 75, 15);
-		frameNastavnik.getContentPane().add(lblPassword);
-		
-		txtPasswordnast = new JTextField();
-		txtPasswordnast.setText("");
-		txtPasswordnast.setBounds(150, 126, 166, 19);
-		frameNastavnik.getContentPane().add(txtPasswordnast);
-		txtPasswordnast.setColumns(10);
-		
 		JLabel lblVrstaNastavnika = new JLabel("Vrsta nastavnika:");
 		lblVrstaNastavnika.setBounds(14, 155, 125, 15);
 		frameNastavnik.getContentPane().add(lblVrstaNastavnika);
@@ -146,6 +125,8 @@ public class NastavnikGUI {
 		JButton btnPotvrdiUnos = new JButton("Potvrdi unos");
 		btnPotvrdiUnos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				boolean postojiProdekan = false;
+
 				/**
 				 * Treba unjeti novog nastavnika.
 				 */
@@ -164,8 +145,6 @@ public class NastavnikGUI {
 				 */
 				nastavnik.setImeNastavnik(txtImenastavnik.getText());
 				nastavnik.setPrezNastavnik(txtPreznastavnik.getText());
-				nastavnik.setUsername(txtUsernamenast.getText());
-				nastavnik.setPassword(txtPasswordnast.getText());
 				
 				/**
 				 * Provjeravamo sta je korisnik odabrao iz ComboBoxa, i odgovarajuci odabir unosimo u nastavnika
@@ -175,37 +154,61 @@ public class NastavnikGUI {
 				} else {
 					nastavnik.setVrstaNastavnik(comboBoxVrstaNast.getSelectedIndex());
 				}
-				
-				/**
-				 * Kako imamo sve podatke koje su unesene, mozemo varijablu 'korisnik' upisati u BP
-				 */
-				try {
-					/**
-					 * Upisujemo 'nastavnik' u BP pozivanjem metoda:
-					 */
-					DBExecuteNastavnik.insertNastavnik(nastavnik);
+				System.out.println("comboBoxVrstaNast.getSelectedItem(): " + comboBoxVrstaNast.getSelectedItem());
+				System.out.println(comboBoxVrstaNast.getSelectedItem().equals("Prodekan"));
+				if (comboBoxVrstaNast.getSelectedItem().equals("Prodekan"))
+				{
+					try
+					{
+						if (DBExecuteNastavnik.countProdekana() != 0)
+						{
+							postojiProdekan = true;
+						}
+					} 
+					catch (SQLException e1) 
+					{
+						e1.printStackTrace();
+					}
 					
-					/**
-					 * Posto smo unjeli novog nastavnika, zelimo da osvjezimo tabelu.
-					 */
-					if(active2 == 1)
-						TabelaNastavnikGUI.frameTabelaNastavnik.dispose();
-					TabelaNastavnikGUI.startTabelaNastavnikGUI();
-					active1 = 1;
-
-					/*
-					createGrupeListProf();
-
-					//osvjezi u panelu Predmet combobox nastavnika
-					comboBoxPredNastavnik.setBounds(400, 124, 271, 24);
-					panelPredmeti.add(comboBoxPredNastavnik);
-					fillComboBoxPredNastavnik();
-					*/
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					if(postojiProdekan)
+					{
+						System.err.println("U bazi moze postojati samo jedan prodekan,za unos novog izbrisite trenutnog!");
+					}
+					else
+					{
+						try 
+						{
+							DBExecuteNastavnik.insertNastavnik(nastavnik);
+						}
+						catch (SQLException e1)
+						{
+							e1.printStackTrace();
+						}
+					}
 				}
+				else{
+					//Ne unosimo prodekana te nema potrebe za provjeru da li vec postoji prodekan
+					/**
+					 * Kako imamo sve podatke koje su unesene, mozemo varijablu 'korisnik' upisati u BP
+					 */
+					
+					try {
+						DBExecuteNastavnik.insertNastavnik(nastavnik);
+						
+						/**
+						 * Posto smo unjeli novog nastavnika, zelimo da osvjezimo tabelu.
+						 */
+						if(active2 == 1)
+							TabelaNastavnikGUI.frameTabelaNastavnik.dispose();
+						TabelaNastavnikGUI.startTabelaNastavnikGUI();
+						active1 = 1;
 
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
 			}
 		});
 		btnPotvrdiUnos.setBounds(141, 186, 175, 25);

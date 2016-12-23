@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteUsmjerenje;
+import modeli.CustomDefaultTableModel;
 import modeli.Usmjerenje_;
 import pomocneF.PomocneF;
 import pomocneF.IzbrisiRed;
@@ -23,7 +23,7 @@ public class TabelaUsmjerenjeGUI {
 
 	public static JFrame frameTabelaUsmjerenja;
 	private JTable tableUsmjerenja;
-	private DefaultTableModel modelUsmjerenja;
+	private CustomDefaultTableModel modelUsmjerenja;
 	
 	/**
 	 * Launch the application.
@@ -69,7 +69,7 @@ public class TabelaUsmjerenjeGUI {
 		
 		tableUsmjerenja = new JTable();
 		scrollPane.setViewportView(tableUsmjerenja);
-		tableUsmjerenja.setModel(new DefaultTableModel(
+		tableUsmjerenja.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -107,7 +107,7 @@ public class TabelaUsmjerenjeGUI {
 	
 	private void popuniTabeluUsmjerenjima() throws SQLException {
 
-		modelUsmjerenja = (DefaultTableModel) tableUsmjerenja.getModel();
+		modelUsmjerenja = (CustomDefaultTableModel) tableUsmjerenja.getModel();
 
 		PomocneF.resetTable(modelUsmjerenja);
 

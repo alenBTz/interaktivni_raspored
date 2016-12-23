@@ -11,11 +11,11 @@ import tables.NastavnikGrupa;
 
 public class DBExecuteNastavnikGrupa {
 	
-	private static final String SQL = "SELECT * FROM NastavnikGrupa";
+	private static final String SQL = "SELECT * FROM nastavnikgrupa";
 
 	/**
 	 * @author dino
-	 * Metod za uspostavljanje konekcije na bazu podataka i dohvatanja svih ntorki iz NastavnikGrupa.
+	 * Metod za uspostavljanje konekcije na bazu podataka i dohvatanja svih ntorki iz nastavnikgrupa.
 	 * @return 
 	 */
 	public static void getNastavnikGrupa() throws SQLException {
@@ -40,7 +40,7 @@ public class DBExecuteNastavnikGrupa {
 	 */
 	public static boolean insertNastavnikGrupa(NastavnikGrupa_ nastavnikGrupa) throws SQLException {
 		
-		String sqlInsert = "INSERT INTO NastavnikGrupa (sifNastavnik, sifGrupa) " + "VALUES (?,?)";
+		String sqlInsert = "INSERT INTO nastavnikgrupa (sifNastavnik, sifGrupa) " + "VALUES (?,?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);

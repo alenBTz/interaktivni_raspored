@@ -10,7 +10,7 @@ import modeli.TipNastave_;
 import tables.TipNastave;
 
 public class DBExecuteTipNastave {
-	private static final String SQL = "SELECT * FROM tipNastave";
+	private static final String SQL = "SELECT * FROM tipnastave";
 
 	/**
 	 * @author dino
@@ -38,7 +38,7 @@ public class DBExecuteTipNastave {
 	 */
 	public static boolean insertSemestar(TipNastave_ tipNastave) throws SQLException {
 		
-		String sqlInsert = "INSERT INTO tipNastave (nazTipNastave, kratTipNastave) " + "VALUES (?,?)";
+		String sqlInsert = "INSERT INTO tipnastave (nazTipNastave, kratTipNastave) " + "VALUES (?,?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);

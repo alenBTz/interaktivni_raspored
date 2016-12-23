@@ -10,7 +10,7 @@ import java.sql.SQLException;
  */
 public class DBUtil {
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "0601";
+	private static final String PASSWORD = "";
 	private static final String CONN_STRING = "jdbc:mysql://localhost/interaktivni_raspored";
 	
 	
@@ -27,9 +27,9 @@ public class DBUtil {
 	 * Procesuiranje iznimke u slucaju da je konekcija neuspjesna
 	 */
 	public static void processException(SQLException e){
-		System.err.println("Gre≈°ka: " + e.getMessage());
-		System.err.println("Kod gre≈°ke: " + e.getErrorCode() );
-		System.err.println("Reprezentacija gre≈°ke: " + e.getSQLState());
+		System.err.println("Greöka: " + e.getMessage());
+		System.err.println("Kod greöke: " + e.getErrorCode() );
+		System.err.println("Reprezentacija greöke: " + e.getSQLState());
 
 	}
 }

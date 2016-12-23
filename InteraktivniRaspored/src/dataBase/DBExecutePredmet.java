@@ -30,15 +30,20 @@ public class DBExecutePredmet {
 	}
 	public static Predmet_ getPredmetByName(String imePredmeta) throws SQLException {
 		String sqlGetByName = "SELECT * FROM predmet WHERE nazPredmet = '" + imePredmeta + "'";
+		System.out.println(sqlGetByName);
 		Predmet_ predmet = new Predmet_();
 		try{
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(sqlGetByName);
-				predmet.setNazPredmet(rs.getString("nazPredmet"));
-				predmet.setSifPredmet(rs.getInt("sifPredmet"));
-				predmet.setKratPredmet(rs.getString("kratPredmet"));
-				predmet.setSifSemestar(rs.getInt("sifSemestar"));
+				while (rs.next())
+				{
+					predmet.setNazPredmet(rs.getString("nazPredmet"));
+					predmet.setSifPredmet(rs.getInt("sifPredmet"));
+					predmet.setKratPredmet(rs.getString("kratPredmet"));
+					predmet.setSifSemestar(rs.getInt("sifSemestar"));
+				}
+				
 				return predmet;
 				
 		} 
@@ -48,6 +53,32 @@ public class DBExecutePredmet {
 		}
 		return predmet;
 	}
+	
+	public static Predmet_ getPredmetBySifPredavanje(int sifraPredavanje) throws SQLException {
+		String sqlGetByName = "SELECT predmet.* FROM predmet INNER JOIN predmetpredavanjetipnastave ON predmet.sifPredmet = predmetpredavanjetipnastave.sifPredmet WHERE predmetpredavanjetipnastave.sifPredavanje LIKE '" + sifraPredavanje + "'";
+		Predmet_ predmet = new Predmet_();
+		try{
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				while (rs.next())
+				{
+					predmet.setNazPredmet(rs.getString("nazPredmet"));
+					predmet.setSifPredmet(rs.getInt("sifPredmet"));
+					predmet.setKratPredmet(rs.getString("kratPredmet"));
+					predmet.setSifSemestar(rs.getInt("sifSemestar"));
+				}
+				
+				return predmet;
+				
+		} 
+		catch (SQLException e) {
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji predmet sa sifrom Predmeta : "+ sifraPredavanje);
+		}
+		return predmet;
+	}
+	
 	public static Predmet_ getPredmetBySifraAndSemestar(int sifPredmeta, int sifSemestra) throws SQLException {
 		String sqlGetByName = "SELECT * FROM predmet WHERE sifPredmet = '" + sifPredmeta + "' AND sifSemestar = '" + sifSemestra + "'";
 		Predmet_ predmet = new Predmet_();
@@ -119,5 +150,31 @@ public class DBExecutePredmet {
 		}
 		
 		return true;
+	}
+	
+	public static Predmet_ getPredmetBySifra(int sifraPredmeta) throws SQLException {
+		String sqlGetByName = "SELECT * FROM predmet WHERE sifPredmet = '" + sifraPredmeta + "'";
+		System.out.println(sqlGetByName);
+		Predmet_ predmet = new Predmet_();
+		try{
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				while (rs.next())
+				{
+					predmet.setNazPredmet(rs.getString("nazPredmet"));
+					predmet.setSifPredmet(rs.getInt("sifPredmet"));
+					predmet.setKratPredmet(rs.getString("kratPredmet"));
+					predmet.setSifSemestar(rs.getInt("sifSemestar"));
+				}
+				
+				return predmet;
+				
+		} 
+		catch (SQLException e) {
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji predmet sa sifrom : "+ sifraPredmeta);
+		}
+		return predmet;
 	}
 }

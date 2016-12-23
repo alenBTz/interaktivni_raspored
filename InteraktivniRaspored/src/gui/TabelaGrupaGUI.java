@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteGrupa;
+import modeli.CustomDefaultTableModel;
 import modeli.Grupa_;
 import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
@@ -23,7 +23,7 @@ public class TabelaGrupaGUI {
 
 	public static JFrame frameTabelaGrupa;
 	private JTable tableGrupa;
-	private DefaultTableModel modelGrupa;
+	private CustomDefaultTableModel modelGrupa;
 
 	/**
 	 * Launch the application.
@@ -63,7 +63,7 @@ public class TabelaGrupaGUI {
 		
 		tableGrupa = new JTable();
 		scrollPane.setViewportView(tableGrupa);
-		tableGrupa.setModel(new DefaultTableModel(
+		tableGrupa.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -104,7 +104,7 @@ public class TabelaGrupaGUI {
 	
 	
 	private void popuniTabeluGrupama() throws SQLException{
-		modelGrupa = (DefaultTableModel) tableGrupa.getModel();
+		modelGrupa = (CustomDefaultTableModel) tableGrupa.getModel();
 
 		PomocneF.resetTable(modelGrupa);
 

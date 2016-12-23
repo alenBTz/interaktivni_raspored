@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteIzborni;
 import dataBase.DBExecutePredmet;
 import dataBase.DBExecutePredmetUsmjerenjeIzborni;
 import dataBase.DBExecuteUsmjerenje;
+import modeli.CustomDefaultTableModel;
 import modeli.Izborni_;
 import modeli.PredmetUsmjerenjeIzborni_;
 import modeli.Predmet_;
@@ -32,7 +32,7 @@ public class TabelaVPredmetUsmjerenjeGUI {
 
 	public static JFrame frameTabelaPredmUsmj;
 	private JTable tablePredmUsmj;
-	private DefaultTableModel modelVezaPredUsmjerenja;
+	private CustomDefaultTableModel modelVezaPredUsmjerenja;
 	/**
 	 * Launch the application.
 	 */
@@ -77,7 +77,7 @@ public class TabelaVPredmetUsmjerenjeGUI {
 		
 		tablePredmUsmj = new JTable();
 		scrollPane.setViewportView(tablePredmUsmj);
-		tablePredmUsmj.setModel(new DefaultTableModel(
+		tablePredmUsmj.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -137,7 +137,7 @@ public class TabelaVPredmetUsmjerenjeGUI {
 		 */
 		
 		
-		modelVezaPredUsmjerenja = (DefaultTableModel) tablePredmUsmj.getModel();
+		modelVezaPredUsmjerenja = (CustomDefaultTableModel) tablePredmUsmj.getModel();
 		
 		/**
 		 * Pozovemo ovaj metod kako ne bi bilo u tabeli ispis duplih elemenata. Resetuje tabelu, tj isprazni joj sadrzaj

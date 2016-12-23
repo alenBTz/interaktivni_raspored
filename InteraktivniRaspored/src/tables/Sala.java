@@ -13,7 +13,7 @@ public class Sala {
 
 
 	public static ArrayList<Sala_> getSalaList(ResultSet rs) throws SQLException{
-		
+		salaLista.clear();
 		while (rs.next()) {
 			Sala_ sala = new Sala_();
 			

@@ -10,8 +10,6 @@ public class Nastavnik_ {
 	String imeNastavnik;
 	String prezNastavnik;
 	int vrstaNastavnik;
-	String username;
-	String password;
 	
 	/**
 	 * @author dino
@@ -22,8 +20,6 @@ public class Nastavnik_ {
 		this.imeNastavnik = "";
 		this.prezNastavnik = "";
 		this.vrstaNastavnik = -1;
-		this.username = "";
-		this.password = "";
 	}
 	
 	public int getSifNastavnik() {
@@ -38,12 +34,7 @@ public class Nastavnik_ {
 	public int getVrstaNastavnik() {
 		return vrstaNastavnik;
 	}
-	public String getUsername() {
-		return username;
-	}
-	public String getPassword() {
-		return password;
-	}
+
 	public void setSifNastavnik(int sifNastavnik) {
 		this.sifNastavnik = sifNastavnik;
 	}
@@ -55,12 +46,6 @@ public class Nastavnik_ {
 	}
 	public void setVrstaNastavnik(int vrstaNastavnik) {
 		this.vrstaNastavnik = vrstaNastavnik;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public void setPassword(String password) {
-		this.password = password;
 	}
 	
 }

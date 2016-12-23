@@ -8,9 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteNastavnik;
+import modeli.CustomDefaultTableModel;
 import modeli.Nastavnik_;
 import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
@@ -22,7 +22,7 @@ public class TabelaNastavnikGUI {
 
 	public static JFrame frameTabelaNastavnik;
 	private JTable tableNastavnici;
-	public static DefaultTableModel modelNastavnik;
+	public static CustomDefaultTableModel modelNastavnik;
 	
 	/**
 	 * Launch the application.
@@ -67,19 +67,17 @@ public class TabelaNastavnikGUI {
 		
 		tableNastavnici = new JTable();
 		scrollPane.setViewportView(tableNastavnici);
-		tableNastavnici.setModel(new DefaultTableModel(
+		tableNastavnici.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"\u0160ifra", "Ime", "Prezime", "Tip", "Username", "Password"
+				"\u0160ifra", "Ime", "Prezime", "Tip"
 			}
 		));
 		tableNastavnici.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tableNastavnici.getColumnModel().getColumn(1).setPreferredWidth(151);
 		tableNastavnici.getColumnModel().getColumn(2).setPreferredWidth(191);
 		tableNastavnici.getColumnModel().getColumn(3).setPreferredWidth(89);
-		tableNastavnici.getColumnModel().getColumn(4).setPreferredWidth(138);
-		tableNastavnici.getColumnModel().getColumn(5).setPreferredWidth(117);
 		
 		/**
 		 * Funkcija implementira popunjavanje date tabele nastavnicima
@@ -115,7 +113,7 @@ public class TabelaNastavnikGUI {
 	 * funkcija koja vrsi popunjavanje tabele
 	 */
 	private void popuniTabeluNastavnicima() throws SQLException {
-		modelNastavnik = (DefaultTableModel) tableNastavnici.getModel();
+		modelNastavnik = (CustomDefaultTableModel) tableNastavnici.getModel();
 
 		PomocneF.resetTable(modelNastavnik);
 
@@ -128,7 +126,7 @@ public class TabelaNastavnikGUI {
 			String sifNastString = String.valueOf(nastavnik.getSifNastavnik());
 			String vrstaNastavnikString = String.valueOf(nastavnik.getVrstaNastavnik());
 
-			modelNastavnik.addRow(new Object[]{sifNastString, nastavnik.getImeNastavnik(), nastavnik.getPrezNastavnik(), vrstaNastavnikString, nastavnik.getUsername(), nastavnik.getPassword()});
+			modelNastavnik.addRow(new Object[]{sifNastString, nastavnik.getImeNastavnik(), nastavnik.getPrezNastavnik(), vrstaNastavnikString});
 		}
 	}
 

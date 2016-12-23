@@ -8,9 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteZgrada;
+import modeli.CustomDefaultTableModel;
 import modeli.Zgrada_;
 import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
@@ -24,7 +24,7 @@ public class TabelaZgradaGUI {
 	private JTable tableZgrade;
 	private JButton btnIzbrisiZgrade;
 	private JScrollPane scrollPane;
-	private DefaultTableModel modelZgrade;
+	private CustomDefaultTableModel modelZgrade;
 	/**
 	 * Launch the application.
 	 */
@@ -67,7 +67,7 @@ public class TabelaZgradaGUI {
 		
 		tableZgrade = new JTable();
 		scrollPane.setViewportView(tableZgrade);
-		tableZgrade.setModel(new DefaultTableModel(
+		tableZgrade.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -112,7 +112,7 @@ public class TabelaZgradaGUI {
 	}
 	
 	private void popuniTabeluZgradama() throws SQLException{
-		modelZgrade = (DefaultTableModel) tableZgrade.getModel();
+		modelZgrade = (CustomDefaultTableModel) tableZgrade.getModel();
 
 		PomocneF.resetTable(modelZgrade);
 

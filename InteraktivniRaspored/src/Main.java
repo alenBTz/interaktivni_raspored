@@ -12,11 +12,12 @@ public class Main {
 
 	public static void main(String[] args) throws SQLException {
 		LoginGUI.startLoginGUI();
+		
+		/** Testiranje Korisnickog Interfejsa - Bez Login Frome **/
 		//KorisnikGUI.startKorisnikGUI();
 		//ProdekanGUI.startProdekanGUI();
-		
 		//Rezervacija_ rez = new Rezervacija_();  //malo mi nejasno sto je ovo ovdje
-		
+		//PredavanjeUsmjerenjeSemestar
 	}
 
 }

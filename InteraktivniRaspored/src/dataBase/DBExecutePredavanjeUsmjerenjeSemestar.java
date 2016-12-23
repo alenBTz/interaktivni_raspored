@@ -15,7 +15,7 @@ import tables.PredavanjeUsmjerenjeSemestar;
 
 public class DBExecutePredavanjeUsmjerenjeSemestar {
 
-	private static final String SQL = "SELECT * FROM PredavanjeUsmjerenjeSemestar";
+	private static final String SQL = "SELECT * FROM predavanjeusmjerenjesemestar";
 
 	/**
 	 * @author dino
@@ -41,7 +41,7 @@ public class DBExecutePredavanjeUsmjerenjeSemestar {
 	
 	
 	public static ArrayList<Integer> getPredavanjeByUsmjerenje(int sifUsmjerenja) throws SQLException {
-		String sqlGetByName = "SELECT * FROM PredavanjeUsmjerenjeSemestar WHERE sifUsmjerenje = '" + sifUsmjerenja + "'";
+		String sqlGetByName = "SELECT * FROM predavanjeusmjerenjesemestar WHERE sifUsmjerenje = '" + sifUsmjerenja + "'";
 		ArrayList<PredavanjeUsmjerenjeSemestar_> lista = null;
 		ArrayList<Integer> array = new ArrayList<Integer>();;
 		try{
@@ -59,26 +59,31 @@ public class DBExecutePredavanjeUsmjerenjeSemestar {
 		}
 		return array;
 	}
-	public static ArrayList<PredavanjeUsmjerenjeSemestar_> getPredavanjeByUsmjerenjeAndSemestar(int sifUsmjerenja, int sifSemestar) throws SQLException {
-		String sqlGetByName = "SELECT * FROM PredavanjeUsmjerenjeSemestar WHERE sifUsmjerenje = '" + sifUsmjerenja + "' AND sifSemestar = '" + sifSemestar + "'";
+	//getPredavanjeByUsmjerenjeAndSemestar
+	public static ArrayList<Integer> getPredavanjeByUsmjerenjeAndSemestar(int sifUsmjerenja, int sifSemestar) throws SQLException 
+	{
+		String sqlGetByName = "SELECT * FROM predavanjeusmjerenjesemestar WHERE sifUsmjerenje = '" + sifUsmjerenja + "' AND sifSemestar = '" + sifSemestar + "'";
+		System.out.println(sqlGetByName);
 		ArrayList<PredavanjeUsmjerenjeSemestar_> lista = null;
-		ArrayList<Integer> array = new ArrayList<Integer>();;
-		try{
+		try
+		{
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
 				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery(sqlGetByName);
 				lista = PredavanjeUsmjerenjeSemestar.getPredavanjeUsmjerenjeSemestarList(rs);
 		} 
-		catch (SQLException e) {
+		catch (SQLException e)
+		{
 			DBUtil.processException(e);
 			System.out.println("U bazi ne postoji predmet sa sifrom usmjerenja :"+ sifUsmjerenja);
 		}
-		System.out.println("Velicina vracenih predavanja je "+lista.size());
-		for(int i=0;i<lista.size();i++){
-			array.add(lista.get(i).getSifPredavanje());
+		ArrayList<Integer> listaSifPredavanja = new ArrayList<Integer>();
+		for(int i=0; i<lista.size();i++)
+		{
+			listaSifPredavanja.add(lista.get(i).getSifPredavanje());
 		}
 		
-		return lista;
+		return listaSifPredavanja;
 	}
 	
 	/**
@@ -89,7 +94,7 @@ public class DBExecutePredavanjeUsmjerenjeSemestar {
 	 */
 	public static boolean insertPredavanjeUsmjerenjeSemestar(PredavanjeUsmjerenjeSemestar_ predavanjeUsmjerenjeSemestar) throws SQLException {
 		
-		String sqlInsert = "INSERT INTO PredavanjeUsmjerenjeSemestar (sifPredavanje, sifUsmjerenje, sifSemestar) " + "VALUES (?, ?, ?)";
+		String sqlInsert = "INSERT INTO predavanjeusmjerenjesemestar (sifPredavanje, sifUsmjerenje, sifSemestar) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteSemestar;
+import modeli.CustomDefaultTableModel;
 import modeli.Semestar_;
 import pomocneF.IzbrisiRed;
 import pomocneF.PomocneF;
@@ -23,7 +23,7 @@ public class TabelaSemestarGUI {
 	public static JFrame frameTabelaSemestar;
 	private JTable tableSemestar;
 	private JScrollPane scrollPane;
-	private DefaultTableModel modelSemestar;
+	private CustomDefaultTableModel modelSemestar;
 
 	/**
 	 * Launch the application.
@@ -67,7 +67,7 @@ public class TabelaSemestarGUI {
 		
 		tableSemestar = new JTable();
 		scrollPane.setViewportView(tableSemestar);
-		tableSemestar.setModel(new DefaultTableModel(
+		tableSemestar.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -113,7 +113,7 @@ public class TabelaSemestarGUI {
 	}
 	
 	private void popuniTabeluSemestrima() throws SQLException{
-		modelSemestar = (DefaultTableModel) tableSemestar.getModel();
+		modelSemestar = (CustomDefaultTableModel) tableSemestar.getModel();
 
 		PomocneF.resetTable(modelSemestar);
 

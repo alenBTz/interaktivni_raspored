@@ -11,7 +11,7 @@ import tables.PredmetUsmjerenjeIzborni;
 
 public class DBExecutePredmetUsmjerenjeIzborni {
 	
-	private static final String SQL = "SELECT * FROM PredmetUsmjerenjeIzborni";
+	private static final String SQL = "SELECT * FROM predmetusmjerenjeizborni";
 
 	public static void getPredmetUsmjerenja() throws SQLException {
 
@@ -30,7 +30,7 @@ public class DBExecutePredmetUsmjerenjeIzborni {
 
 	public static boolean insertPredmetUsmjerenje(PredmetUsmjerenjeIzborni_ predmetUsmjerenje) throws SQLException {
 
-		String sqlInsert = "INSERT INTO PredmetUsmjerenjeIzborni (sifPredmet, sifUsmjerenje, sifIzborni) " + "VALUES (?, ?, ?)";
+		String sqlInsert = "INSERT INTO predmetusmjerenjeizborni (sifPredmet, sifUsmjerenje, sifIzborni) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
@@ -74,7 +74,7 @@ public class DBExecutePredmetUsmjerenjeIzborni {
 		 * sifIzborni = 2 je po defaultu, tj da predmeti "izborni" predmeti na svim usmjerenjima.
 		 * za odgovarajuci predmet na odgovarajucem usmjerenju, postavljamo da je sifIzborni = 1, tj da je obavezan
 		 */
-		String sqlInsert = "UPDATE PredmetUsmjerenjeIzborni SET sifIzborni = ? " + "WHERE sifPredmet = ? AND sifUsmjerenje = ?";
+		String sqlInsert = "UPDATE predmetusmjerenjeizborni SET sifIzborni = ? " + "WHERE sifPredmet = ? AND sifUsmjerenje = ?";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);

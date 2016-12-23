@@ -8,12 +8,18 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import dataBase.DBExecuteGrupa;
+import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteStudent;
+import dataBase.DBExecuteUsmjerenje;
 import modeli.Grupa_;
+import modeli.Semestar_;
 import modeli.Student_;
+import modeli.Usmjerenje_;
 import pomocneF.PomocneF;
 import tables.Grupa;
+import tables.Semestar;
 import tables.Student;
+import tables.Usmjerenje;
 
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
@@ -32,6 +38,11 @@ public class VezaGrupaStudentGUI {
 	private JTextField txtBrindexstud;
 	
 	JComboBox<String> comboBoxGrupaStud = new JComboBox<String>();
+	JComboBox<String> comboBoxUsmjerenja = new JComboBox<String>();
+	JComboBox<String> comboBoxSemestar = new JComboBox<String>();
+	
+	ArrayList<Integer> semestriSifre ;
+	ArrayList<Integer> usmjerenjaSifre ;
 
 	int active1 = 0;
 	int active2 = 0;
@@ -65,7 +76,7 @@ public class VezaGrupaStudentGUI {
 	 */
 	private void initialize() {
 		frameGrupaStudent = new JFrame();
-		frameGrupaStudent.setBounds(100, 100, 240, 390);
+		frameGrupaStudent.setBounds(100, 100, 240, 480);
 		/**
 		 * umjesto JFrame.EXIT_ON_CLOSE, koristit cemo JFrame.DISPOSE_ON_CLOSE. Exit on close zatvara cijelu aplikaciju
 		 * dok Dispose samo aktivni prozor
@@ -243,6 +254,32 @@ public class VezaGrupaStudentGUI {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} 
+		
+		JLabel lblUsmjerenje = new JLabel("Usmjerenje:");
+		lblUsmjerenje.setBounds(20, 327, 114, 15);
+		frameGrupaStudent.getContentPane().add(lblUsmjerenje);
+		
+		comboBoxUsmjerenja.setBounds(100, 327, 114, 24);
+		frameGrupaStudent.getContentPane().add(comboBoxUsmjerenja);
+		try {
+			fillComboBoxUsmjerenje();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 	
+		
+		JLabel lblSemestar = new JLabel("Semestar:");
+		lblSemestar.setBounds(15, 361, 114, 15);
+		frameGrupaStudent.getContentPane().add(lblSemestar);
+		
+		comboBoxSemestar.setBounds(100, 361, 114, 24);
+		frameGrupaStudent.getContentPane().add(comboBoxSemestar);
+		try {
+			fillComboBoxSemestri();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
 		 
 		
 		
@@ -270,7 +307,28 @@ public class VezaGrupaStudentGUI {
 				student.setPrezStudent(txtPrezstudenta.getText());
 				student.setJmbgStudent(txtJmbgstudenta.getText());
 				student.setBrIndexa(txtBrindexstud.getText());
-
+				//--Alen
+				if (comboBoxSemestar.getSelectedIndex() == -1)
+				{
+					System.err.println("Pogresno unesen ili nije unesena grupa");
+				}
+				else 
+				{
+					int pom = comboBoxSemestar.getSelectedIndex();
+					student.setSifSemestra(semestriSifre.get(pom));
+				}
+				
+				if (comboBoxUsmjerenja.getSelectedIndex() == -1)
+				{
+					System.err.println("Pogresno unesen ili nije unesena grupa");
+				}
+				else 
+				{
+					int pom = comboBoxUsmjerenja.getSelectedIndex();
+					student.setSifUsmjerenja(usmjerenjaSifre.get(pom));
+					System.out.println("usmjerenjaSifre.get(pom)" + usmjerenjaSifre.get(pom));
+				}
+				//--End
 				/**
 				 * Treba da studenta dodamo i odgovarajucoj grupi. Dohvatimo sve grupe iz BP, da bi od odgovarajuce grupe koju 
 				 * smo odabrali uzeli potrebne podatke
@@ -339,7 +397,7 @@ public class VezaGrupaStudentGUI {
 				
 			}
 		});
-		btnPotvrdiUnosStud.setBounds(22, 320, 180, 25);
+		btnPotvrdiUnosStud.setBounds(22, 410, 180, 25);
 		frameGrupaStudent.getContentPane().add(btnPotvrdiUnosStud);
 	}
 	
@@ -355,6 +413,41 @@ public class VezaGrupaStudentGUI {
 			Grupa_ grupaPom = new Grupa_();	
 			grupaPom = grupe.get(i);
 			comboBoxGrupaStud.addItem(grupaPom.getNazivGrupa());
+		}
+	}
+	
+	private void fillComboBoxUsmjerenje() throws SQLException{
+		PomocneF.clearListe();
+
+		comboBoxUsmjerenja.removeAllItems();
+
+		DBExecuteUsmjerenje.getUsmjerenja();
+		ArrayList<Usmjerenje_> usmjerenja= new ArrayList<Usmjerenje_>();
+		usmjerenja = Usmjerenje.usmjerenjeLista;
+		usmjerenjaSifre = new ArrayList<Integer>();
+		for (int i = 0; i < usmjerenja.size(); i++) {
+			Usmjerenje_ usmjerenjePom = new Usmjerenje_();	
+			usmjerenjePom = usmjerenja.get(i);
+			usmjerenjaSifre.add(usmjerenjePom.getSifUsmjerenje());
+			//comboBoxUsmjerenja.addItem(usmjerenjePom.getSifUsmjerenje() + "." + usmjerenjePom.getNazUsmjerenje());
+			comboBoxUsmjerenja.addItem(usmjerenjePom.getNazUsmjerenje());
+		}
+	}
+	
+	private void fillComboBoxSemestri() throws SQLException{
+		PomocneF.clearListe();
+
+		comboBoxSemestar.removeAllItems();
+
+		DBExecuteSemestar.getSemestri();
+		ArrayList<Semestar_> semestri = new ArrayList<Semestar_>();
+		semestri = Semestar.semestarLista;
+		semestriSifre = new ArrayList<Integer>();
+		for (int i = 0; i < semestri.size(); i++) {
+			Semestar_ semestarPom = new Semestar_();	
+			semestarPom = semestri.get(i);
+			semestriSifre.add(semestarPom.getSifSemestar());
+			comboBoxSemestar.addItem(semestarPom.getNazSemestar());
 		}
 	}
 }

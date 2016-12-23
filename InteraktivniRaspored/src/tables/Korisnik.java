@@ -9,7 +9,6 @@ import modeli.Korisnik_;
 
 public class Korisnik {
 
-	
 public static ArrayList<Korisnik_> korisnikLista = new ArrayList<Korisnik_>();
 	
 	public static ArrayList<Korisnik_> getKorisnikList(ResultSet rs) throws SQLException{

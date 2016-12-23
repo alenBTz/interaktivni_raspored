@@ -8,10 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteSala;
 import dataBase.DBExecuteZgrada;
+import modeli.CustomDefaultTableModel;
 import modeli.Sala_;
 import modeli.Zgrada_;
 import pomocneF.IzbrisiRed;
@@ -25,7 +25,7 @@ public class TabelaSalaGUI {
 
 	public static JFrame frameTabelaSala;
 	private JTable tableSale;
-	private DefaultTableModel modelSala;
+	private CustomDefaultTableModel modelSala;
 	/**
 	 * Launch the application.
 	 */
@@ -68,7 +68,7 @@ public class TabelaSalaGUI {
 		
 		tableSale = new JTable();
 		scrollPane.setViewportView(tableSale);
-		tableSale.setModel(new DefaultTableModel(
+		tableSale.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -110,7 +110,7 @@ public class TabelaSalaGUI {
 	}
 	
 	private void popuniTabeluSalama() throws SQLException{
-		modelSala = (DefaultTableModel) tableSale.getModel();
+		modelSala = (CustomDefaultTableModel) tableSale.getModel();
 
 		PomocneF.resetTable(modelSala);
 

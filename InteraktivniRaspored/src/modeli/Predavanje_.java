@@ -8,6 +8,7 @@ public class Predavanje_ {
 	Time pocetakPredavanje;
 	Time krajPredavanje;
 	int sifSala;
+	String tipPredavanja;
 	
 	public Predavanje_() {
 		
@@ -16,10 +17,15 @@ public class Predavanje_ {
 		this.pocetakPredavanje = Time.valueOf("00:00:00");
 		this.krajPredavanje = Time.valueOf("00:00:00");
 		this.sifSala = -1;
+		this.tipPredavanja = "";
 	}
 
 	public int getSifPredavanje() {
 		return sifPredavanje;
+	}
+	
+	public String getTipPredavanja() {
+		return tipPredavanja;
 	}
 
 	public String getDanPredavanje() {
@@ -40,6 +46,10 @@ public class Predavanje_ {
 
 	public void setSifPredavanje(int sifPredavanje) {
 		this.sifPredavanje = sifPredavanje;
+	}
+	
+	public void setTipPredavanja(String tipPredavanja) {
+		this.tipPredavanja = tipPredavanja;
 	}
 
 	public void setDanPredavanje(String danPredavanje) {

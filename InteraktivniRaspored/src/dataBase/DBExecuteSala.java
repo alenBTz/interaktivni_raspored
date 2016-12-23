@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+import modeli.Predmet_;
 import modeli.Sala_;
 import tables.Sala;
 
@@ -79,4 +81,81 @@ public class DBExecuteSala {
 		return true;
 	}
 	
+	public static ArrayList<Integer> getSalaByZgrada(int sifZgrada) throws SQLException 
+	{
+		String sqlGetByName = "SELECT * FROM sala WHERE sifZgrada = '" + sifZgrada +  "'";
+		System.out.println(sqlGetByName);
+		ArrayList<Sala_> lista = null;
+		try
+		{
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				lista = Sala.getSalaList(rs);
+		} 
+		catch (SQLException e)
+		{
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji sala sa sifrom zgrade :"+ sifZgrada);
+		}
+		ArrayList<Integer> listaSifSala = new ArrayList<Integer>();
+		for(int i=0; i<lista.size();i++)
+		{
+			listaSifSala.add(lista.get(i).getSifSala());
+		}
+		
+		return listaSifSala;
+	}
+	
+	public static Sala_ getSalaByName(String nazSala) throws SQLException {
+		String sqlGetByName = "SELECT * FROM sala WHERE nazivSala = '" + nazSala + "'";
+		Sala_ sala = new Sala_();
+		try{
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				while(rs.next())
+				{
+					sala.setNazivSala(rs.getString("nazivSala"));
+					sala.setSifSala(rs.getInt("sifSala"));
+					sala.setKratSala(rs.getString("kratSala"));
+					sala.setSifZgrada(rs.getInt("sifZgrada"));
+					sala.setBrMjesta(rs.getInt("brMjesta"));
+				}
+				
+				return sala;
+				
+		} 
+		catch (SQLException e) {
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji sala sa nazivom :"+ nazSala);
+		}
+		return sala;
+	}
+	
+	public static Sala_ getSalaBySifra(int sifraSala) throws SQLException {
+		String sqlGetByName = "SELECT * FROM sala WHERE sifSala = '" + sifraSala + "'";
+		Sala_ sala = new Sala_();
+		try{
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				while (rs.next())
+				{
+					sala.setNazivSala(rs.getString("nazivSala"));
+					sala.setSifSala(rs.getInt("sifSala"));
+					sala.setKratSala(rs.getString("kratSala"));
+					sala.setSifZgrada(rs.getInt("sifZgrada"));
+					sala.setBrMjesta(rs.getInt("brMjesta"));
+				}
+				
+				return sala;
+				
+		} 
+		catch (SQLException e) {
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji sala sa sifrom : "+ sifraSala);
+		}
+		return sala;
+	}
 }

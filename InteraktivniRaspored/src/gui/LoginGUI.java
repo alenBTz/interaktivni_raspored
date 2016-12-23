@@ -12,10 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import dataBase.DBExecuteKorisnik;
+import dataBase.DBExecuteNastavnik;
 import modeli.Korisnik_;
 import javax.swing.JPasswordField;
 
+
+
 public class LoginGUI {
+	public static int sessionSifNastavnik ;
 	private JFrame frameLogin;
 	private JTextField txtKorisnickoIme;
 	private JButton btnPrijaviSe;
@@ -78,18 +82,26 @@ public class LoginGUI {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Korisnik_ session = DBExecuteKorisnik.getKorisnik(txtKorisnickoIme.getText(), txtSifra.getText());
-					if(session.getUloga().equals("Prodekan")){
+					if(session.getUloga().equals("Prodekan"))
+					{
 						frameLogin.dispose();
 						ProdekanGUI.startProdekanGUI();
+						sessionSifNastavnik = -1;
+
 					}
-					else if(session.getUloga().equals("Nastavnik")){
-						System.out.println("Pronadjeni korisnik je "+session.getIme());
+					else if(session.getUloga().equals("Profesor"))
+					{
+						String sessionUserName = session.getIme();
+						String sessionUserSurname = session.getPrezime();
+						sessionSifNastavnik = DBExecuteNastavnik.getSifNastavnikByNameAndSurname(sessionUserName, sessionUserSurname);
 						frameLogin.dispose();
-						RasporedGUI.startRasporedGUI();
+						ProfesorInterfaceGUI.startProfesorInterfaceGUI();
 					}
-					else {
+					else 
+					{
 						
 					}
+					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					System.err.println("Pogresno uneseni podaci ,probajte ponovo!");

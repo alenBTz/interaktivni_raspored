@@ -106,30 +106,62 @@ public class KorisnikGUI {
 			public void actionPerformed(ActionEvent e) {
 				boolean postojiProdekan = false;
 				Korisnik.korisnikLista.clear();
+				
 				Korisnik_ korisnik = new Korisnik_();
 				korisnik.setKorisnickoIme(txtKorisnickoIme.getText());
 				korisnik.setSifra(txtSifra.getText());
 				korisnik.setIme(txtIme.getText());
 				korisnik.setPrezime(txtPrezime.getText());
-				try {
-					//brojProdekana = DBExecuteKorisnik.countProdekana();
-					if (DBExecuteKorisnik.countProdekana() != 0){
+				
+				try 
+				{
+					
+					if (DBExecuteKorisnik.countProdekana() != 0)
+					{
 						postojiProdekan = true;
-						System.err.println("U bazi moze postojati samo jedan prodekan,za unos novog izbrisite trenutnog!");
+						//System.err.println("U bazi moze postojati samo jedan prodekan,za unos novog izbrisite trenutnog!");
 					}
-				} catch (SQLException e2) {
+				}
+				catch (SQLException e2) 
+				{
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-				if (comboBoxUlogaKorisnika.getSelectedIndex() == -1 || String.valueOf(comboBoxUlogaKorisnika.getSelectedItem()) == "  --  " || postojiProdekan) {
+				
+				if (comboBoxUlogaKorisnika.getSelectedItem().equals("Prodekan"))
+				{
+					if(postojiProdekan)
+					{
+						System.err.println("U bazi moze postojati samo jedan prodekan,za unos novog izbrisite trenutnog!");
+					}
+					else
+					{
+						korisnik.setUloga(String.valueOf(comboBoxUlogaKorisnika.getSelectedItem()));
+						try 
+						{
+							DBExecuteKorisnik.insertKorisnik(korisnik);
+						}
+						catch (SQLException e1)
+						{
+							e1.printStackTrace();
+						}
+					}
+				}
+				
+				if (comboBoxUlogaKorisnika.getSelectedIndex() == -1 || String.valueOf(comboBoxUlogaKorisnika.getSelectedItem()) == "  --  ") 
+				{
 					System.err.println("Greska pri unosu,provjerite da li je unesen tip korisnika");
-				} else {
+				} 
+				else 
+				{
 					korisnik.setUloga(String.valueOf(comboBoxUlogaKorisnika.getSelectedItem()));
 					
 					try {
 						/**
 						 * Upisujemo 'korisnik' u BP pozivanjem metoda:
 						 */
+						System.out.println("Usao u upis korisnika");
+						System.out.println("korisnik:" + korisnik.getUloga());
 						DBExecuteKorisnik.insertKorisnik(korisnik);
 						
 						/**

@@ -7,6 +7,8 @@ public class Student_ {
 	String jmbgStudent;
 	String brIndexa;
 	int sifGrupa;
+	int sifSemestra;
+	int sifUsmjerenja;
 	
 	public Student_() {
 		this.sifStudent = -1;
@@ -15,6 +17,8 @@ public class Student_ {
 		this.jmbgStudent = "";
 		this.brIndexa = "";
 		this.sifGrupa = -1;
+		this.sifSemestra = -1;
+		this.sifUsmjerenja = -1;
 	}
 
 	public int getSifStudent() {
@@ -40,6 +44,14 @@ public class Student_ {
 	public int getSifGrupa() {
 		return sifGrupa;
 	}
+	
+	public int getSifUsmjerenja() {
+		return sifUsmjerenja;
+	}
+	
+	public int getSifSemestra() {
+		return sifSemestra;
+	}
 
 	public void setSifStudent(int sifStudent) {
 		this.sifStudent = sifStudent;
@@ -64,9 +76,14 @@ public class Student_ {
 	public void setSifGrupa(int sifGrupa) {
 		this.sifGrupa = sifGrupa;
 	}
-
 	
+	public void setSifUsmjerenja(int sifUsmjerenja) {
+		this.sifUsmjerenja = sifUsmjerenja;
+	}
 	
+	public void setSifSemestra(int sifSemestra) {
+		this.sifSemestra = sifSemestra;
+	}
 	
 	
 }

@@ -25,6 +25,8 @@ public class Student {
 			student.setJmbgStudent(rs.getString("jmbgStudent"));
 			student.setBrIndexa(rs.getString("brIndexa"));
 			student.setSifGrupa(rs.getInt("sifGrupa"));
+			student.setSifUsmjerenja(rs.getInt("sifUsmjerenja"));
+			student.setSifSemestra(rs.getInt("sifSemestra"));
 			studentLista.add(student);
 			
 		}

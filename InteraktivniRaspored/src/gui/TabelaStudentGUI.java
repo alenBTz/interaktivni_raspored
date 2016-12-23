@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteGrupa;
 import dataBase.DBExecuteStudent;
+import modeli.CustomDefaultTableModel;
 import modeli.Grupa_;
 import modeli.Student_;
 import pomocneF.IzbrisiRed;
@@ -26,7 +26,7 @@ public class TabelaStudentGUI {
 
 	public static JFrame frameTabelaStudent;
 	private JTable tableStudent;
-	private DefaultTableModel modelStudent;
+	private CustomDefaultTableModel modelStudent;
 	/**
 	 * Launch the application.
 	 */
@@ -69,7 +69,7 @@ public class TabelaStudentGUI {
 		
 		tableStudent = new JTable();
 		scrollPane.setViewportView(tableStudent);
-		tableStudent.setModel(new DefaultTableModel(
+		tableStudent.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -117,7 +117,7 @@ public class TabelaStudentGUI {
 	}
 	
 	private void popuniTabeluStudentima() throws SQLException{
-		modelStudent = (DefaultTableModel) tableStudent.getModel();
+		modelStudent = (CustomDefaultTableModel) tableStudent.getModel();
 
 		PomocneF.resetTable(modelStudent);
 

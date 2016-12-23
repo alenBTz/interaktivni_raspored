@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteGrupa;
 import dataBase.DBExecuteNastavnik;
 import dataBase.DBExecuteNastavnikGrupa;
+import modeli.CustomDefaultTableModel;
 import modeli.Grupa_;
 import modeli.NastavnikGrupa_;
 import modeli.Nastavnik_;
@@ -29,7 +29,7 @@ public class TabelaNastavnikGrupaGUI {
 
 	public static JFrame frameTabelaNastGrupa;
 	private JTable tableNastGrupa;
-	private DefaultTableModel modelNastGrupa;
+	private CustomDefaultTableModel modelNastGrupa;
 	/**
 	 * Launch the application.
 	 */
@@ -72,7 +72,7 @@ public class TabelaNastavnikGrupaGUI {
 		
 		tableNastGrupa = new JTable();
 		scrollPane.setViewportView(tableNastGrupa);
-		tableNastGrupa.setModel(new DefaultTableModel(
+		tableNastGrupa.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -118,7 +118,7 @@ public class TabelaNastavnikGrupaGUI {
 	}
 	
 	private void popuniTabeluGrupaNastavnicima() throws SQLException{
-		modelNastGrupa = (DefaultTableModel) tableNastGrupa.getModel();
+		modelNastGrupa = (CustomDefaultTableModel) tableNastGrupa.getModel();
 		PomocneF.resetTable(modelNastGrupa);
 
 		/**

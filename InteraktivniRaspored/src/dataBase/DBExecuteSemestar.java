@@ -5,8 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+import modeli.PredavanjeUsmjerenjeSemestar_;
 import modeli.Semestar_;
+import tables.PredavanjeUsmjerenjeSemestar;
 import tables.Semestar;
 
 
@@ -21,13 +24,16 @@ public class DBExecuteSemestar {
 	 */
 	public static void getSemestri() throws SQLException {
 
-		try(
-				Connection conn = DBUtil.getConnection(DBType.MYSQL);
-				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				ResultSet rs = stmt.executeQuery(SQL);
-				) {
-			Semestar.getSemestarList(rs);		} 
-		catch (SQLException e) {
+		try
+		{
+			Connection conn = DBUtil.getConnection(DBType.MYSQL);
+			Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = stmt.executeQuery(SQL);
+			Semestar.getSemestarList(rs);		
+		} 
+		
+		catch (SQLException e) 
+		{
 			DBUtil.processException(e);
 		}
 	}
@@ -75,7 +81,27 @@ public class DBExecuteSemestar {
 		return true;
 	}
 	
-	
+	public static int getSemestarBySifra(int sifSemestar) throws SQLException 
+	{
+		String sqlGetByName = "SELECT * FROM semestar WHERE sifSemestar = '" + sifSemestar + "'";
+		//System.out.println(sqlGetByName);
+		ArrayList<Semestar_> lista = null;
+		try
+		{
+				Connection conn = DBUtil.getConnection(DBType.MYSQL);
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(sqlGetByName);
+				lista = Semestar.getSemestarList(rs);
+		} 
+		catch (SQLException e)
+		{
+			DBUtil.processException(e);
+			System.out.println("U bazi ne postoji semestar sa sifrom semestra :"+ sifSemestar);
+		}
+		
+		
+		return Integer.parseInt(lista.get(0).getNazSemestar());
+	}
 	
 	
 }

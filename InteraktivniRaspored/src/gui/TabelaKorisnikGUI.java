@@ -8,10 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteKorisnik;
 import dataBase.DBExecuteNastavnik;
+import modeli.CustomDefaultTableModel;
 import modeli.Korisnik_;
 import modeli.Nastavnik_;
 import pomocneF.IzbrisiRed;
@@ -25,7 +25,7 @@ public class TabelaKorisnikGUI {
 
 	public static JFrame frameTabelaKorisnik;
 	private JTable tableKorisnici;
-	public static DefaultTableModel modelKorisnik;
+	public static CustomDefaultTableModel modelKorisnik;
 	
 	/**
 	 * Launch the application.
@@ -70,7 +70,7 @@ public class TabelaKorisnikGUI {
 		
 		tableKorisnici = new JTable();
 		scrollPane.setViewportView(tableKorisnici);
-		tableKorisnici.setModel(new DefaultTableModel(
+		tableKorisnici.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -118,7 +118,7 @@ public class TabelaKorisnikGUI {
 	 * funkcija koja vrsi popunjavanje tabele
 	 */
 	private void popuniTabeluKorisnicima() throws SQLException {
-		modelKorisnik = (DefaultTableModel) tableKorisnici.getModel();
+		modelKorisnik = (CustomDefaultTableModel) tableKorisnici.getModel();
 
 		PomocneF.resetTable(modelKorisnik);
 

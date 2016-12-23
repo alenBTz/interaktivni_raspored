@@ -17,6 +17,7 @@ import dataBase.DBExecutePredavanje;
 import dataBase.DBExecutePredavanjeUsmjerenjeSemestar;
 import dataBase.DBExecutePredmet;
 import dataBase.DBExecutePredmetPredavanjeTipNastave;
+import dataBase.DBExecuteSala;
 import dataBase.DBExecuteSemestar;
 import dataBase.DBExecuteTipNastave;
 import dataBase.DBExecuteUsmjerenje;
@@ -38,6 +39,7 @@ import tables.TipNastave;
 import tables.Usmjerenje;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 
@@ -45,15 +47,16 @@ public class PrikazRasporedGUI {
 
 	private JFrame framePrikazRaspored;
 	private JFrame framePrikazRaspore;
+	
 
 	/**
 	 * Launch the application.
 	 */
-	public static void startPrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati,ArrayList<Predavanje_> svaPredavanja) {
+	public static void startPrikazRasporedGUI(ArrayList<Integer> predavanjaZaPrikazati) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PrikazRasporedGUI window = new PrikazRasporedGUI(predavanjaZaPrikazati,svaPredavanja);
+					PrikazRasporedGUI window = new PrikazRasporedGUI(predavanjaZaPrikazati);
 					window.framePrikazRaspored.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,57 +68,122 @@ public class PrikazRasporedGUI {
 	/**
 	 * Create the application.
 	 */
-	public PrikazRasporedGUI(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati,ArrayList<Predavanje_> svaPredavanja) {
-		initialize(predavanjaZaPrikazati,svaPredavanja);
+	public PrikazRasporedGUI(ArrayList<Integer> predavanjaZaPrikazati) {
+		initialize(predavanjaZaPrikazati);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(ArrayList<PredavanjeUsmjerenjeSemestar_> predavanjaZaPrikazati,ArrayList<Predavanje_> svaPredavanja) {
+	private void initialize(ArrayList<Integer> predavanjaZaPrikazati) {
 		//komentar
+		ArrayList<Predavanje_> svaPredavanja = new ArrayList<Predavanje_>();
+		JPanel panel = new JPanel();
+		try {
+			svaPredavanja = DBExecutePredavanje.getPredavanja();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		framePrikazRaspored = new JFrame();
-		framePrikazRaspored.setBounds(100, 100, 1290, 735);
+		framePrikazRaspored.setBounds(100, 30, 970, 650);
 		framePrikazRaspored.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		framePrikazRaspored.getContentPane().setLayout(null);
 		
 		Border borderBlack = BorderFactory.createLineBorder(Color.BLACK, 2);
 		int[] array = {84,136,188,240,292,344,396,448,500,552};
+		int pocetak, kraj;
+		JLabel lblDan;
+		Predmet_ pomPredmet;
 		
-		for(int i=0;i<predavanjaZaPrikazati.size();i++){
-			for(int j=0;j<svaPredavanja.size();j++){
-				if(predavanjaZaPrikazati.get(i).getSifPredavanje() == svaPredavanja.get(j).getSifPredavanje()){
-					switch (svaPredavanja.get(j).getDanPredavanje()){
-					case "Ponedeljak":
-						System.out.println("ponedeljak");
-						int pocetak = Integer.parseInt(svaPredavanja.get(j).getPocetakPredavanje().toString().substring(0,2)) - 8;
-						int kraj = Integer.parseInt(svaPredavanja.get(j).getKrajPredavanje().toString().substring(0,2)) - 8;
-						//System.out.println(svaPredavanja.get(j).getPocetakPredavanje());
-						//System.out.println("pocetak"+pocetak);
-						//System.out.println("kraj"+kraj);
+		for(int i=0;i<predavanjaZaPrikazati.size();i++)
+		{
+			for(int j=0;j<svaPredavanja.size();j++)
+			{
+				if(predavanjaZaPrikazati.get(i) == svaPredavanja.get(j).getSifPredavanje()){
+					String kraticaSale;
+					try {
+						pomPredmet = DBExecutePredmet.getPredmetBySifPredavanje( svaPredavanja.get(j).getSifPredavanje() );
+						kraticaSale = DBExecuteSala.getSalaBySifra(svaPredavanja.get(j).getSifSala()).getKratSala();
+						lblDan = new JLabel( pomPredmet.getKratPredmet() + "/" + kraticaSale);
+						lblDan.setOpaque(true);
+						lblDan.setHorizontalAlignment(SwingConstants.CENTER);
+						pocetak = Integer.parseInt(svaPredavanja.get(j).getPocetakPredavanje().toString().substring(0,2)) - 8;
+						kraj = Integer.parseInt(svaPredavanja.get(j).getKrajPredavanje().toString().substring(0,2)) - 8;
+						//lblDan = new JLabel("" + svaPredavanja.get(j).getSifPredavanje() );
 						
-						JLabel lblPonedeljakk = new JLabel("Ime predmeta");
-						lblPonedeljakk.setBackground(Color.RED);
-						lblPonedeljakk.setOpaque(true);
-						lblPonedeljakk.setHorizontalAlignment(SwingConstants.CENTER);
-						lblPonedeljakk.setBounds(144, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
-						lblPonedeljakk.setBorder(borderBlack);
-						framePrikazRaspored.getContentPane().add(lblPonedeljakk);
 						
-						break;
-					case "Utorak":
-						System.out.println("utorak");
-						break;
-					case "Srijeda":
-						System.out.println("srijeda");
-						break;
-					case "Cetvrtak":
-						System.out.println("cevtrtak");
-						break;
-					case "Petak":
-						System.out.println("petak");
-						break;
+						if (svaPredavanja.get(j).getTipPredavanja().equals("Predavanja"))
+						{
+							lblDan.setBackground(Color.RED);
+							lblDan.setForeground(Color.white);
+						}
+						else if(svaPredavanja.get(j).getTipPredavanja().equals("Auditorne vjezbe"))
+						{
+							lblDan.setBackground(Color.BLUE);
+							lblDan.setForeground(Color.white);
+						}
+						else
+						{
+							lblDan.setBackground(Color.GREEN);
+						}
+						
+						
+						switch (svaPredavanja.get(j).getDanPredavanje()){
+						case "Ponedeljak":
+											
+							
+							/** Ovdje Greska **/
+							lblDan.setBounds(144, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
+							lblDan.setBorder(borderBlack);
+							framePrikazRaspored.getContentPane().add(lblDan);
+							
+							break;
+						case "Utorak":
+							
+							/** Ovdje Greska **/
+							lblDan.setBounds(304, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
+							lblDan.setBorder(borderBlack);
+							framePrikazRaspored.getContentPane().add(lblDan);
+							
+							break;
+						case "Srijeda":
+							
+							/** Ovdje Greska **/
+							lblDan.setBounds(464, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
+							lblDan.setBorder(borderBlack);
+							framePrikazRaspored.getContentPane().add(lblDan);break;
+						case "Cetvrtak":
+							
+							/** Ovdje Greska **/
+							lblDan.setBounds(624, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
+							lblDan.setBorder(borderBlack);
+							framePrikazRaspored.getContentPane().add(lblDan);
+							
+							break;
+						case "Petak":
+							
+							/** Ovdje Greska **/
+							lblDan.setBounds(784, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
+							lblDan.setBorder(borderBlack);
+							framePrikazRaspored.getContentPane().add(lblDan);
+							
+							break;
+						case "Subota":
+							
+							/** Ovdje Greska **/
+							lblDan.setBounds( 944, array[pocetak], 150, (40*(kraj-pocetak))+12*(kraj-pocetak-1));
+							lblDan.setBorder(borderBlack);
+							framePrikazRaspored.getContentPane().add(lblDan);
+							
+							break;
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						System.out.println( "Predmet nije u bazi!" );
+						e.printStackTrace();
 					}
+					
+					
 				}
 			}
 		}

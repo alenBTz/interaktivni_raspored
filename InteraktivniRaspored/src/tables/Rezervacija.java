@@ -15,10 +15,10 @@ public class Rezervacija {
 		while(rs.next()){
 			Rezervacija_ rezervacija = new Rezervacija_();
 			rezervacija.setSifRezervacija(rs.getInt("sifRezervacija"));
-			rezervacija.setDatumRezervacija(rs.getDate("datumRetervacuha"));
+			rezervacija.setDatumRezervacija(rs.getDate("datumRezervacija"));
 			rezervacija.setTipRezervacije(rs.getString("tipRezervacije"));
 			rezervacija.setSatRezervacije(rs.getTime("satRezervacije"));
-			rezervacija.setSatRezervacijeKraj(rs.getTime("sarRezervacijeKraj"));
+			rezervacija.setSatRezervacijeKraj(rs.getTime("satRezervacijeKraj"));
 			rezervacija.setSifPredmet(rs.getInt("sifPredmet"));
 			rezervacija.setSifSala(rs.getInt("sifSala"));
 			rezervacija.setSifNastavnik(rs.getInt("sifNastavnik"));

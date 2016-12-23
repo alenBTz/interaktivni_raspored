@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import dataBase.DBExecuteNastavnik;
 import dataBase.DBExecutePredmet;
 import dataBase.DBExecutePredmetNastavnikTipNastave;
 import dataBase.DBExecuteTipNastave;
+import modeli.CustomDefaultTableModel;
 import modeli.Nastavnik_;
 import modeli.PredmetNastavnikTipNastave_;
 import modeli.Predmet_;
@@ -32,7 +32,7 @@ public class TabelaVezaNastPredGUI {
 
 	public static JFrame frameTabelaVezaNastPred;
 	private JTable tableVezaNastPred;
-	private DefaultTableModel modelVezaNastPred;
+	private CustomDefaultTableModel modelVezaNastPred;
 	/**
 	 * Launch the application.
 	 */
@@ -77,7 +77,7 @@ public class TabelaVezaNastPredGUI {
 		
 		tableVezaNastPred = new JTable();
 		scrollPane.setViewportView(tableVezaNastPred);
-		tableVezaNastPred.setModel(new DefaultTableModel(
+		tableVezaNastPred.setModel(new CustomDefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
@@ -119,7 +119,7 @@ public class TabelaVezaNastPredGUI {
 	
 	private void popuniTabeluNastavnicimaPredmetima() throws SQLException{
 
-		modelVezaNastPred = (DefaultTableModel) tableVezaNastPred.getModel();
+		modelVezaNastPred = (CustomDefaultTableModel) tableVezaNastPred.getModel();
 		
 		/**
 		 * Pozovemo ovaj metod kako ne bi bilo u tabeli ispis duplih elemenata. Resetuje tabelu, tj isprazni joj sadrzaj

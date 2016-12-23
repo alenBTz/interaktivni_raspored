@@ -28,8 +28,6 @@ public class Nastavnik {
 			nastavnik.setImeNastavnik(rs.getString("imeNastavnik"));
 			nastavnik.setPrezNastavnik(rs.getString("prezNastavnik"));
 			nastavnik.setVrstaNastavnik(rs.getInt("vrstaNastavnik"));
-			nastavnik.setUsername(rs.getString("username"));
-			nastavnik.setPassword(rs.getString("password"));
 			nastavnikLista.add(nastavnik);
 			
 		}

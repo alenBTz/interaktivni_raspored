@@ -11,7 +11,7 @@ import tables.PredmetGrupaTipNastave;
 
 public class DBExecutePredmetGrupaTipNastave {
 
-	private static final String SQL = "SELECT * FROM PredmetGrupaTipNastave";
+	private static final String SQL = "SELECT * FROM predmetgrupatipnastave";
 
 	public static void getPredmetGrupaTipNastave() throws SQLException {
 
@@ -30,7 +30,7 @@ public class DBExecutePredmetGrupaTipNastave {
 
 	public static boolean insertPredmetGrupaTipNastave(PredmetGrupaTipNastave_ predmetGrupaTipNastave) throws SQLException {
 
-		String sqlInsert = "INSERT INTO PredmetGrupaTipNastave (sifPredmet, sifGrupa, sifTipNastave) " + "VALUES (?, ?, ?)";
+		String sqlInsert = "INSERT INTO predmetgrupatipnastave (sifPredmet, sifGrupa, sifTipNastave) " + "VALUES (?, ?, ?)";
 		ResultSet keys = null;
 		try(
 				Connection conn = DBUtil.getConnection(DBType.MYSQL);
